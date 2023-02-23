@@ -1,4 +1,4 @@
-import parteModelo from '../models/parte.modelo' ;
+import parteModelo from '../models/parte.modelo.js' ;
 
 // Controlador que almacena un nuevo parte
 // CREAR PARTE
