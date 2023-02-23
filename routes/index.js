@@ -6,6 +6,8 @@ import parteRutas from "./parte.route.js"
 
 export const rutas = () => [
     inventarioRutas,
+    distribuidorRutas,
+    puntoRutas,
     usuarioRutas,
     loginRutas,
     productosRutas,
