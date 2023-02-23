@@ -1,68 +1,27 @@
-import { response } from ("express");
-import { Punto } from ("../models/puntos.js");
+
+import PuntoModelo from "../models/punto.js";
 
 
 
 export const getPuntos = async (req, res) => {
-  const { limite = 5, desde = 0 } = req.query;
-  const query = { estado: true };
+    const datos = req.body;
 
-  try {
-    const [total, puntos, tabla] = await Promise.all([
-      Punto.countDocuments(query),
-      Punto.find(query)
-        .populate("usuario", "nombre")
-        .skip(Number(desde))
-        .limit(Number(limite)),
-      Punto.aggregate([
-        { $match: query },
-        {
-          $lookup: {
-            from: "usuarios",
-            localField: "usuario",
-            foreignField: "_id",
-            as: "usuario",
-          },
-        },
-        { $unwind: "$usuario" },
-        {
-          $project: {
-            _id: 0,
-            id: "$_id",
-            nombre: 1,
-            departamento: 1,
-            barrio: 1,
-            descripcion: 1,
-            usuario: "$usuario.nombre",
-            updatedAt: {
-              $dateToString: {
-                format: "%Y-%m-%d",
-                date: "$updatedAt",
-              },
-            },
-          },
-        },
-      ]),
-    ]);
-
-    res.json({
-      total,
-      tabla,
-      puntos,
-    });
-  } catch (err) {
-    console.log("Error al mostrar los puntos: ", err);
-    res.status(500).json({
-      msg: "Por favor, hable con el administrador",
-    });
-  }
-};
-
+    try {
+        // Se alamacena el nuevo inventario en la base de datos
+    const  punto = new PuntoModelo(datos);
+    await punto.save() 
+   
+    res.json({msg: 'El inventario se guardo correctamente'});
+    } catch (error) {
+        console.log("Error al crear un inventario: ", error)
+    }
+   }
+   
 export const getPunto = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const punto = await Punto.findById(id).populate("usuario", "nombre");
+    const punto = await PuntoModelo.findById(id).populate("usuario", "nombre");
 
     res.json(punto);
   } catch (err) {
@@ -73,11 +32,11 @@ export const getPunto = async (req, res) => {
   }
 };
 
-export const PostPuntos = async (req, res) => {
+export const postNuevoPunto = async (req, res) => {
   const nombre = req.body.nombre.toUpperCase();
 
   try {
-    const puntoDB = await Punto.findOne({ nombre });
+    const puntoDB = await PuntoModelo.findOne({ nombre });
 
     if (puntoDB) {
       return res.status(400).json({
@@ -91,7 +50,7 @@ export const PostPuntos = async (req, res) => {
       usuario: req.usuario._id,
     };
 
-    const punto = new Punto(data);
+    const punto = new PuntoModelo(data);
 
     // Guardar DB
     await punto.save();
@@ -105,7 +64,7 @@ export const PostPuntos = async (req, res) => {
   }
 };
 
-export const PutPuntos = async (req, res) => {
+export const test2 = async (req, res) => {
   const { id } = req.params;
   const { estado, usuario, ...data } = req.body;
 
@@ -113,7 +72,7 @@ export const PutPuntos = async (req, res) => {
   data.usuario = req.usuario._id;
 
   try {
-    const punto = await Punto.findByIdAndUpdate(id, data, { new: true });
+    const punto = await PuntoModelo.findByIdAndUpdate(id, data, { new: true });
 
     res.json(punto);
   } catch (err) {
@@ -124,11 +83,11 @@ export const PutPuntos = async (req, res) => {
   }
 };
 
-export const DeletePuntos = async (req, res) => {
+export const test3 = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const puntoBorrado = await Punto.findByIdAndUpdate(
+    const puntoBorrado = await PuntoModelo.findByIdAndUpdate(
       id,
       { estado: false },
       { new: true }
