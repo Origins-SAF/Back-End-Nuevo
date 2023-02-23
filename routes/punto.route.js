@@ -21,7 +21,7 @@ router.get(
 
 // Crear punto - privado - cualquier persona con un token válido
 router.post(
-  "/",
+  "/nuevopunto",
 
   postNuevoPunto
 );

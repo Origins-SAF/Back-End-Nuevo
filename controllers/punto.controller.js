@@ -47,7 +47,6 @@ export const postNuevoPunto = async (req, res) => {
     // Generar la data a guardar
     const data = {
       ...req.body,
-      usuario: req.usuario._id,
     };
 
     const punto = new PuntoModelo(data);

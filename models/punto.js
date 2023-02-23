@@ -12,20 +12,8 @@ const PuntoSchema = new Schema(
     barrio: {
       type: String,
     },
-    usuario: {
-      type: Schema.Types.ObjectId,
-      ref: "Usuario",
-      required: true,
-    },
     descripcion: { type: String },
-    ubicacion: {
-      lat: {
-        type: String,
-      },
-      lon: {
-        type: String,
-      },
-    },
+  
     estado: {
       type: Boolean,
       default: true,
