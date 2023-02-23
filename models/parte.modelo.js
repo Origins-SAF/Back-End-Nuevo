@@ -2,18 +2,18 @@ import { model, Schema } from 'mongoose';
 
 const ParteSchema = new Schema(
     {
-        usuario: {
+/*         usuario: {
           type: Schema.Types.ObjectId,
           ref: "usuarioModelo",
-        },
+        }, */
         fecha: {
           type: String,
         },
         distribuidor: [ {
-          nombre: {
+/*           nombre: {
             type: Schema.Types.ObjectId,
             ref: "Distribuidor",
-          },
+          }, */
           nota: {
             type: String,
           },

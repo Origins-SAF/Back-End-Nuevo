@@ -22,13 +22,14 @@ export const postParte = async (req, res) => {
 // ACTUALIZAR PARTE
 export const putParte = async (req, res = response) => {
     const { id } = req.params;
-    const { usuario, ...data } = req.body;
+//    const { usuario, ...data } = req.body;
+    const  data  = req.body;
   
     try {
-        data.dia;
-        data.distribuidor;
+     /*    data.dia;
+        data.distribuidor; */
       
-        data.usuario = req.usuario._id;
+    /*     data.usuario = req.usuario._id; */
 
       const parte = await parteModelo.findByIdAndUpdate(id, data, { new: true });
   

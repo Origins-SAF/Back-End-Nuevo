@@ -8,8 +8,8 @@ import {
     putParte
   } from "../controllers/parte.controller.js";
 
-  router.get("/crear-parte", postParte);
-  router.put("/editar-parte", putParte);
+  router.post("/crear-parte", postParte);
+  router.put("/editar-parte/:id", putParte);
 
 
 export default router;
