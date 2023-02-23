@@ -1,4 +1,4 @@
-import { Schema, model } from ("mongoose");
+import { Schema, model } from "mongoose";
 
 const PuntoSchema = new Schema(
   {
@@ -41,4 +41,4 @@ PuntoSchema.methods.toJSON = function () {
 };
 
 
-export default model("puntoModelo", PuntoSchema);
+export default model("PuntoModelo", PuntoSchema);

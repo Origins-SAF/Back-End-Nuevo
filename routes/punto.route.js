@@ -1,16 +1,11 @@
-import{ Router } from ("express");
-import { check } from ("express-validator");
+import  Router  from "express";
 
-import { validarJWT, validarCampos, esAdminRole } from ("../middlewares");
 
 import {
   getPuntos,
   getPunto,
-  PostPunto,
-  PutPunto,
-  DeletePunto,
-} from ("../controllers/punto.controller.js");
-const { existePuntoPorId } = require("../helpers/db-validators");
+  postNuevoPunto
+} from "../controllers/punto.controller.js";
 
 const router = Router();
 
@@ -20,48 +15,29 @@ router.get("/", getPuntos);
 // Obtener un punto por id - publico
 router.get(
   "/:id",
-  [
-    check("id", "No es un id de Mongo válido").isMongoId(),
-    check("id").custom(existePuntoPorId),
-    validarCampos,
-  ],
+
   getPunto
 );
 
 // Crear punto - privado - cualquier persona con un token válido
 router.post(
   "/",
-  [
-    validarJWT,
-    check("nombre", "El nombre es obligatorio").not().isEmpty(),
-    validarCampos,
-  ],
-  PostPunto
+
+  postNuevoPunto
 );
 
-// Actualizar - privado - cualquiera con token válido
+/* // Actualizar - privado - cualquiera con token válido
 router.put(
   "/:id",
-  [
-    validarJWT,
-    check("nombre", "El nombre es obligatorio").not().isEmpty(),
-    check("id").custom(existePuntoPorId),
-    validarCampos,
-  ],
-  PutPunto
+
+  test2
 );
 
 // Borrar un punto - Admin
 router.delete(
   "/:id",
-  [
-    validarJWT,
-    esAdminRole,
-    check("id", "No es un id de Mongo válido").isMongoId(),
-    check("id").custom(existePuntoPorId),
-    validarCampos,
-  ],
-  DeletePunto
-);
+
+  test3
+); */
 
 export default router;
