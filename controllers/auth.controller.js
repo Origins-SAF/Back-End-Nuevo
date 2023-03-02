@@ -2,6 +2,9 @@
 
 import bcryptjs from 'bcryptjs';
 
+const ctrlAuth = {};
+
+
 import  generarJWT  from '../helpers/generar-jwt.js';
 import usuarioModelo from '../models/usuario.modelo.js';
 
@@ -74,11 +77,11 @@ export const register = async (req, res) => {
   }
 };
 
-/* ctrlAuth.renew = async (req = request, res = response) => {
+export const renew = async (req = request, res = response) => {
   const { _id } = req.usuario;
 
   try {
-    const usuario = await Usuario.findById(_id);
+    const usuario = await usuarioModelo.findById(_id);
 
     const token = await generarJWT(_id);
 
@@ -95,5 +98,5 @@ export const register = async (req, res) => {
       msg: "Por favor, hable con el administrador",
     });
   }
-}; */
+};
 

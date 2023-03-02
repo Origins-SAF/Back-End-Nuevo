@@ -10,18 +10,18 @@ import {
 const router = Router();
 
 //  Obtener todos los puntos - publico
-router.get("/", getPuntos);
+router.get("/ver-puntos", getPuntos);
 
 // Obtener un punto por id - publico
 router.get(
-  "/:id",
+  "/ver-punto:id",
 
   getPunto
 );
 
 // Crear punto - privado - cualquier persona con un token válido
 router.post(
-  "/",
+  "/guardar-punto",
 
   postNuevoPunto
 );

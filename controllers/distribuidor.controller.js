@@ -1,7 +1,7 @@
-import distribuidorModelo from '../models/distribuidor.js';
+import distribuidorModelo from '../models/distribuidor.modelo.js';
 
 
-// Devuelve todos los inventarios activas de la colección
+// Devuelve todos los distribuidor activas de la colección
 export const getDistribuidores = async (req, res) => {
   try {
       const distribuidores = await distribuidorModelo.find({estado: true}) // consulta para todos los documentos
@@ -14,14 +14,14 @@ export const getDistribuidores = async (req, res) => {
 }
 
 
-// Controlador que almacena un nuevo inventario
+// Controlador que almacena un nuevo distribuidor
 export const postDistribuidores = async (req, res) => {
   // Desestructuramos la información recibida del cliente
 
  const datos = req.body;
 
  try {
-     // Se alamacena el nuevo inventario en la base de datos
+     // Se alamacena el nuevo distribuidor en la base de datos
  const distribuidor = new distribuidorModelo(datos);
  await distribuidor.save() 
 

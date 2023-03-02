@@ -1,5 +1,19 @@
 import parteModelo from '../models/parte.modelo.js' ;
 
+
+// Devuelve todos los partes activas de la colección
+export const getPartes = async (req, res) => {
+    try {
+        const partes = await parteModelo.find({estado: true}) // consulta para todos los documentos
+    
+    // Respuesta del servidor
+    res.json(partes);
+    } catch (error) {
+        console.log("Error al traer los partes: ", error)
+    }
+  }
+
+
 // Controlador que almacena un nuevo parte
 // CREAR PARTE
 export const postParte = async (req, res) => {

@@ -1,19 +1,17 @@
 
-import PuntoModelo from "../models/punto.js";
+import PuntoModelo from "../models/punto.modelo.js";
 
 
 
 export const getPuntos = async (req, res) => {
-    const datos = req.body;
+  
+  try {
+    const puntos = await PuntoModelo.find({estado: true}) // consulta para todos los documentos
 
-    try {
-        // Se alamacena el nuevo inventario en la base de datos
-    const  punto = new PuntoModelo(datos);
-    await punto.save() 
-   
-    res.json({msg: 'El inventario se guardo correctamente'});
-    } catch (error) {
-        console.log("Error al crear un inventario: ", error)
+// Respuesta del servidor
+res.json(puntos);
+} catch (error) {
+    console.log("Error al traer los puntos: ", error)
     }
    }
    
