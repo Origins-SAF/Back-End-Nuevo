@@ -1,9 +1,9 @@
-const { response, request } = require("express");
-const jwt = require("jsonwebtoken");
 
-const { secret_key } = require("../config");
+import jwt from "jsonwebtoken";
 
-const Usuario = require("../models/usuario");
+
+
+import usuariosModelo from "../models/usuario.modelo.js";
 
 const validarJWT = async (req = request, res = response, next) => {
   const token = req.header("x-token");
@@ -15,10 +15,11 @@ const validarJWT = async (req = request, res = response, next) => {
   }
 
   try {
-    const { uid } = jwt.verify(token, secret_key);
+    const { id } = jwt.verify(token, process.env.SECRET_KEY );
 
+    //console.log(id)
     // leer el usuario que corresponde al uid
-    const usuario = await Usuario.findById(uid).populate("designado", "nombre");
+    const usuario = await usuariosModelo.findById(id).populate("nombre", "apellido");
 
     if (!usuario) {
       return res.status(401).json({
@@ -43,6 +44,4 @@ const validarJWT = async (req = request, res = response, next) => {
   }
 };
 
-module.exports = {
-  validarJWT,
-};
+export default validarJWT

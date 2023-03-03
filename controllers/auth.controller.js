@@ -77,26 +77,14 @@ export const register = async (req, res) => {
   }
 };
 
-export const renew = async (req = request, res = response) => {
-  const { _id } = req.usuario;
-
+export const loginUser = async (req, res) => {
   try {
-    const usuario = await usuarioModelo.findById(_id);
-
-    const token = await generarJWT(_id);
-
-    res.json({
-      ok: true,
-      msg: "Token revalidado",
-      usuario,
-      token,
-    });
-  } catch (err) {
-    console.log("Error al revalidar al token", err);
-    return res.status(500).json({
-      ok: false,
-      msg: "Por favor, hable con el administrador",
-    });
+    
+      const user = await usuarioModelo.findById(req.usuario.id).select('-password, -updatedAt')
+      res.json(user)
+  } catch (error) {
+      console.log(error)
+      res.status(500).send('server error - Hable con un administrador')
   }
-};
+}
 
