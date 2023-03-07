@@ -15,59 +15,78 @@ export const getInventarios = async (req, res) => {
 }
 
 export const obtenerInventarios = async (req, res = response) => {
-    const { limite = 5, desde = 0 } = req.query;
-    const query = { estado: true };
-  
-    try {
-      const [total, puntos, tabla] = await Promise.all([
-        inventarioModelo.countDocuments(query),
-        inventarioModelo.find(query)
-          .populate("usuario", ["nombre","apellido","img"])
-          .skip(Number(desde))
-            .limit(Number(limite)),
-          inventarioModelo.aggregate([
-          { $match: query },
-          {
-            $lookup: {
-              from: "usuarios",
-              localField: "usuario",
-              foreignField: "_id",
-              as: "usuario",
-            },
+  const { limite = 5, desde = 0 } = req.query;
+  let query;
+
+  query = {
+    estado: true
+  };
+
+  try {
+    const [total, inventario, detallado] = await Promise.all([
+      inventarioModelo.countDocuments(query),
+      inventarioModelo.aggregate([
+        { $match: query },
+        {
+          $unwind: "$usuario",
+        },
+        {
+          $lookup: {
+            from: "usuarioModelo",
+            localField: "proveedor",
+            foreignField: "uid",
+            as: "proveedor",
           },
-          { $unwind: "$usuario" },
-          {
-            $project: {
-              _id: 0,
-              id: "$_id",
-              nombre: 1,
-            departamento: 1,
-            barrio: 1,
-            descripcion: 1,
-            usuario: "$usuario.nombre",
-            updatedAt: {
+        },
+        {
+          $unwind: "$proveedor",
+        },
+        {
+          $project: {
+            _id: 0,
+            createdAt: {
               $dateToString: {
                 format: "%Y-%m-%d",
-                date: "$updatedAt",
+                date: "$createdAt",
               },
             },
-            },
+            productos: [{
+              nombre: 1,
+              unidad: 1,
+              cantidadProducto: 1,
+              precio: 1,
+              categoria: 1,
+              destino: 1,
+              img: 1
+            }],
+            proveedor: "$proveedor.nombre",
+            usuario: "$usuario.nombre",
           },
-        ]),
-      ]);
-  
-      res.json({
-        total,
-      tabla,
-      puntos,
-      });
-    } catch (err) {
-      console.log("Error al mostrar los puntos: ", err);
-      res.status(500).json({
-        msg: "Por favor, hable con el administrador",
-      });
-    }
-  };
+        },
+        { $sort: { nombre: 1 } },
+        { $skip: parseInt(desde) },
+        { $limit: parseInt(limite) },
+      ]),
+      inventarioModelo.find(query)
+        .populate("usuario", "nombre")
+        .populate("proveedor", "nombre")
+        .skip(Number(desde))
+        .limit(Number(limite)),
+    ]);
+
+    res.json({
+      total,
+      inventario,
+      detallado,
+    });
+    console.log(inventario)
+  } catch (err) {
+    console.log("Error al mostrar los productos: ", err);
+    res.status(500).json({
+      msg: "Por favor, hable con el administrador",
+    });
+  }
+};
 
 
 // Controlador que almacena un nuevo inventario
@@ -79,8 +98,9 @@ export const postInventario = async (req, res) => {
  try {
      // Se alamacena el nuevo inventario en la base de datos
      datos.usuario = req.usuario.id
-     //console.log(datos)
+     datos.totalDeProductos = datos.productos.length
 
+     //console.log(datos)
  const inventario = new inventarioModelo(datos);
  await inventario.save() 
 

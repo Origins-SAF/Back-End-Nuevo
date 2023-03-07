@@ -47,11 +47,10 @@ const InventarioSchema = new Schema(
       },
       img: { type: String },
     }],
-    proveedor: {
-      type: Schema.Types.ObjectId,
-      ref: "usuarioModelo",
-      required: true,
-    },
+    totalDeProductos:{
+      type: Number,
+      default: 0,
+    }
     /* disponible: { type: Boolean, default: true }, */
   },
   { timestamps: true }
