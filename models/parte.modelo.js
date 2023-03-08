@@ -12,7 +12,7 @@ const ParteSchema = new Schema(
         distribuidor: [ {
           nombre: {
             type: Schema.Types.ObjectId,
-            ref: "Distribuidor",
+            ref: "distribuidorModelo",
           },
           nota: {
             type: String,
@@ -20,15 +20,21 @@ const ParteSchema = new Schema(
           familiasParticipantes: {
             type: Number,
           },
-          stockInicial: {
-            type: Number,
-          }, 
-          stockVendidos: {
-            type: Number,
-          }, 
-          totalRecaudado: {
-            type: Number,
-          },
+          stock: [{
+            producto: {
+              type: Schema.Types.ObjectId,
+              ref: "productoModelo",
+            },
+            stockInicial: {
+              type: Number,
+            }, 
+            stockFinal: {
+              type: Number,
+            }, 
+            totalRecaudado: {
+              type: Number,
+            },
+          }],
           prodmasvendido: {
             type: String,
           },
@@ -36,6 +42,10 @@ const ParteSchema = new Schema(
         recaudacionTotal: {
           type: Number,
         },
+        estado: {
+          type: Boolean,
+          default: true
+        }
       }
 );
 

@@ -35,11 +35,6 @@ const InventarioSchema = new Schema(
         type: Number,
         default: 0,
       },
-      categoria: {
-        type: Schema.Types.ObjectId,
-        ref: "Categoria",
-        required: true,
-      },
       destino: {
         type: Schema.Types.ObjectId,
         ref: "Destino",
