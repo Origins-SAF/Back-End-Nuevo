@@ -12,9 +12,9 @@ const ProductoSchema = new Schema(
       default: true,
       required: true,
     },
-    usuario: {
+    distribuidor: {
       type: Schema.Types.ObjectId,
-      ref: "Usuario",
+      ref: "distribuidorModelo",
       required: true,
     },
    

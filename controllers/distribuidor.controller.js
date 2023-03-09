@@ -4,7 +4,7 @@ import distribuidorModelo from '../models/distribuidor.modelo.js';
 // Devuelve todos los distribuidor activas de la colección
 export const getDistribuidores = async (req, res) => {
   try {
-      const distribuidores = await distribuidorModelo.find({estado: true}) // consulta para todos los documentos
+      const distribuidores = await distribuidorModelo.find() // consulta para todos los documentos
   
   // Respuesta del servidor
   res.json(distribuidores);

@@ -6,6 +6,7 @@ import {
   getPunto,
   postNuevoPunto
 } from "../controllers/punto.controller.js";
+import validarJWT from "../middlewares/validar-jwt.js";
 
 const router = Router();
 
@@ -22,7 +23,7 @@ router.get(
 // Crear punto - privado - cualquier persona con un token válido
 router.post(
   "/guardar-punto",
-
+  validarJWT,
   postNuevoPunto
 );
 

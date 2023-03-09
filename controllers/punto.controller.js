@@ -9,7 +9,7 @@ export const getPuntos = async (req, res) => {
     const puntos = await PuntoModelo.find({estado: true}) // consulta para todos los documentos
 
 // Respuesta del servidor
-res.json(puntos);
+res.json({puntos});
 } catch (error) {
     console.log("Error al traer los puntos: ", error)
     }
@@ -21,7 +21,7 @@ export const getPunto = async (req, res) => {
   try {
     const punto = await PuntoModelo.findById(id).populate("usuario", "nombre");
 
-    res.json(punto);
+    res.json({punto});
   } catch (err) {
     console.log("Error al mostrar el punto: ", err);
     res.status(500).json({
@@ -45,6 +45,8 @@ export const postNuevoPunto = async (req, res) => {
     // Generar la data a guardar
     const data = {
       ...req.body,
+
+      //detecta automaticamente el usuario que registro el punto con el token
       usuario: req.usuario._id,
     };
 
