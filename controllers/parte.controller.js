@@ -39,14 +39,14 @@ export const putParte = async (req, res = response) => {
     const { usuario, ...data } = req.body;
   
     try {
-        data.dia;
+        data.fecha;
         data.distribuidor;
-      
+        //console.log(data.fecha)
         data.usuario = req.usuario._id;
-
-      const parte = await parteModelo.findByIdAndUpdate(id, data, { new: true });
-  
-      res.json(parte, {msg: 'El parte se actualizó correctamente'});
+        //console.log(id)
+      await parteModelo.findByIdAndUpdate(id, data, { new: true });
+        
+      res.json( {msg: 'El parte se actualizó correctamente'});
     } catch (error) {
         console.log("Error al actualizar el parte: ", error);
     }
