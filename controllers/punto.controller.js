@@ -21,7 +21,7 @@ export const getPunto = async (req, res) => {
   try {
     const punto = await PuntoModelo.findById(id).populate("usuario", "nombre");
 
-    res.json({punto});
+    res.json(punto);
   } catch (err) {
     console.log("Error al mostrar el punto: ", err);
     res.status(500).json({
@@ -58,6 +58,28 @@ export const postNuevoPunto = async (req, res) => {
     res.status(201).json(punto);
   } catch (err) {
     console.log("Error al crear el punto: ", err);
+    res.status(500).json({
+      msg: "Por favor, hable con el administrador",
+    });
+  }
+};
+
+
+//actualizar punto
+
+export const putPuntos =  async (req, res = response) => {
+  const { id } = req.params;
+  const { estado, ...data } = req.body;
+
+  data.nombre = data.nombre.toUpperCase();
+  
+
+  try {
+    const punto = await PuntoModelo.findByIdAndUpdate(id, data, { new: true });
+
+    res.json(punto);
+  } catch (err) {
+    console.log("Error al actualizar el punto: ", err);
     res.status(500).json({
       msg: "Por favor, hable con el administrador",
     });

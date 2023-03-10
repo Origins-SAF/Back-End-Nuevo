@@ -4,7 +4,8 @@ import  Router  from "express";
 import {
   getPuntos,
   getPunto,
-  postNuevoPunto
+  postNuevoPunto,
+  putPuntos
 } from "../controllers/punto.controller.js";
 import validarJWT from "../middlewares/validar-jwt.js";
 
@@ -15,7 +16,7 @@ router.get("/ver-puntos", getPuntos);
 
 // Obtener un punto por id - publico
 router.get(
-  "/ver-punto:id",
+  "/ver-punto/:id",
 
   getPunto
 );
@@ -26,6 +27,9 @@ router.post(
   validarJWT,
   postNuevoPunto
 );
+
+
+router.put("/actualizar-punto/:id", putPuntos)
 
 /* // Actualizar - privado - cualquiera con token válido
 router.put(
