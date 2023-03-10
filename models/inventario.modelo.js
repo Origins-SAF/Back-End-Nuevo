@@ -9,7 +9,7 @@ const InventarioSchema = new Schema(
     },
     usuario: {
       type: Schema.Types.ObjectId,
-      ref: "Usuario",
+      ref: "usuarioModelo",
       required: true,
     },
 
@@ -39,10 +39,10 @@ const InventarioSchema = new Schema(
         type: Schema.Types.ObjectId,
         ref: "Destino",
         required: true,
-      }
+      },
+      img: { type: String, default:"https://images.vexels.com/media/users/3/199820/isolated/preview/892bfdfcb80b356c53405aafbb716513-caja-de-carton-isometrica.png"},
     }],
     /* disponible: { type: Boolean, default: true }, */
-    img: { type: String },
   },
   { timestamps: true }
 );
