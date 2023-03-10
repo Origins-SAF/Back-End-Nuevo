@@ -23,8 +23,10 @@ export const postInventario = async (req, res) => {
 
  try {
   datos.usuario = req.usuario._id
+
   datos.totalDeProductos = datos.productos.length
 
+  console.log(datos)
 
      // Se alamacena el nuevo inventario en la base de datos
  const inventario = new inventarioModelo(datos);
