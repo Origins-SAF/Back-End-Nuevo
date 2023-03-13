@@ -14,7 +14,7 @@ const PuntoSchema = new Schema(
     },
     usuario: {
       type: Schema.Types.ObjectId,
-      ref: "Usuario",
+      ref: "usuarioModelo",
       required: true,
     },
     descripcion: { type: String },
