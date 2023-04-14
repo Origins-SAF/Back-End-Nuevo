@@ -1,44 +1,59 @@
 import { model, Schema } from 'mongoose';
 
 const ParteSchema = new Schema(
-    {
-        usuario: {
+  {
+    usuario: {
+      type: Schema.Types.ObjectId,
+      ref: "usuarioModelo",
+    },
+    fecha: {
+      type: String,
+    },
+    distribuidor: [ 
+      {
+      nombre: {
+        type: Schema.Types.ObjectId,
+        ref: "distribuidorModelo",
+      },
+      nota: {
+        type: String,
+      },
+      familiasParticipantes: {
+        type: Number,
+      },
+      stock: [{
+        producto: {
           type: Schema.Types.ObjectId,
-          ref: "usuarioModelo",
+          ref: "productoModelo",
         },
-        fecha: {
-          type: String,
-        },
-        distribuidor: [ {
-          nombre: {
-            type: Schema.Types.ObjectId,
-            ref: "Distribuidor",
-          },
-          nota: {
-            type: String,
-          },
-          familiasParticipantes: {
-            type: Number,
-          },
-          stockInicial: {
-            type: Number,
-          }, 
-          stockVendidos: {
-            type: Number,
-          }, 
-          totalRecaudado: {
-            type: Number,
-          },
-          prodmasvendido: {
-            type: String,
-          },
-        }],
-        recaudacionTotal: {
+        stockInicial: {
+          type: Number,
+        }, 
+        stockFinal: {
+          type: Number,
+        }, 
+        totalRecaudado: {
           type: Number,
         },
-      }
+      }],
+      prodmasvendido: {
+        type: String,
+      },
+    }
+  ],
+    recaudacionTotal: {
+      type: Number,
+    },
+    ubicacion:{
+      type: Schema.Types.ObjectId,
+      ref: "PuntoModelo",
+    },
+    estado: {
+      type: Boolean,
+      default: true
+    }
+  }
 );
-
  
 ParteSchema.methods.toJSON = function () {
   const { __v, estado, _id, ...data } = this.toObject();

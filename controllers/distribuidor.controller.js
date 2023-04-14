@@ -13,6 +13,19 @@ export const getDistribuidores = async (req, res) => {
   }
 }
 
+// Devuelve todos los distribuidor activas de la colección
+export const getDistribuidorUnico = async (req, res) => {
+  const {id } = req.params;
+  try {
+      const distribuidor = await distribuidorModelo.findById(id) // consulta para todos los documentos
+  
+  // Respuesta del servidor
+  res.json(distribuidor);
+  } catch (error) {
+      console.log("Error al traer el distribuidor: ", error)
+  }
+}
+
 
 // Controlador que almacena un nuevo distribuidor
 export const postDistribuidores = async (req, res) => {

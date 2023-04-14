@@ -4,7 +4,31 @@ import inventarioModelo from '../models/inventario.modelo.js';
 // Devuelve todos los inventarios activas de la colección
 export const getInventarios = async (req, res) => {
   try {
-    const inventarios = await inventarioModelo.find({estado: true}).populate('usuario',["nombre","apellido","img"]) // consulta para todos los documentos
+    const inventarios = await inventarioModelo.find({estado: true}).populate('usuario',["nombre","apellido","img"])
+    .populate('productos.destino',["barrio" , "nombre"]) // consulta para todos los documentos
+  
+  // Respuesta del servidor
+  res.json(inventarios);
+  } catch (error) {
+      console.log("Error al traer los inventarios: ", error)
+  }
+}
+export const getInventariosDesactivados = async (req, res) => {
+  try {
+    const inventarios = await inventarioModelo.find({estado: false}) // consulta para todos los documentos
+  
+  // Respuesta del servidor
+  res.json(inventarios);
+  } catch (error) {
+      console.log("Error al traer los inventarios: ", error)
+  }
+}
+
+export const getInventarioUnico = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const inventarios = await inventarioModelo.findById(id).populate('usuario',["nombre","apellido","img"])
+    .populate('productos.destino',["barrio" , "nombre"]) // consulta para todos los documentos
   
   // Respuesta del servidor
   res.json(inventarios);

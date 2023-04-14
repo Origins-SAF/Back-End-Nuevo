@@ -62,11 +62,11 @@ export const postNuevoPunto = async (req, res) => {
   }
 };
 
-export const test2 = async (req, res) => {
+export const updatePunto = async (req, res) => {
   const { id } = req.params;
   const { estado, usuario, ...data } = req.body;
 
-  data.nombre = data.nombre.toUpperCase();
+  /* data.nombre = data.nombre.toUpperCase(); */
   data.usuario = req.usuario._id;
 
   try {
@@ -81,7 +81,7 @@ export const test2 = async (req, res) => {
   }
 };
 
-export const test3 = async (req, res) => {
+export const eliminarPuntoLog = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -91,9 +91,34 @@ export const test3 = async (req, res) => {
       { new: true }
     );
 
-    res.json(puntoBorrado);
+    res.json({
+      msg: "Punto eliminado correctamente (lógica)",
+      puntoBorrado,
+    });
   } catch (err) {
     console.log("Error al borrar el punto: ", err);
+    res.status(500).json({
+      msg: "Por favor, hable con el administrador",
+    });
+  }
+};
+
+export const reactivarPuntoLog = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const puntoReactivado = await PuntoModelo.findByIdAndUpdate(
+      id,
+      { estado: true },
+      { new: true }
+    );
+
+    res.json({
+      msg: "Punto Reactivado correctamente (lógica)",
+      puntoReactivado,
+    });
+  } catch (err) {
+    console.log("Error al reactivar el punto: ", err);
     res.status(500).json({
       msg: "Por favor, hable con el administrador",
     });

@@ -12,12 +12,6 @@ const ProductoSchema = new Schema(
       default: true,
       required: true,
     },
-    usuario: {
-      type: Schema.Types.ObjectId,
-      ref: "Usuario",
-      required: true,
-    },
-   
     unidad: {
       type: String,
       default: "UN",
@@ -30,13 +24,13 @@ const ProductoSchema = new Schema(
     descripcion: { type: String },
     
 
-   /*  distribuidor: {
+    distribuidor: {
       type: Schema.Types.ObjectId,
-      ref: "Distribuidors",
+      ref: "distribuidorModelo",
       required: true,
-    }, */
+    },
 
-    img: { type: String },
+    img: { type: String, default:"img"},
   },
   { timestamps: true }
 );

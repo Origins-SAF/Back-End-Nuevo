@@ -9,11 +9,13 @@ import {
     updateDistribuidores,
     deleteLogDistribuidor, 
     reactivarLogDistribuidor,
-    deleteDistribuidor 
+    deleteDistribuidor,
+    getDistribuidorUnico 
     } from "../controllers/distribuidor.controller.js";
     
     
     router.get("/ver-distribuidor", getDistribuidores);
+    router.get("/ver-distribuidor-unico/:id", getDistribuidorUnico);
     router.post("/guardar-distribuidor", postDistribuidores)
     router.put("/actualizar-distribuidor/:id", updateDistribuidores)
     router.put("/eliminar-log-distribuidor/:id", deleteLogDistribuidor)
