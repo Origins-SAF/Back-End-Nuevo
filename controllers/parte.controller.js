@@ -34,15 +34,21 @@ export const getPartesPorFecha = async (req, res) => {
 };
 
 export const getPartesPorGrupos = async (req, res) => {
+
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+
   try {
     const partes = await parteModelo
       .find()
       .populate("usuario", ["nombre", "apellido", "img"]) // consulta para todos los documentos
       .populate("distribuidor.nombre", ["nombre"])
-      /*  .populate('ubicacion',[ "nombre", "barrio" ]) */
-      .populate("distribuidor.stock.producto", ["nombre", "img"]);
+      .populate('ubicacion',[ "nombre", "barrio" ])
+      .populate("distribuidor.stock.producto", ["nombre", "img"])
 
-    let datosParte = partes.reverse();
+      const totalPage = partes.length
+
+    let datosParte = partes.slice(skip, skip + limit).reverse();
     //console.log(datosParte)
 
     // "data" es la variable que está alojando el JSON
@@ -71,8 +77,8 @@ export const getPartesPorGrupos = async (req, res) => {
       }
     }
     // Respuesta del servidor
-
-    res.json(partesDatos);
+    //console.log(partesDatos.length)
+    res.json({totalPage,partesDatos});
   } catch (error) {
     console.log("Error al traer los partes: ", error);
   }

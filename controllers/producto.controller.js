@@ -3,11 +3,19 @@ import mongoose from 'mongoose';
 
 // Devuelve todos los productos activas de la colección
 export const getProducto = async (req, res) => {
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+ /*  console.log(limit)
+  console.log(skip) */
+
   try {
-      const productos = await productoModelo.find({estado: true}) // consulta para todos los documentos
-  
+      const productos = await productoModelo.find() // consulta para todos los documentos
+      //const tamano = (await productoModelo.find()).length
+      const totalPage = productos.length
+      //console.log(productos)
+      const productosFiltrados = productos.slice(skip, skip + limit);
   // Respuesta del servidor
-  res.json(productos);
+  res.json({totalPage,productosFiltrados});
   } catch (error) {
       console.log("Error al traer los productos: ", error)
   }
