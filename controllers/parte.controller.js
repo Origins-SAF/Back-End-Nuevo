@@ -84,6 +84,19 @@ export const getPartesPorGrupos = async (req, res) => {
   }
 };
 
+export const getPartesPorMes = async (req,res) => {
+  const mes = 4; // buscar registros del mes de abril
+  parteModelo.find({
+    $expr: {
+      $eq: [{ $month: "$fecha" }, 4]
+    }
+  }, function(err, users) {
+    console.log(users);
+  });
+
+
+}
+
 // Controlador que almacena un nuevo parte
 // CREAR PARTE
 export const postParte = async (req, res) => {

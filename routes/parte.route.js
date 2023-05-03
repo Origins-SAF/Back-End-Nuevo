@@ -8,12 +8,14 @@ import {
     postParte,
     putParte,
     getPartesPorGrupos,
-    getPartesPorFecha
+    getPartesPorFecha,
+    getPartesPorMes
   } from "../controllers/parte.controller.js";
 import validarJWT from "../middlewares/validar-jwt.js";
   
-  router.get("/ver-parte", getPartes);
-  router.get("/ver-partes-dias-grupos", getPartesPorGrupos);
+router.get("/ver-parte", getPartes);
+router.get("/ver-parte-mes", getPartesPorMes);
+router.get("/ver-partes-dias-grupos", getPartesPorGrupos);
   router.get("/ver-partes-dias-fecha/:fechapd", getPartesPorFecha)
   router.post("/crear-parte",validarJWT, postParte);
   router.put("/editar-parte/:id",validarJWT, putParte);

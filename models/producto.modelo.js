@@ -29,6 +29,10 @@ const ProductoSchema = new Schema(
       ref: "distribuidorModelo",
       required: true,
     },
+    publicado: {
+      type: Boolean,
+      default: false,
+    },
 
     img: { type: String, default:"img"},
   },

@@ -3,12 +3,24 @@ import inventarioModelo from '../models/inventario.modelo.js';
 
 // Devuelve todos los inventarios activas de la colección
 export const getInventarios = async (req, res) => {
+
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+
   try {
     const inventarios = await inventarioModelo.find({estado: true}).populate('usuario',["nombre","apellido","img"])
     .populate('productos.destino',["barrio" , "nombre"]) // consulta para todos los documentos
   
+    const totalPage = inventarios.length
+    //console.log(productos)
+    const inventarioFiltrados = inventarios.slice(skip, skip + limit);
+
+  
+  
+
+
   // Respuesta del servidor
-  res.json(inventarios);
+  res.json({totalPage, inventarioFiltrados});
   } catch (error) {
       console.log("Error al traer los inventarios: ", error)
   }

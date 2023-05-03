@@ -1,5 +1,5 @@
 import distribuidorModelo from '../models/distribuidor.modelo.js';
-
+import notificacionesModelo from '../models/notificaciones.modelo.js';
 
 // Devuelve todos los distribuidor activas de la colección
 export const getDistribuidores = async (req, res) => {
@@ -38,7 +38,17 @@ export const postDistribuidores = async (req, res) => {
  const distribuidor = new distribuidorModelo(datos);
  await distribuidor.save() 
 
- res.json({msg: 'El distribudor se guardo correctamente'});
+ const noti = {}
+
+ noti.descripcion = "Nuevo Distribuidor"
+ noti.tipo = "Distribuidor"
+ noti.img = "ti-info-alt"
+
+ const notificacionNueva = new notificacionesModelo(noti)
+ await notificacionNueva.save()
+
+ 
+ res.json({msg: 'El distribudor se guardo correctamente', notificacion: noti.descripcion});
  } catch (error) {
      console.log("Error al crear un distribuidor: ", error)
  }

@@ -30,6 +30,28 @@ export const getPunto = async (req, res) => {
   }
 };
 
+export const publicacionPunto = async (req, res) => {
+  const { id } = req.params;
+  const valor = req.body.publicado
+try {
+    const puntoPublicado = await PuntoModelo.findByIdAndUpdate(
+      id,
+      { publicado: valor },
+      { new: true }
+    );
+
+    res.json({
+      msg: "Punto Actualizado Correctamente (Publicacion)",
+      puntoPublicado,
+    });
+  } catch (err) {
+    console.log("Error al actualizar el punto: ", err);
+    res.status(500).json({
+      msg: "Por favor, hable con el administrador",
+    });
+  }
+};
+
 export const postNuevoPunto = async (req, res) => {
   const nombre = req.body.nombre.toUpperCase();
 

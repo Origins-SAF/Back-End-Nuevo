@@ -26,6 +26,10 @@ const PuntoSchema = new Schema(
         type: String,
       },
     },
+    publicado: {
+      type: Boolean,
+      default: false,
+    },
     estado: {
       type: Boolean,
       default: true,

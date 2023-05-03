@@ -7,7 +7,8 @@ import {
   postNuevoPunto,
   updatePunto,
   eliminarPuntoLog,
-  reactivarPuntoLog
+  reactivarPuntoLog,
+  publicacionPunto
 } from "../controllers/punto.controller.js";
 import validarJWT from "../middlewares/validar-jwt.js";
 
@@ -19,11 +20,13 @@ router.get("/ver-puntos", getPuntos);
 // Obtener un punto por id - publico
 router.get("/ver-punto/:id",validarJWT,getPunto);
 
+router.put("/publicacion-punto/:id",publicacionPunto);
+
 // Crear punto - privado - cualquier persona con un token válido
 router.post("/guardar-punto",validarJWT,postNuevoPunto);
 
 // Actualizar - privado - cualquiera con token válido
-router.put("/actualizar-punto/:id",updatePunto);
+router.put("/actualizar-punto/:id",validarJWT,updatePunto);
 
 // Borrar un punto - Log
 router.put("/eliminar-punto-log/:id",eliminarPuntoLog);

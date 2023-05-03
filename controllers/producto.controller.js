@@ -2,24 +2,47 @@ import productoModelo from '../models/producto.modelo.js';
 import mongoose from 'mongoose';
 
 // Devuelve todos los productos activas de la colección
-export const getProducto = async (req, res) => {
+export const getProductos = async (req, res) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
  /*  console.log(limit)
   console.log(skip) */
 
   try {
-      const productos = await productoModelo.find() // consulta para todos los documentos
+      const productos = await productoModelo.find().populate("distribuidor", "nombre") // consulta para todos los documentos
       //const tamano = (await productoModelo.find()).length
-      const totalPage = productos.length
+      const totalProductos = productos.length
       //console.log(productos)
       const productosFiltrados = productos.slice(skip, skip + limit);
+
+      const pages = [];
+      for (let i = 0; i < productos.length; i += limit) {
+        const page = i
+        pages.push(page);
+      }
+  
+      const totalPages= pages
   // Respuesta del servidor
-  res.json({totalPage,productosFiltrados});
+  res.json({totalPages,totalProductos,productosFiltrados});
   } catch (error) {
       console.log("Error al traer los productos: ", error)
   }
 }
+
+export const getProducto = async (req, res = response) => {
+  const { id } = req.params;
+
+  try {
+    const producto = await productoModelo.findById(id).populate("distribuidor", "nombre")
+
+    res.json(producto);
+  } catch (err) {
+    console.log("Error al mostrar el producto: ", err);
+    res.status(500).json({
+      msg: "Por favor, hable con el administrador",
+    });
+  }
+};
 
 export const getProductoDistribuidores = async (req, res) => {
 
@@ -99,3 +122,42 @@ export const reactivarProductoLog = async (req, res) => {
     });
   }
 };
+
+//actualizar usuario
+
+export const putProductos =  async (req, res = response) => {
+  const { id } = req.params;
+  const { estado, ...data } = req.body;
+
+  data.nombre = data.nombre.toUpperCase();
+  
+
+  try {
+    const producto = await productoModelo.findByIdAndUpdate(id, data, { new: true });
+
+    res.json(producto);
+  } catch (err) {
+    console.log("Error al actualizar el punto: ", err);
+    res.status(500).json({
+      msg: "Por favor, hable con el administrador",
+    });
+  }
+};
+
+//eliminar producto
+
+export const deleteProductos =  async (req, res = response) => {
+  const  id = req.params.id;
+  
+  try {
+     
+      await productoModelo.findByIdAndDelete(id)
+
+      res.json({
+          msg: 'producto eliminado correctamente'
+      })
+  } catch (error) {
+     
+      console.log('Error al eliminar producto: ', error)
+  }
+}
