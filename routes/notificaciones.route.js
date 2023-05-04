@@ -7,9 +7,10 @@ import {
     getNotificacionesActivas,
     cambiarEstadoNotificacion
     } from "../controllers/notificacion.controller.js";
+    import validarJWT from "../middlewares/validar-jwt.js";
     
-    
-    router.get("/ver-notificaciones", getNotificacionesActivas);
+    router.get("/ver-notificaciones", validarJWT, getNotificacionesActivas);
     router.put("/leer-notificacion/:id", cambiarEstadoNotificacion);
+
     export default router;
     

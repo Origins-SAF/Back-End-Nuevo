@@ -1,6 +1,6 @@
 import noticiaModelo from '../models/noticia.modelo.js';
 import notificacionesModelo from '../models/notificaciones.modelo.js';
-
+import usuarioModelo from '../models/usuario.modelo.js'
 // Devuelve todos los noticias activas de la colección
 export const getNoticias = async (req, res) => {
   try {
@@ -34,18 +34,19 @@ export const postNoticia = async (req, res) => {
   // Desestructuramos la información recibida del cliente
 
  const datos = req.body;
-
+const usuarios = await usuarioModelo.find({}, 'uid')
  try {
 
  // Se alamacena la nueva noticia en la base de datos
  const noticia = new noticiaModelo(datos);
  await noticia.save() 
-
+  //console.log(usuarios)
  const noti = {}
 
  noti.descripcion = `Nueva Noticia Subida (${noticia.titulo})`
  noti.tipo = "Noticia"
  noti.img = "ti-info-alt"
+ noti.usuarios = usuarios
 
  const notificacionNueva = new notificacionesModelo(noti)
  await notificacionNueva.save()

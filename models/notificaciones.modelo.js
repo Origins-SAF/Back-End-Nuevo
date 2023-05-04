@@ -11,11 +11,18 @@ const NotificacionSchema = new Schema(
           img:{
             type: String,
           },
-          
-          leido: {
-            type: Boolean,
-            default: false
-          },
+          usuarios:[
+            {
+              idUsuario:{
+                type: Schema.Types.ObjectId,
+                ref: "usuarioModelo",
+              },
+              leido: {
+                type: Boolean,
+                default: false
+              },
+            }
+          ]
         }
       );
 

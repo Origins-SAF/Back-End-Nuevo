@@ -1,9 +1,10 @@
 import notificacionesModelo from '../models/notificaciones.modelo.js';
-
+import mongoose from 'mongoose';
 // Devuelve todas las notificaciones no leidas de la colección
 export const getNotificacionesActivas = async (req, res) => {
+  const idUser = req.usuario._id
   try {
-      const notificaciones = await notificacionesModelo.find({leido: false}) // consulta para todos los documentos
+      const notificaciones = await notificacionesModelo.find({"usuarios.idUsuario" : mongoose.Types.ObjectId(idUser)}) // consulta para todos los documentos
   
   // Respuesta del servidor
   res.json(notificaciones);
