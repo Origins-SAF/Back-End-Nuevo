@@ -11,6 +11,10 @@ const NotificacionSchema = new Schema(
           img:{
             type: String,
           },
+          color:{
+            type: String,
+            default: "bg-info"
+          },
           usuarios:[
             {
               idUsuario:{

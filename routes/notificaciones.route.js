@@ -10,7 +10,7 @@ import {
     import validarJWT from "../middlewares/validar-jwt.js";
     
     router.get("/ver-notificaciones", validarJWT, getNotificacionesActivas);
-    router.put("/leer-notificacion/:id", cambiarEstadoNotificacion);
+    router.put("/leer-notificacion/:id",validarJWT, cambiarEstadoNotificacion);
 
     export default router;
     

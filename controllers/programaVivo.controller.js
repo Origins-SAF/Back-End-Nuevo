@@ -1,5 +1,6 @@
 import programaModelo from '../models/programaVivo.modelo.js';
 import notificacionesModelo from '../models/notificaciones.modelo.js';
+import usuarioModelo from '../models/usuario.modelo.js';
 
 // Devuelve todos los programas activos de la colección
 export const getProgramas = async (req, res) => {
@@ -32,7 +33,7 @@ export const postPrograma = async (req, res) => {
   // Desestructuramos la información recibida del cliente
 
  const datos = req.body;
-
+ const usuarios = await usuarioModelo.find({}, 'uid')
  try {
 
  // Se alamacena el nuevo programa en la base de datos
@@ -43,7 +44,19 @@ export const postPrograma = async (req, res) => {
 
  noti.descripcion = `Nuevo Programa Publicado (${programa.titulo})`
  noti.tipo = "Programa"
- noti.img = "ti-info-alt"
+ noti.img = "ti-headphone"
+
+ const userID = []
+ for (let i = 0; i < usuarios.length; i++) {
+  //console.log()
+  const nuevoUser = {
+    leido: false,
+    idUsuario: usuarios[i]._id
+  }
+  userID.push(nuevoUser);
+}
+
+noti.usuarios = userID
 
  const notificacionNueva = new notificacionesModelo(noti)
  await notificacionNueva.save()

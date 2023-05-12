@@ -27,10 +27,6 @@ const UsuarioSchema = new Schema(
       type: String,
       default: "Trabajador del SAF",
     },
-    /* designado: {
-      type: Schema.Types.ObjectId,
-      ref: "Punto",
-    }, */
     ubicacion: {
       lat: {
         type: Number,
@@ -46,6 +42,18 @@ const UsuarioSchema = new Schema(
       type: String,
       required: true,
       default: "user",
+    },
+    configuraciones:{
+      
+        colorNavbar: {
+          type: String,
+          default: 'colorDefault'
+      },
+        colorSiderBar:{
+          type: String,
+          default: 'sidebar-custom-theme'
+        }
+      
     },
     estado: {
       type: Boolean,

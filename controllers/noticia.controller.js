@@ -3,11 +3,17 @@ import notificacionesModelo from '../models/notificaciones.modelo.js';
 import usuarioModelo from '../models/usuario.modelo.js'
 // Devuelve todos los noticias activas de la colección
 export const getNoticias = async (req, res) => {
+
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+
+
   try {
       const noticias = await noticiaModelo.find()
       const todasLasNoticias = noticias.reverse() // consulta para todos los documentos
-      const primeraNoticia = todasLasNoticias[0]
-      const otrasNoticias = todasLasNoticias.slice(1)
+      const noticiasFiltradas = todasLasNoticias.slice(skip, skip + limit);
+      const primeraNoticia = noticiasFiltradas[0]
+      const otrasNoticias = noticiasFiltradas.slice(1)
   // Respuesta del servidor
   res.json({primeraNoticia,otrasNoticias});
   } catch (error) {
@@ -45,8 +51,20 @@ const usuarios = await usuarioModelo.find({}, 'uid')
 
  noti.descripcion = `Nueva Noticia Subida (${noticia.titulo})`
  noti.tipo = "Noticia"
- noti.img = "ti-info-alt"
- noti.usuarios = usuarios
+ noti.img = "ti-clipboard"
+
+
+const userID = []
+ for (let i = 0; i < usuarios.length; i++) {
+  //console.log()
+  const nuevoUser = {
+    leido: false,
+    idUsuario: usuarios[i]._id
+  }
+  userID.push(nuevoUser);
+}
+
+noti.usuarios = userID
 
  const notificacionNueva = new notificacionesModelo(noti)
  await notificacionNueva.save()

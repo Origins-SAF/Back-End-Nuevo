@@ -1,5 +1,7 @@
 import productoModelo from '../models/producto.modelo.js';
 import mongoose from 'mongoose';
+import notificacionesModelo from '../models/notificaciones.modelo.js';
+import usuarioModelo from '../models/usuario.modelo.js';
 
 // Devuelve todos los productos activas de la colección
 export const getProductos = async (req, res) => {
@@ -89,11 +91,33 @@ export const postProducto = async (req, res) => {
   // Desestructuramos la información recibida del cliente
 
  const datos = req.body;
-
+ const usuarios = await usuarioModelo.find({}, 'uid')
  try {
      // Se alamacena el nuevo inventario en la base de datos
  const producto = new productoModelo(datos);
  await producto.save() 
+
+ const noti = {}
+
+    noti.descripcion = `Nuevo Producto Registrado (${producto.nombre})`
+    noti.tipo = "Producto"
+    noti.img = "ti-package"
+    noti.color = "bg-warning"
+
+    const userID = []
+    for (let i = 0; i < usuarios.length; i++) {
+      //console.log()
+      const nuevoUser = {
+        leido: false,
+        idUsuario: usuarios[i]._id
+      }
+      userID.push(nuevoUser);
+    }
+
+    noti.usuarios = userID
+
+    const notificacionNueva = new notificacionesModelo(noti)
+    await notificacionNueva.save()
 
  res.json({msg: 'El producto se guardo correctamente'});
  } catch (error) {

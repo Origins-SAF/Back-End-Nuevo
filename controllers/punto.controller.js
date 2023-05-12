@@ -1,6 +1,7 @@
 
 import PuntoModelo from "../models/punto.modelo.js";
-
+import notificacionesModelo from '../models/notificaciones.modelo.js';
+import usuarioModelo from '../models/usuario.modelo.js';
 
 
 export const getPuntos = async (req, res) => {
@@ -33,6 +34,8 @@ export const getPunto = async (req, res) => {
 export const publicacionPunto = async (req, res) => {
   const { id } = req.params;
   const valor = req.body.publicado
+
+  
 try {
     const puntoPublicado = await PuntoModelo.findByIdAndUpdate(
       id,
@@ -54,7 +57,7 @@ try {
 
 export const postNuevoPunto = async (req, res) => {
   const nombre = req.body.nombre.toUpperCase();
-
+  const usuarios = await usuarioModelo.find({}, 'uid')
   try {
     const puntoDB = await PuntoModelo.findOne({ nombre });
 
@@ -69,9 +72,31 @@ export const postNuevoPunto = async (req, res) => {
       ...req.body,
       usuario: req.usuario._id,
     };
+    
 
     const punto = new PuntoModelo(data);
 
+    const noti = {}
+
+    noti.descripcion = `Nuevo Punto Registrado (${punto.nombre})`
+    noti.tipo = "Punto"
+    noti.img = "ti-map-alt"
+    noti.color = "bg-success"
+
+    const userID = []
+    for (let i = 0; i < usuarios.length; i++) {
+      //console.log()
+      const nuevoUser = {
+        leido: false,
+        idUsuario: usuarios[i]._id
+      }
+      userID.push(nuevoUser);
+    }
+
+    noti.usuarios = userID
+
+    const notificacionNueva = new notificacionesModelo(noti)
+    await notificacionNueva.save()
     // Guardar DB
     await punto.save();
 

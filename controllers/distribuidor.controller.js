@@ -1,6 +1,6 @@
 import distribuidorModelo from '../models/distribuidor.modelo.js';
 import notificacionesModelo from '../models/notificaciones.modelo.js';
-
+import usuarioModelo from '../models/usuario.modelo.js';
 // Devuelve todos los distribuidor activas de la colección
 export const getDistribuidores = async (req, res) => {
   try {
@@ -32,7 +32,7 @@ export const postDistribuidores = async (req, res) => {
   // Desestructuramos la información recibida del cliente
 
  const datos = req.body;
-
+ const usuarios = await usuarioModelo.find({}, 'uid')
  try {
      // Se alamacena el nuevo distribuidor en la base de datos
  const distribuidor = new distribuidorModelo(datos);
@@ -40,9 +40,22 @@ export const postDistribuidores = async (req, res) => {
 
  const noti = {}
 
- noti.descripcion = "Nuevo Distribuidor"
+ noti.descripcion = `Nuevo Distribuidor (${distribuidor.nombre})`
  noti.tipo = "Distribuidor"
- noti.img = "ti-info-alt"
+ noti.img = "ti-id-badge"
+ noti.color = "bg-info"
+
+ const userID = []
+    for (let i = 0; i < usuarios.length; i++) {
+      //console.log()
+      const nuevoUser = {
+        leido: false,
+        idUsuario: usuarios[i]._id
+      }
+      userID.push(nuevoUser);
+    }
+
+    noti.usuarios = userID
 
  const notificacionNueva = new notificacionesModelo(noti)
  await notificacionNueva.save()
