@@ -5,6 +5,10 @@ const DistribuidorSchema = new Schema(
           nombre: {
             type: String,
           },
+          consorcio: {
+            type: Boolean,
+            default: false
+          },
           estado: {
             type: Boolean,
             default: true

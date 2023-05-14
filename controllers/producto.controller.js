@@ -2,6 +2,7 @@ import productoModelo from '../models/producto.modelo.js';
 import mongoose from 'mongoose';
 import notificacionesModelo from '../models/notificaciones.modelo.js';
 import usuarioModelo from '../models/usuario.modelo.js';
+import cloudinary from 'cloudinary'
 
 // Devuelve todos los productos activas de la colección
 export const getProductos = async (req, res) => {
@@ -15,7 +16,8 @@ export const getProductos = async (req, res) => {
       //const tamano = (await productoModelo.find()).length
       const totalProductos = productos.length
       //console.log(productos)
-      const productosFiltrados = productos.slice(skip, skip + limit);
+      
+      const productosFiltrados = productos.reverse().slice(skip, skip + limit);
 
       const pages = [];
       for (let i = 0; i < productos.length; i += limit) {
@@ -90,9 +92,17 @@ export const getProductoDistribuidoresTodos = async (req, res) => {
 export const postProducto = async (req, res) => {
   // Desestructuramos la información recibida del cliente
 
- const datos = req.body;
+
  const usuarios = await usuarioModelo.find({}, 'uid')
+
+ const imgURl = await cloudinary.uploader.upload(req?.file?.path)
+
  try {
+  const datos = {
+    ...req.body,
+    img: imgURl?.url
+  }
+
      // Se alamacena el nuevo inventario en la base de datos
  const producto = new productoModelo(datos);
  await producto.save() 

@@ -22,16 +22,30 @@ const ProductoSchema = new Schema(
     },
 
     descripcion: { type: String },
-    
 
     distribuidor: {
       type: Schema.Types.ObjectId,
       ref: "distribuidorModelo",
       required: true,
     },
+
     publicado: {
       type: Boolean,
       default: false,
+    },
+
+    config: {
+        colorEtiqueta: {
+          type: String,
+        },
+        tituloEtiqueta:{
+          type: String,
+        },
+    },
+
+    categoria : {
+      type: String,
+      required: true
     },
 
     img: { type: String, default:"img"},
