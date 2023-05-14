@@ -71,11 +71,23 @@ export const postNuevoPunto = async (req, res) => {
     
     console.log(imgURl)
 
+    let iconoUrl
+    if(req.body.tipo == "PuntoFijo"){
+      iconoUrl = "https://res.cloudinary.com/dabtnpikz/image/upload/v1684089821/ubi3_a9iutd.webp"
+    }else if (req.body.tipo == "PuntoVisitado"){
+      iconoUrl = "https://res.cloudinary.com/dabtnpikz/image/upload/v1684089784/PuntoVisitado_b4e3rg.webp"
+    }else if (req.body.tipo == "PuntoBarrio"){
+      iconoUrl = "https://res.cloudinary.com/dabtnpikz/image/upload/v1684089821/ubiBarrio_jhdqgp.webp"
+    }else if (req.body.tipo == "PuntoInterior"){
+      iconoUrl = "https://res.cloudinary.com/dabtnpikz/image/upload/v1684089821/ubiInterior_ajtzs8.webp"
+    }
+
     // Generar la data a guardar
     const data = {
       ...req.body,
       usuario: req.usuario._id,
-      img: imgURl?.url
+      img: imgURl?.url,
+      icono: iconoUrl
     };
     
 
