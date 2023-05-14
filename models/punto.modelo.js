@@ -30,6 +30,18 @@ const PuntoSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    img:{
+      type: String,
+      default: "No hay Img"
+    },
+    icono:{
+      type: String,
+      default: "No hay Img"
+    },
+    tipo:{
+      type: String,
+      default: "PuntoFijo"
+    },
     estado: {
       type: Boolean,
       default: true,

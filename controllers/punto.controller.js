@@ -2,7 +2,7 @@
 import PuntoModelo from "../models/punto.modelo.js";
 import notificacionesModelo from '../models/notificaciones.modelo.js';
 import usuarioModelo from '../models/usuario.modelo.js';
-
+import cloudinary from 'cloudinary'
 
 export const getPuntos = async (req, res) => {
   
@@ -58,19 +58,24 @@ try {
 export const postNuevoPunto = async (req, res) => {
   const nombre = req.body.nombre.toUpperCase();
   const usuarios = await usuarioModelo.find({}, 'uid')
+  const imgURl = await cloudinary.uploader.upload(req?.file?.path)
   try {
     const puntoDB = await PuntoModelo.findOne({ nombre });
-
+    
+    
     if (puntoDB) {
       return res.status(400).json({
         msg: `El punto ${puntoDB.nombre}, ya existe`,
       });
     }
+    
+    console.log(imgURl)
 
     // Generar la data a guardar
     const data = {
       ...req.body,
       usuario: req.usuario._id,
+      img: imgURl?.url
     };
     
 

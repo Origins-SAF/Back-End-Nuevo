@@ -37,6 +37,7 @@ const corsOptions =  {
 app.use(cors(corsOptions))
 
 
+
 // RUTAS
 app.use("/api", rutas());
 
