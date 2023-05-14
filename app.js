@@ -21,7 +21,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 
 const whiteList = [
-   "http://localhost:5173"
+   "http://localhost:5173",
+   "http://xn--logstica-e2a.soberaniaalimentariafsa.com"
 ];
 
 const corsOptions =  {
