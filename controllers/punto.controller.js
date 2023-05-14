@@ -9,8 +9,34 @@ export const getPuntos = async (req, res) => {
   try {
     const puntos = await PuntoModelo.find({estado: true}) // consulta para todos los documentos
 
+
+    var datos;
+    var puntosGrupos = [];
+    for (let i = 0; i < puntos.length; i++) {
+      datos = puntos[i];
+
+      var puntoTipo;
+      var punto = {};
+
+      // Revisa si la ciudad que que actualmente estamos leyendo difiere con la última leída
+      if (puntoTipo !== datos.tipo) {
+        // Guarda la nueva ciudad en la variable correspondiente
+        puntoTipo = datos.tipo;
+
+        // Guarda en la propiedad "nombre" del objeto "ciudad" el valor de la propiedad "Ciudad"
+        // del profesional que actualmente estamos evaluando
+        punto.tipo_nombre = puntoTipo;
+
+        // Filtra el objeto "data" comparando la propiedad "Ciudad" de cada profesional con la ciudad actual
+        punto.datos = puntos.filter((item) => item.tipo === puntoTipo);
+
+        // Finalmente toma el objeto ciudad con todos los profesionales que le corresponden y lo guarda en el array "ciudades"
+        puntosGrupos.push(punto);
+      }
+    }
+
 // Respuesta del servidor
-res.json(puntos);
+res.json(puntosGrupos);
 } catch (error) {
     console.log("Error al traer los puntos: ", error)
     }
