@@ -42,7 +42,14 @@ const ProductoSchema = new Schema(
           type: String,
         },
     },
-
+    puntosDeVenta: [
+      {
+        
+        puntoNombre:{
+          type: String,
+        }
+      }
+    ],
     categoria : {
       type: String,
       required: true
