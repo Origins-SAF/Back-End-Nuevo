@@ -162,12 +162,28 @@ export const reactivarProductoLog = async (req, res) => {
 
 //actualizar usuario
 
-export const putProductos =  async (req, res = response) => {
+export const putProductos =  async (req, res ) => {
   const { id } = req.params;
-  const { estado, ...data } = req.body;
+  //console.log(req.body)
+  //console.log(req.body.nombre)
+  let imgURl;
 
-  data.nombre = data.nombre.toUpperCase();
+  if(req?.file?.path){
+    imgURl = await cloudinary.uploader.upload(req?.file?.path)
+  }else {
+    imgURl = req?.body?.image
+  }
+    
+    //console.log(imgURl)
+  const data = {
+    ...req.body,
+    img: imgURl?.url ? imgURl?.url : imgURl,
+    config:  JSON.parse(req?.body?.config),
+    puntosDeVenta: JSON.parse(req?.body?.puntosDeVenta)
+  }
+
   
+  //console.log(data)
 
   try {
     const producto = await productoModelo.findByIdAndUpdate(id, data, { new: true });

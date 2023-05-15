@@ -24,7 +24,7 @@ router.get("/ver-producto-distribuidor/:id", getProductoDistribuidoresTodos);
 router.post("/guardar-producto",upload.single("image"), postProducto)
 router.put("/reactivar-producto-log/:id", reactivarProductoLog)
 
-router.put("/actualizar-producto/:id", putProductos)
+router.put("/actualizar-producto/:id",upload.single("image"), putProductos)
 router.delete("/delete-producto/:id", deleteProductos)
 
 export default router;
