@@ -60,7 +60,15 @@ try {
 export const postNuevoPunto = async (req, res) => {
   const nombre = req.body.nombre.toUpperCase();
   const usuarios = await usuarioModelo.find({}, 'uid')
-  const imgURl = await cloudinary.uploader.upload(req?.file?.path)
+  //console.log(req?.body?.ubicacion)
+  let imgURl;
+
+  if(req?.file?.path){
+    imgURl = await cloudinary.uploader.upload(req?.file?.path)
+  }else {
+    imgURl = ""
+  }
+
   try {
     const puntoDB = await PuntoModelo.findOne({ nombre });
     
@@ -88,11 +96,13 @@ export const postNuevoPunto = async (req, res) => {
     const data = {
       ...req.body,
       usuario: req.usuario._id,
-      img: imgURl?.url,
-      icono: iconoUrl
+      img: imgURl?.url ? imgURl?.url : imgURl,
+      icono: iconoUrl,
+      ubicacion: JSON.parse(req?.body?.ubicacion)
+      
     };
     
-
+    //console.log(data)
     const punto = new PuntoModelo(data);
 
     const noti = {}
@@ -130,10 +140,24 @@ export const postNuevoPunto = async (req, res) => {
 
 export const updatePunto = async (req, res) => {
   const { id } = req.params;
-  const { estado, usuario, ...data } = req.body;
+  
 
-  /* data.nombre = data.nombre.toUpperCase(); */
-  data.usuario = req.usuario._id;
+ 
+
+
+  if(req?.file?.path){
+    imgURl = await cloudinary.uploader.upload(req?.file?.path)
+  }else {
+    imgURl = req?.body?.image
+  }
+
+  const data = {
+    ...req.body,
+    usuario: req.usuario._id,
+    img: imgURl?.url ? imgURl?.url : imgURl,
+    ubicacion: JSON.parse(req?.body?.ubicacion)
+    
+  };
 
   try {
     const punto = await PuntoModelo.findByIdAndUpdate(id, data, { new: true });

@@ -95,12 +95,18 @@ export const postProducto = async (req, res) => {
 
  const usuarios = await usuarioModelo.find({}, 'uid')
 
- const imgURl = await cloudinary.uploader.upload(req?.file?.path)
+ let imgURl;
+
+ if(req?.file?.path){
+   imgURl = await cloudinary.uploader.upload(req?.file?.path)
+ }else {
+   imgURl = ""
+ }
 
  try {
   const datos = {
     ...req.body,
-    img: imgURl?.url,
+    img: imgURl?.url ? imgURl?.url : imgURl,
     config:  JSON.parse(req?.body?.config),
     puntosDeVenta: JSON.parse(req?.body?.puntosDeVenta)
   }
