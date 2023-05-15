@@ -27,7 +27,7 @@ router.put("/publicacion-punto/:id",publicacionPunto);
 router.post("/guardar-punto",validarJWT,upload.single("image"),postNuevoPunto);
 
 // Actualizar - privado - cualquiera con token válido
-router.put("/actualizar-punto/:id",validarJWT,updatePunto);
+router.put("/actualizar-punto/:id",validarJWT,upload.single("image"),updatePunto);
 
 // Borrar un punto - Log
 router.put("/eliminar-punto-log/:id",eliminarPuntoLog);

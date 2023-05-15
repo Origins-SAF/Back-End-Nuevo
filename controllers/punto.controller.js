@@ -61,6 +61,7 @@ export const postNuevoPunto = async (req, res) => {
   const nombre = req.body.nombre.toUpperCase();
   const usuarios = await usuarioModelo.find({}, 'uid')
   //console.log(req?.body?.ubicacion)
+  console.log(req?.body)
   let imgURl;
 
   if(req?.file?.path){
@@ -143,7 +144,7 @@ export const updatePunto = async (req, res) => {
   
 
  
-
+  let imgURl;
 
   if(req?.file?.path){
     imgURl = await cloudinary.uploader.upload(req?.file?.path)
