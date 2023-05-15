@@ -11,14 +11,15 @@ getProductoDistribuidores,
 reactivarProductoLog,
 getProductoDistribuidoresTodos,
 putProductos,
-deleteProductos
+deleteProductos,
+publicacionProducto
 } from "../controllers/producto.controller.js";
 
 import { upload } from "../Libs/upload.js";
 
 router.get("/ver-producto", getProductos);
 router.get("/ver-producto/:id", getProducto);
-
+router.put("/estado-producto/:id", publicacionProducto)
 router.get("/ver-producto-distribuidor/:id/:numPage", getProductoDistribuidores);
 router.get("/ver-producto-distribuidor/:id", getProductoDistribuidoresTodos);
 router.post("/guardar-producto",upload.single("image"), postProducto)

@@ -138,6 +138,30 @@ export const postProducto = async (req, res) => {
  }
 }
 
+export const publicacionProducto = async (req, res) => {
+    const { id } = req.params;
+    const valor = req.body.publicado
+  
+    const data = !valor
+  try {
+      const productoPublicado = await productoModelo.findByIdAndUpdate(
+        id,
+        { publicado: data },
+        { new: true }
+      );
+  
+      res.json({
+        msg: "Producto Actualizado Correctamente (Publicacion)",
+        productoPublicado,
+      });
+    } catch (err) {
+      console.log("Error al actualizar el punto: ", err);
+      res.status(500).json({
+        msg: "Por favor, hable con el administrador",
+      });
+    }
+  };
+
 export const reactivarProductoLog = async (req, res) => {
   const { id } = req.params;
 
