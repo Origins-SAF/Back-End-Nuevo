@@ -100,11 +100,14 @@ export const postProducto = async (req, res) => {
  try {
   const datos = {
     ...req.body,
-    img: imgURl?.url
+    img: imgURl?.url,
+    config:  JSON.parse(req?.body?.config),
+    puntosDeVenta: JSON.parse(req?.body?.puntosDeVenta)
   }
-
+//console.log(req.body.config)
      // Se alamacena el nuevo inventario en la base de datos
- const producto = new productoModelo(datos);
+ //console.log(datos)
+     const producto = new productoModelo(datos);
  await producto.save() 
 
  const noti = {}
