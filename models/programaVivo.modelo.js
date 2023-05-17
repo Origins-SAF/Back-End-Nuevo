@@ -12,11 +12,11 @@ const ProgramaSchema = new Schema(
             type: Boolean,
             default: false
           },
-          video:{
-            type: String,
-          },
           videoLink:{
             type: String,
+          },
+          miniaturaLink:{
+            type: String
           },
           publicado: {
             type: Boolean,

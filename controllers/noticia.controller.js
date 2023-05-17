@@ -7,14 +7,24 @@ export const getNoticias = async (req, res) => {
 
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
+  //console.log(skip)
+  let skipEdit = 0
 
- 
+  if(skip == 0){
+    skipEdit = 1
+  }else{
+    skipEdit = skip
+  }
+  
   try {
       const noticias = await noticiaModelo.find()
       const todasLasNoticias = noticias.reverse() // consulta para todos los documentos
-      const noticiasFiltradas = todasLasNoticias.slice(skip, skip + limit);
-      const primeraNoticia = noticiasFiltradas[0]
-      const otrasNoticias = noticiasFiltradas.slice(1)
+      const primeraNoticia = todasLasNoticias[0]
+
+      const noticiasFiltradas = todasLasNoticias.slice(skipEdit, skipEdit + limit);
+
+      const otrasNoticias = noticiasFiltradas
+
       const totalNoticias = noticias.length
       const pages = [];
       for (let i = 0; i < noticias.length; i += limit) {
