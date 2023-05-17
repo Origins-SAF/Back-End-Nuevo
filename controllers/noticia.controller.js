@@ -1,21 +1,30 @@
 import noticiaModelo from '../models/noticia.modelo.js';
 import notificacionesModelo from '../models/notificaciones.modelo.js';
 import usuarioModelo from '../models/usuario.modelo.js'
+import cloudinary from 'cloudinary'
 // Devuelve todos los noticias activas de la colección
 export const getNoticias = async (req, res) => {
 
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
 
-
+ 
   try {
       const noticias = await noticiaModelo.find()
       const todasLasNoticias = noticias.reverse() // consulta para todos los documentos
       const noticiasFiltradas = todasLasNoticias.slice(skip, skip + limit);
       const primeraNoticia = noticiasFiltradas[0]
       const otrasNoticias = noticiasFiltradas.slice(1)
+      const totalNoticias = noticias.length
+      const pages = [];
+      for (let i = 0; i < noticias.length; i += limit) {
+        const page = i
+        pages.push(page);
+      }
+  
+      const totalPages= pages
   // Respuesta del servidor
-  res.json({primeraNoticia,otrasNoticias});
+  res.json({totalPages,totalNoticias,primeraNoticia,otrasNoticias});
   } catch (error) {
       console.log("Error al traer las noticias: ", error)
   }
@@ -39,10 +48,22 @@ export const getNoticiarUnica = async (req, res) => {
 export const postNoticia = async (req, res) => {
   // Desestructuramos la información recibida del cliente
 
- const datos = req.body;
+  let imgURl;
+
+  if(req?.file?.path){
+    imgURl = await cloudinary.uploader.upload(req?.file?.path)
+  }else {
+    imgURl = ""
+  }
+
 const usuarios = await usuarioModelo.find({}, 'uid')
  try {
 
+  const datos = {
+    ...req.body,
+    img: imgURl?.url ? imgURl?.url : imgURl,
+    
+  }
  // Se alamacena la nueva noticia en la base de datos
  const noticia = new noticiaModelo(datos);
  await noticia.save() 
@@ -82,19 +103,28 @@ export const updateNoticia = async (req, res) => {
     const { id } = req.params;
 
   // Desestructuramos la información recibida del cliente
+  let imgURl;
 
- const datos = req.body;
+  if(req?.file?.path){
+    imgURl = await cloudinary.uploader.upload(req?.file?.path)
+  }else {
+    imgURl = req?.body?.image
+  }
+
+
 
  try {
+
+  const datos = {
+    ...req.body,
+    img: imgURl?.url ? imgURl?.url : imgURl,
+ 
+  }
+
      // Se alamacena la nueva noticia en la base de datos
  const noticia = await noticiaModelo.findByIdAndUpdate(
       id,
-      {
-        titulo: datos.titulo,
-        descripcion: datos.descripcion,  
-        img: datos.img,
-        publicado: datos.publicado
-      },
+      datos,
       { new: true }
     );
 

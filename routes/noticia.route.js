@@ -14,11 +14,13 @@ import {
    publicarNoticia
     } from "../controllers/noticia.controller.js";
     
+
+    import { upload } from "../Libs/upload.js";
     
     router.get("/ver-noticias", getNoticias);
     router.get("/ver-noticia-unica/:id", getNoticiarUnica);
-    router.post("/guardar-noticia", postNoticia)
-    router.put("/actualizar-noticia/:id", updateNoticia)
+    router.post("/guardar-noticia",upload.single("image"), postNoticia)
+    router.put("/actualizar-noticia/:id",upload.single("image"), updateNoticia)
     router.put("/desactivar-log-noticia/:id", desactivarNoticia)
     router.put("/publicar-log-noticia/:id", publicarNoticia)
     router.delete("/eliminar-noticia/:id", eliminarNoticia)

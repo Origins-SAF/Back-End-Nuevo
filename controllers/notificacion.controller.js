@@ -3,9 +3,13 @@ import mongoose from 'mongoose';
 // Devuelve todas las notificaciones no leidas de la colección
 export const getNotificacionesActivas = async (req, res) => {
   const idUser = req.usuario._id
-  try {
-      const notificaciones = await notificacionesModelo.find() // consulta para todos los documentos
 
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+
+  try {
+      const notis = await notificacionesModelo.find() // consulta para todos los documentos
+      const notificaciones =  notis.slice(skip, skip + limit);
       //console.log(notificaciones.length)
       const long = notificaciones?.length
       const userNotificaciones = []
