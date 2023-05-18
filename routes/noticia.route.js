@@ -11,7 +11,9 @@ import {
    eliminarNoticia,
 
    desactivarNoticia,
-   publicarNoticia
+   publicarNoticia,
+
+   getNoticiasPublicas
     } from "../controllers/noticia.controller.js";
     
 
@@ -24,4 +26,6 @@ import {
     router.put("/desactivar-log-noticia/:id", desactivarNoticia)
     router.put("/publicar-log-noticia/:id", publicarNoticia)
     router.delete("/eliminar-noticia/:id", eliminarNoticia)
+
+    router.get("/ver-noticias-publicas", getNoticiasPublicas)
     export default router;

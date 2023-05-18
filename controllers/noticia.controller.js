@@ -2,6 +2,24 @@ import noticiaModelo from '../models/noticia.modelo.js';
 import notificacionesModelo from '../models/notificaciones.modelo.js';
 import usuarioModelo from '../models/usuario.modelo.js'
 import cloudinary from 'cloudinary'
+
+// Devuelve todos los noticias publicas de la colección
+export const getNoticiasPublicas = async (req, res) => {
+
+
+  
+  try {
+      const noticias = await noticiaModelo.find({publicado: true})
+      const todasLasNoticias = noticias.reverse() 
+      // consulta para todos los documentos
+     
+  // Respuesta del servidor
+  res.json(todasLasNoticias);
+  } catch (error) {
+      console.log("Error al traer las noticias: ", error)
+  }
+}
+
 // Devuelve todos los noticias activas de la colección
 export const getNoticias = async (req, res) => {
 

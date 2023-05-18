@@ -4,6 +4,26 @@ import notificacionesModelo from '../models/notificaciones.modelo.js';
 import usuarioModelo from '../models/usuario.modelo.js';
 import cloudinary from 'cloudinary'
 
+
+
+// Devuelve todos los productos publicado de la colección
+export const getProductosPublicados = async (req, res) => {
+  
+
+  try {
+      const productos = await productoModelo.find({publicado: true}).populate("distribuidor", "nombre") // consulta para todos los documentos
+   
+      
+      const productosFiltrados = productos.reverse()
+
+     
+  // Respuesta del servidor
+  res.json(productosFiltrados);
+  } catch (error) {
+      console.log("Error al traer los productos: ", error)
+  }
+}
+
 // Devuelve todos los productos activas de la colección
 export const getProductos = async (req, res) => {
   const limit = parseInt(req.query.limit);

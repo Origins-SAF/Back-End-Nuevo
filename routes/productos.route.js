@@ -12,7 +12,9 @@ reactivarProductoLog,
 getProductoDistribuidoresTodos,
 putProductos,
 deleteProductos,
-publicacionProducto
+publicacionProducto,
+
+getProductosPublicados
 } from "../controllers/producto.controller.js";
 
 import { upload } from "../Libs/upload.js";
@@ -27,5 +29,7 @@ router.put("/reactivar-producto-log/:id", reactivarProductoLog)
 
 router.put("/actualizar-producto/:id",upload.single("image"), putProductos)
 router.delete("/delete-producto/:id", deleteProductos)
+
+router.get("/ver-productos-publicos", getProductosPublicados)
 
 export default router;

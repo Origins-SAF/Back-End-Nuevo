@@ -7,7 +7,7 @@ const ParteSchema = new Schema(
       ref: "usuarioModelo",
     },
     fecha: {
-      type: String,
+      type: Date,
     },
     distribuidor: [ 
       {
