@@ -4,11 +4,15 @@ import usuarioModelo from '../models/usuario.modelo.js';
 
 // Devuelve todos los programas activos de la colección
 export const getProgramas = async (req, res) => {
+
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+
   try {
       const programas = await programaModelo.find() // consulta para todos los documentos
-      
+       const programasFiltrados = programas.reverse().slice(skip, skip + limit);
   // Respuesta del servidor
-  res.json(programas.reverse());
+  res.json(programasFiltrados);
   } catch (error) {
       console.log("Error al traer los programas: ", error)
   }

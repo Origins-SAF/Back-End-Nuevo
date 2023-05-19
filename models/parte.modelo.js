@@ -8,6 +8,7 @@ const ParteSchema = new Schema(
     },
     fecha: {
       type: Date,
+      default: Date.now()
     },
     distribuidor: [ 
       {

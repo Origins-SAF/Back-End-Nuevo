@@ -4,6 +4,20 @@ import notificacionesModelo from '../models/notificaciones.modelo.js';
 import usuarioModelo from '../models/usuario.modelo.js';
 import cloudinary from 'cloudinary'
 
+export const getPuntosPublicos = async (req, res) => {
+  
+  try {
+    const puntos = await PuntoModelo.find({estado: true, publicado: true}) // consulta para todos los documentos
+
+
+    
+// Respuesta del servidor
+res.json(puntos);
+} catch (error) {
+    console.log("Error al traer los puntos: ", error)
+    }
+   }
+
 export const getPuntos = async (req, res) => {
   
   try {

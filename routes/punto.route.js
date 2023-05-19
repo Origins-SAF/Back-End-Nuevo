@@ -8,7 +8,9 @@ import {
   updatePunto,
   eliminarPuntoLog,
   reactivarPuntoLog,
-  publicacionPunto
+  publicacionPunto,
+
+  getPuntosPublicos
 } from "../controllers/punto.controller.js";
 import validarJWT from "../middlewares/validar-jwt.js";
 import { upload } from "../Libs/upload.js";
@@ -34,5 +36,7 @@ router.put("/eliminar-punto-log/:id",eliminarPuntoLog);
 
 // Reactivar un punto - Log
 router.put("/reactivar-punto-log/:id",reactivarPuntoLog);
+
+router.get("/ver-puntos-publicos", getPuntosPublicos);
 
 export default router;
