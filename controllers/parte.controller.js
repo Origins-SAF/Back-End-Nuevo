@@ -54,23 +54,24 @@ export const getPartesPorGrupos = async (req, res) => {
     // "data" es la variable que está alojando el JSON
     var datos;
     var partesDatos = [];
+    
     for (let i = 0; i < datosParte.length; i++) {
       datos = datosParte[i];
 
       var parteAct;
       var parte = {};
-
+      /* console.log(datos.fecha.toLocaleDateString("es-ES")) */
       // Revisa si la ciudad que que actualmente estamos leyendo difiere con la última leída
       if (parteAct !== datos.fecha) {
         // Guarda la nueva ciudad en la variable correspondiente
-        parteAct = datos.fecha;
+        parteAct = datos.fecha.toLocaleDateString("es-ES");
 
         // Guarda en la propiedad "nombre" del objeto "ciudad" el valor de la propiedad "Ciudad"
         // del profesional que actualmente estamos evaluando
         parte.parte_fecha = parteAct;
 
         // Filtra el objeto "data" comparando la propiedad "Ciudad" de cada profesional con la ciudad actual
-        parte.datos = datosParte.filter((item) => item.fecha === parteAct);
+        parte.datos = datosParte.filter((item) => item.fecha.toLocaleDateString("es-ES") === parteAct);
 
         // Finalmente toma el objeto ciudad con todos los profesionales que le corresponden y lo guarda en el array "ciudades"
         partesDatos.push(parte);
