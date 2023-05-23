@@ -62,7 +62,7 @@ export const getPartesPorGrupos = async (req, res) => {
       var parte = {};
       /* console.log(datos.fecha.toLocaleDateString("es-ES")) */
       // Revisa si la ciudad que que actualmente estamos leyendo difiere con la última leída
-      if (parteAct !== datos.fecha) {
+      if (parteAct !== datos.fecha.toLocaleDateString("es-ES")) {
         // Guarda la nueva ciudad en la variable correspondiente
         parteAct = datos.fecha.toLocaleDateString("es-ES");
 
@@ -72,7 +72,7 @@ export const getPartesPorGrupos = async (req, res) => {
 
         // Filtra el objeto "data" comparando la propiedad "Ciudad" de cada profesional con la ciudad actual
         parte.datos = datosParte.filter((item) => item.fecha.toLocaleDateString("es-ES") === parteAct);
-
+        console.log(parte)
         // Finalmente toma el objeto ciudad con todos los profesionales que le corresponden y lo guarda en el array "ciudades"
         partesDatos.push(parte);
       }
