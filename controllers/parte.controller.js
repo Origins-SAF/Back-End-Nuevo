@@ -72,7 +72,7 @@ export const getPartesPorGrupos = async (req, res) => {
 
         // Filtra el objeto "data" comparando la propiedad "Ciudad" de cada profesional con la ciudad actual
         parte.datos = datosParte.filter((item) => item.fecha.toLocaleDateString("es-ES") === parteAct);
-        console.log(parte)
+        //onsole.log(parte)
         // Finalmente toma el objeto ciudad con todos los profesionales que le corresponden y lo guarda en el array "ciudades"
         partesDatos.push(parte);
       }
