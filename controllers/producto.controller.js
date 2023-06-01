@@ -28,11 +28,18 @@ export const getProductosPublicados = async (req, res) => {
 export const getProductos = async (req, res) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
- /*  console.log(limit)
-  console.log(skip) */
+  const filtro = req.query.filtroProductos;
+  
+  console.log(filtro)
 
   try {
-      const productos = await productoModelo.find().populate("distribuidor", "nombre") // consulta para todos los documentos
+      let productos 
+      if(filtro){
+        productos = await productoModelo.find({distribuidor: mongoose.Types.ObjectId(filtro)}).populate("distribuidor", "nombre") 
+      }
+      else{
+        productos = await productoModelo.find().populate("distribuidor", "nombre") // consulta para todos los documentos
+      }
       //const tamano = (await productoModelo.find()).length
       const totalProductos = productos.length
       //console.log(productos)
