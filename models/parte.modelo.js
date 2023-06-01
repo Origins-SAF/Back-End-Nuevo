@@ -5,16 +5,22 @@ const ParteSchema = new Schema(
     usuario: {
       type: Schema.Types.ObjectId,
       ref: "usuarioModelo",
+      required : true
     },
     fecha: {
       type: Date,
       default: Date.now()
+    },
+    cambioInicial:{
+      type: String,
+      required : true
     },
     distribuidor: [ 
       {
       nombre: {
         type: Schema.Types.ObjectId,
         ref: "distribuidorModelo",
+        required : true
       },
       nota: {
         type: String,
@@ -26,28 +32,36 @@ const ParteSchema = new Schema(
         producto: {
           type: Schema.Types.ObjectId,
           ref: "productoModelo",
+          required : true
         },
         stockInicial: {
           type: Number,
+          required : true
         }, 
         stockFinal: {
           type: Number,
+          required : true
         }, 
         totalRecaudado: {
           type: Number,
+          required : true
         },
       }],
       prodmasvendido: {
-        type: String,
+        type: Schema.Types.ObjectId,
+          ref: "productoModelo",
+          required : true
       },
     }
   ],
     recaudacionTotal: {
       type: Number,
+      required : true
     },
     ubicacion:{
       type: Schema.Types.ObjectId,
       ref: "PuntoModelo",
+      required : true
     },
     estado: {
       type: Boolean,

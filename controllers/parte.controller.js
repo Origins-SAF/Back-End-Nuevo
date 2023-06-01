@@ -38,13 +38,35 @@ export const getPartesPorGrupos = async (req, res) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
 
+  let fechaInicio; 
+  let fechaFinal; 
+  var año = new Date().getFullYear();
+
+  if(req.query.fechaInicio){
+    fechaInicio = new Date(req.query.fechaInicio)
+  }else{
+    fechaInicio = new Date(`${año}/01/01`)
+  }
+
+  if(req.query.fechaFinal){
+    fechaFinal = new Date(req.query.fechaFinal)
+  }else{
+    fechaFinal = new Date(`${año}/12/31`)
+  }
+
   try {
     const partes = await parteModelo
-      .find()
+      .find({
+        fecha: {
+          $gte: fechaInicio,
+          $lt: fechaFinal
+        }
+      })
       .populate("usuario", ["nombre", "apellido", "img"]) // consulta para todos los documentos
       .populate("distribuidor.nombre", ["nombre"])
       .populate('ubicacion',[ "nombre", "barrio" ])
       .populate("distribuidor.stock.producto", ["nombre", "img"])
+     /*  .populate("distribuidor.stock.prodmasvendido", ["nombre"]) */
 
       const totalPage = partes.length
 
@@ -64,14 +86,14 @@ export const getPartesPorGrupos = async (req, res) => {
       // Revisa si la ciudad que que actualmente estamos leyendo difiere con la última leída
       if (parteAct !== datos.fecha.toLocaleDateString("es-ES")) {
         // Guarda la nueva ciudad en la variable correspondiente
-        parteAct = datos.fecha.toLocaleDateString("es-ES");
+        parteAct = datos.fecha;
 
         // Guarda en la propiedad "nombre" del objeto "ciudad" el valor de la propiedad "Ciudad"
         // del profesional que actualmente estamos evaluando
         parte.parte_fecha = parteAct;
 
         // Filtra el objeto "data" comparando la propiedad "Ciudad" de cada profesional con la ciudad actual
-        parte.datos = datosParte.filter((item) => item.fecha.toLocaleDateString("es-ES") === parteAct);
+        parte.datos = datosParte.filter((item) => item.fecha.toLocaleDateString("es-ES") === parteAct.toLocaleDateString("es-ES"));
         //onsole.log(parte)
         // Finalmente toma el objeto ciudad con todos los profesionales que le corresponden y lo guarda en el array "ciudades"
         partesDatos.push(parte);
@@ -86,14 +108,39 @@ export const getPartesPorGrupos = async (req, res) => {
 };
 
 export const getPartesPorMes = async (req,res) => {
-  const mes = 4; // buscar registros del mes de abril
-  parteModelo.find({
+ 
+  
+  let fechaInicio; 
+  let fechaFinal; 
+  var año = new Date().getFullYear();
+
+  if(req.query.fechaInicio){
+    fechaInicio = new Date(req.query.fechaInicio)
+  }else{
+    fechaInicio = new Date(`${año}/01/01`)
+  }
+
+  if(req.query.fechaFinal){
+    fechaFinal = new Date(req.query.fechaFinal)
+  }else{
+    fechaFinal = new Date(`${año}/12/31`)
+  }
+
+const consulta = await parteModelo.find({
+  fecha: {
+    $gte: fechaInicio,
+    $lt: fechaFinal
+  }
+})
+
+res.json(consulta)
+  /* parteModelo.find({
     $expr: {
-      $eq: [{ $month: "$fecha" }, 4]
+      $eq: [{ $month: "$fecha" }, mes]
     }
   }, function(err, users) {
     console.log(users);
-  });
+  }); */
 
 
 }
