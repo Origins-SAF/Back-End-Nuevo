@@ -101,8 +101,8 @@ export const getProductoDistribuidoresTodos = async (req, res) => {
     
       //console.log(productos)
   // Respuesta del servidor
-
-  res.json({cantidadProductos: productos.length});
+    const cantidadProductos = productos.length
+  res.json({cantidadProductos, productos});
   } catch (error) {
       console.log("Error al traer los productos por distribuidor: ", error)
   }

@@ -23,7 +23,7 @@ router.get("/ver-producto", getProductos);
 router.get("/ver-producto/:id", getProducto);
 router.put("/estado-producto/:id", publicacionProducto)
 router.get("/ver-producto-distribuidor/:id/:numPage", getProductoDistribuidores);
-router.get("/ver-producto-distribuidor/:id", getProductoDistribuidoresTodos);
+router.get("/ver-producto-distribuidor-todos/:id", getProductoDistribuidoresTodos);
 router.post("/guardar-producto",upload.single("image"), postProducto)
 router.put("/reactivar-producto-log/:id", reactivarProductoLog)
 
