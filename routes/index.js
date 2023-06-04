@@ -8,6 +8,7 @@ import parteRutas from "./parte.route.js"
 import notifacionRutas from "./notificaciones.route.js"
 import noticiaRutas from "./noticia.route.js"
 import programaVivoRutas from "./programaVivo.route.js"
+import cronogramaRutas from "./cronograma.route.js"
 
 export const rutas = () => [
     inventarioRutas,
@@ -19,5 +20,6 @@ export const rutas = () => [
     parteRutas,
     notifacionRutas,
     noticiaRutas,
-    programaVivoRutas
+    programaVivoRutas,
+    cronogramaRutas
 ];
