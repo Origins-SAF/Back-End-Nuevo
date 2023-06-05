@@ -13,7 +13,7 @@ export const login = async (req, res) => {
 
   try {
     // Verificar si el email existe
-    const usuario = await usuarioModelo.findOne({ correo });
+    const usuario = await usuarioModelo.findOne({ correo }).populate("rol", ["rol"]);
     if (!usuario) {
       return res.status(400).json({
         msg: "Usuario / Password no son correctos - correo",
