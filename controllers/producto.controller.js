@@ -30,7 +30,7 @@ export const getProductos = async (req, res) => {
   const skip = parseInt(req.query.skip);
   const filtro = req.query.filtroProductos;
   
-  console.log(filtro)
+/*   console.log(filtro) */
 
   try {
       let productos 
@@ -47,9 +47,11 @@ export const getProductos = async (req, res) => {
       const productosFiltrados = productos.reverse().slice(skip, skip + limit);
 
       const pages = [];
-      for (let i = 0; i < productos.length; i += limit) {
-        const page = i
-        pages.push(page);
+      if(limit != 1){
+        for (let i = 0; i < productos.length; i += limit) {
+          const page = i
+          pages.push(page);
+        }
       }
   
       const totalPages= pages
