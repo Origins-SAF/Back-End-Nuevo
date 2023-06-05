@@ -43,7 +43,7 @@ export const login = async (req, res) => {
       token,
     });
   } catch (err) {
-    console.log("Error al iniciar sesión", err);
+    /* console.log("Error al iniciar sesión", err); */
     res.status(500).json({
       msg: "Por favor, hable con el administrador (vos)",
     });
@@ -70,7 +70,7 @@ export const register = async (req, res) => {
       token,
     });
   } catch (err) {
-    console.log("Error al registrar al usuario: ", err);
+    /* console.log("Error al registrar al usuario: ", err); */
     res.status(500).json({
       msg: "Por favor, hable con el administrador (vos)",
     });
@@ -83,7 +83,7 @@ export const loginUser = async (req, res) => {
       const user = await usuarioModelo.findById(req.usuario.id).select('-password, -updatedAt')
       res.json(user)
   } catch (error) {
-      console.log(error)
+      /* console.log(error) */
       res.status(500).send('server error - Hable con un administrador')
   }
 }

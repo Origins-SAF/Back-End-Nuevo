@@ -6,11 +6,11 @@ export const getNotificacionesActivas = async (req, res) => {
 
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
-  console.log(limit)
+/*   console.log(limit) */
   try {
       const notis = await (await notificacionesModelo.find()).reverse() // consulta para todos los documentos
       const notificaciones =  notis.slice(skip, skip + limit);
-      console.log(notificaciones)
+      /* console.log(notificaciones) */
       const long = notificaciones?.length
       const userNotificaciones = []
       for (let i = 0; i < long; i++) {
@@ -42,7 +42,7 @@ export const getNotificacionesActivas = async (req, res) => {
 
   
   // Respuesta del servidor
-  console.log(userNotificaciones)
+/*   console.log(userNotificaciones) */
     res.json(userNotificaciones);
   } catch (error) {
       console.log("Error al traer las notificaciones: ", error)
