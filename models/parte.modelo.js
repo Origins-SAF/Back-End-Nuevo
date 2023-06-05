@@ -42,6 +42,10 @@ const ParteSchema = new Schema(
           type: Number,
           required : true
         }, 
+        precioProducto: {
+          type: Number,
+          required : true
+        }, 
         totalRecaudado: {
           type: Number,
           required : true
