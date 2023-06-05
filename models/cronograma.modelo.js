@@ -2,21 +2,29 @@ import { model, Schema } from 'mongoose';
 
 const CronogramaSchema = new Schema(
         {
-          Puntos: [
+          detalles: [
             {
-            fecha: {
-                    type: Date,
-                    require:true,
-                },
-              puntoNombre:{
-                type: Schema.Types.ObjectId,
-                ref: "PuntoModelo",
-                require: true
+              fecha: {
+                type: Date,
+                  require:true,
               },
-              nombreConsorcio:{
-                type: String
-              }
-            }
+              puntos: [
+                {
+                  puntoNombre:{
+                    type: Schema.Types.ObjectId,
+                    ref: "PuntoModelo",
+                    require: true
+                  },
+                  nombreConsorcio:{
+                    type: String
+                  }
+                },
+              ],
+              publicado: {
+                type: Boolean,
+                default: false
+              },
+          } 
           ],
           estado: {
             type: Boolean,
