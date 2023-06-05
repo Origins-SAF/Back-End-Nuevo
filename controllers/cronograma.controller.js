@@ -5,7 +5,7 @@ import usuarioModelo from '../models/usuario.modelo.js';
 
 export const getCronograma = async (req, res) => {
     try {
-        const cronograma = await cronogramaModelo.find({estado: true}) // consulta para todos los documentos
+        const cronograma = await cronogramaModelo.find({estado: true}).populate("detalles.puntos.puntoNombre", ["nombre"]) // consulta para todos los documentos
     
     // Respuesta del servidor
     res.json(cronograma);
