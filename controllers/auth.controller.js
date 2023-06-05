@@ -80,7 +80,7 @@ export const register = async (req, res) => {
 export const loginUser = async (req, res) => {
   try {
     
-      const user = await usuarioModelo.findById(req.usuario.id).select('-password, -updatedAt')
+      const user = await usuarioModelo.findById(req.usuario.id).select('-password, -updatedAt').populate("rol", ["rol"]);
       res.json(user)
   } catch (error) {
       /* console.log(error) */
