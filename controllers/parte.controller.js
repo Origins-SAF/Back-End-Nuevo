@@ -66,7 +66,7 @@ export const getPartesPorGrupos = async (req, res) => {
       .populate("distribuidor.nombre", ["nombre"])
       .populate('ubicacion',[ "nombre", "barrio" ])
       .populate("distribuidor.stock.producto", ["nombre", "img"])
-     /*  .populate("distribuidor.stock.prodmasvendido", ["nombre"]) */
+      .populate("distribuidor.prodmasvendido", ["nombre"])
 
       const totalPage = partes.length
 
