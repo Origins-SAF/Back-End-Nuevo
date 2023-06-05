@@ -39,12 +39,11 @@ const UsuarioSchema = new Schema(
       type: String,
     },
     rol: {
-      type: String,
-      required: true,
-      default: "user",
+      type: Schema.Types.ObjectId,
+      ref: "rolModelo",
+      default: "647dff4d15499b8a9d423119",
     },
     configuraciones:{
-      
         colorNavbar: {
           type: String,
           default: 'colorDefault'
@@ -53,7 +52,6 @@ const UsuarioSchema = new Schema(
           type: String,
           default: 'sidebar-custom-theme'
         }
-      
     },
     estado: {
       type: Boolean,
