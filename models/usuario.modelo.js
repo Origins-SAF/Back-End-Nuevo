@@ -28,12 +28,14 @@ const UsuarioSchema = new Schema(
       default: "Trabajador del SAF",
     },
     ubicacion: {
-      lat: {
-        type: Number,
+      puntoFijo:{
+        type: Schema.Types.ObjectId,
+        ref: "PuntoModelo"
       },
-      lon: {
-        type: Number,
-      },
+      todosLosPuntos:{
+        type: Boolean,
+        default: false
+      }
     },
     img: {
       type: String,
