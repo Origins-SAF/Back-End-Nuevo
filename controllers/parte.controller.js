@@ -90,7 +90,7 @@ export const getPartesPorGrupos = async (req, res) => {
         /* console.log(parteAct) */
         // Guarda en la propiedad "nombre" del objeto "ciudad" el valor de la propiedad "Ciudad"
         // del profesional que actualmente estamos evaluando
-        parte.parte_fecha = parteAct;
+        parte.parte_fecha = datos.fecha;
 
         // Filtra el objeto "data" comparando la propiedad "Ciudad" de cada profesional con la ciudad actual
         parte.datos = datosParte.filter((item) => item.fecha.toLocaleDateString("es-ES") === parteAct);
