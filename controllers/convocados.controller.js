@@ -67,23 +67,45 @@ export const postConvocados = async (req, res) => {
   }
 
 export const getAsistenciasPorPunto = async (req, res) => {
-    /* console.log(req.usuario) */
     const idPunto = req.usuario.ubicacion?.puntoFijo
     const permiso = req.usuario.ubicacion?.todosLosPuntos
-  /*   console.log(idPunto)
-    console.log(permiso) */
-    let asistencias 
 
-    if(idPunto){
-        asistencias = await convocadoModelo.find({
-            punto: idPunto,
-            vigente: true
-        }).populate("punto", ["nombre","barrio"])
-    }else if (permiso == true){
-        asistencias = await convocadoModelo.find({
-            estado: true
-        }).populate("punto", ["nombre","barrio"])
+    let asistencias 
+    try {
+        if(idPunto){
+            asistencias = await convocadoModelo.find({
+                punto: idPunto,
+                vigente: true
+            }).populate("punto", ["nombre","barrio"])
+        }else if (permiso == true){
+            asistencias = await convocadoModelo.find({
+                estado: true
+            }).populate("punto", ["nombre","barrio"])
+        }
+
+        res.json(asistencias)
+    } catch (error) {
+        res.status(401).json({
+            msg: "Error al traer la lista de asistencias",
+          });
+          console.log("Error al traer la lista: ", error)
     }
     
-    res.json(asistencias?.length)
+   
+}
+
+export const guardarAsistenciasPorPunto = async (req, res) => {
+    const datos = req.body
+    const {id } = req.params;
+
+    try {
+        const asistencia = await convocadoModelo.findByIdAndUpdate(
+            id,
+            { lista: datos },
+            { new: true }
+          );
+        res.json({msg:"Se Subio La Asistencia Correctamente", asistencia})
+    } catch (error) {
+        console.log("Error", error)
+    }
 }
