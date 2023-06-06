@@ -6,9 +6,16 @@ const ConvocadosSchema = new Schema(
             type: Date,
             require: true
         },
+        punto:{
+          type: Schema.Types.ObjectId,
+          ref: "PuntoModelo"
+        },
          lista:[
             {
                 nombreCompleto: {
+                    type: String,
+                  },
+                  funcion:{
                     type: String,
                   },
                   asistencia:[
@@ -29,13 +36,13 @@ const ConvocadosSchema = new Schema(
                             type: String
                         }
                     }
-                  ],
-                  convocado: {
-                    type: Boolean,
-                    default: false
-                  }
+                  ]
             }
          ],
+         vigente:{
+          type: Boolean,
+          default: true
+         },
           estado: {
             type: Boolean,
             default: true
