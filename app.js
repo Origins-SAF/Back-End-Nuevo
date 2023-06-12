@@ -22,7 +22,8 @@ app.use(morgan("dev"));
 
 const whiteList = [
    "http://localhost:5173",
-   "http://admin.soberaniaalimentariafsa.com"
+   "http://admin.soberaniaalimentariafsa.com",
+   "https://soberaniaalimentariafsa.com/"
 ];
 
 const corsOptions =  {
