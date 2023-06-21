@@ -36,7 +36,7 @@ export const getConvocados = async (req, res) => {
         listaArchivados = listaConvocados.filter((item) => item.vigente == false);
         //onsole.log(listaC)
         // Finalmente toma el objeto ciudad con todos los profesionales que le corresponden y lo guarda en el array "ciudades"
-        
+
         convocadosArray.push(listaC);
         archivadosArray.push(listaArchivados);
       }
@@ -132,6 +132,28 @@ export const archivarPlanilla = async (req, res) => {
       });
     } catch (err) {
       console.log("Error al actualizar el punto: ", err);
+      res.status(500).json({
+        msg: "Por favor, hable con el administrador",
+      });
+    }
+  };
+
+export const eliminarPlanillaLog = async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      const planilla = await convocadoModelo.findByIdAndUpdate(
+        id,
+        { estado: false },
+        { new: true }
+      );
+  
+      res.json({
+        msg: "Planilla eliminada correctamente (lógica)",
+        planilla,
+      });
+    } catch (err) {
+      console.log("Error al borrar la planilla: ", err);
       res.status(500).json({
         msg: "Por favor, hable con el administrador",
       });

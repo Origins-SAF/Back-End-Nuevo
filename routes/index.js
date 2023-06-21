@@ -11,6 +11,7 @@ import programaVivoRutas from "./programaVivo.route.js"
 import cronogramaRutas from "./cronograma.route.js"
 import rolRutas from "./rol.route.js"
 import convocadoRutas from "./convocados.route.js"
+import noticiaNutrirRutas from "./noticiaNutricion.route.js"
 
 export const rutas = () => [
     inventarioRutas,
@@ -25,5 +26,6 @@ export const rutas = () => [
     programaVivoRutas,
     cronogramaRutas,
     rolRutas,
-    convocadoRutas
+    convocadoRutas,
+    noticiaNutrirRutas
 ];
