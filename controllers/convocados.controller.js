@@ -13,12 +13,14 @@ export const getConvocados = async (req, res) => {
     // "data" es la variable que está alojando el JSON
     var datos;
     var convocadosArray = [];
+    var archivadosArray = []
     
     for (let i = 0; i < listaConvocados.length; i++) {
       datos = listaConvocados[i];
 
       var listaFecha;
       var listaC = {};
+      var listaArchivados = {}
       /* console.log(datos.fecha.toLocaleDateString("es-ES")) */
       // Revisa si la ciudad que que actualmente estamos leyendo difiere con la última leída
       if (listaFecha !== datos.fecha.toLocaleDateString("es-ES")) {
@@ -30,17 +32,20 @@ export const getConvocados = async (req, res) => {
         listaC.fecha_convocados = datos.fecha;
 
         // Filtra el objeto "data" comparando la propiedad "Ciudad" de cada profesional con la ciudad actual
-        listaC.datos = listaConvocados.filter((item) => item.fecha.toLocaleDateString("es-ES") === listaFecha);
+        listaC.datos = listaConvocados.filter((item) => item.fecha.toLocaleDateString("es-ES") === listaFecha && item.vigente == true);
+        listaArchivados = listaConvocados.filter((item) => item.vigente == false);
         //onsole.log(listaC)
         // Finalmente toma el objeto ciudad con todos los profesionales que le corresponden y lo guarda en el array "ciudades"
+        
         convocadosArray.push(listaC);
+        archivadosArray.push(listaArchivados);
       }
     }
     // Respuesta del servidor
     //console.log(convocadosArray.length)
    
     // Respuesta del servidor
-    res.json({totalPage,convocadosArray});
+    res.json({totalPage,convocadosArray, archivadosArray});
     } catch (error) {
         console.log("Error al traer los convocados: ", error)
     }
@@ -109,3 +114,26 @@ export const guardarAsistenciasPorPunto = async (req, res) => {
         console.log("Error", error)
     }
 }
+
+export const archivarPlanilla = async (req, res) => {
+    const { id } = req.params;
+    const valor = req.body.vigente
+    
+  try {
+      const planilla = await convocadoModelo.findByIdAndUpdate(
+        id,
+        { vigente: valor },
+        { new: true }
+      );
+  
+      res.json({
+        msg: "Planilla Actualizada Correctamente ",
+        planilla,
+      });
+    } catch (err) {
+      console.log("Error al actualizar el punto: ", err);
+      res.status(500).json({
+        msg: "Por favor, hable con el administrador",
+      });
+    }
+  };
