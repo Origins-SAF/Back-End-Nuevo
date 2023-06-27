@@ -63,16 +63,14 @@ export const register = async (req, res) => {
     // Guardar en BD
     const usuarioRegistrado = await usuario.save();
 
-    const token = await generarJWT(usuarioRegistrado.id);
+    /* const token = await generarJWT(usuarioRegistrado.id); */
 
-    res.json({
-      usuario,
-      token,
-    });
+    res.json({msg: 'El Usuario se guardo correctamente', usuarioRegistrado});
+
   } catch (err) {
     /* console.log("Error al registrar al usuario: ", err); */
     res.status(500).json({
-      msg: "Por favor, hable con el administrador (vos)",
+      msg: "Por favor, hable con el administrador",
     });
   }
 };
