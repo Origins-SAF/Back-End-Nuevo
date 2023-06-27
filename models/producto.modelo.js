@@ -9,8 +9,7 @@ const ProductoSchema = new Schema(
     },
     estado: {
       type: Boolean,
-      default: true,
-      required: true,
+      default: true
     },
     unidad: {
       type: String,
@@ -20,7 +19,14 @@ const ProductoSchema = new Schema(
       type: Number,
       default: 0,
     },
-
+    listaParteDia: {
+      type: Boolean,
+      default: true,
+    },
+    listaInventario: {
+      type: Boolean,
+      default: true,
+    },
     descripcion: { type: String },
 
     distribuidor: {

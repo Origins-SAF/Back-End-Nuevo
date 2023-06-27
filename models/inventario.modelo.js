@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-
+ 
 const InventarioSchema = new Schema(
   {
     estado: {
@@ -12,16 +12,21 @@ const InventarioSchema = new Schema(
       ref: "usuarioModelo",
       required: true,
     },
-    distribuidor: {
+    destino: {
       type: Schema.Types.ObjectId,
-      ref: "distribuidorModelo",
+      ref: "PuntoModelo",
+      required: true,
     },
-
     productos: [{
 
-      nombre: {
-        type: String,
-        required: [true, "El nombre es obligatorio"]
+      producto: {
+        type: Schema.Types.ObjectId,
+        ref: "productoModelo",
+      },
+
+      distribuidor: {
+        type: Schema.Types.ObjectId,
+        ref: "distribuidorModelo",
       },
 
       unidad: {
@@ -32,18 +37,12 @@ const InventarioSchema = new Schema(
       cantidadProducto: {
         type: Number,
         default: 0,
-
       },
+
       precio: {
         type: Number,
         default: 0,
       },
-      destino: {
-        type: Schema.Types.ObjectId,
-        ref: "PuntoModelo",
-        required: true,
-      },
-      img: { type: String, default:"https://images.vexels.com/media/users/3/199820/isolated/preview/892bfdfcb80b356c53405aafbb716513-caja-de-carton-isometrica.png"},
     }],
     totalDeProductos: {
       type: Number
