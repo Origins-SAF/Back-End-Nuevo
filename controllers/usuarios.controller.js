@@ -13,5 +13,25 @@ export const getUsuarios = async (req, res) => {
   }
 };
 
+export const actualizarUsuario = async (req, res) => {
+  const { id } = req.params;
+  //console.log(req.body)
+  //console.log(req.body.nombre)
+
+    
+    //console.log(imgURl)
+  const data = req.body
+  try {
+
+    await usuarioModelo.findByIdAndUpdate(id, data, { new: true });
+
+    res.json({msg:"Se Actualizo el usuario"});
+  } catch (err) {
+    console.log("Error al actualizar el punto: ", err);
+    res.status(500).json({
+      msg: "Por favor, hable con el administrador",
+    });
+  }
+}
 
 

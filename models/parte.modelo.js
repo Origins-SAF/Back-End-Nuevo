@@ -15,6 +15,10 @@ const ParteSchema = new Schema(
       type: String,
       required : true
     },
+    totalEnCaja:{
+      type: number,
+      required : true
+    },
     distribuidor: [ 
       {
       nombre: {
