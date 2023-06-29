@@ -17,10 +17,20 @@ export const actualizarUsuario = async (req, res) => {
   const { id } = req.params;
   //console.log(req.body)
   //console.log(req.body.nombre)
+  let imgURl;
 
+  if(req?.file?.path){
+    imgURl = await cloudinary.uploader.upload(req?.file?.path)
+  }else {
+    imgURl = ""
+  }
     
     //console.log(imgURl)
-  const data = req.body
+
+  const data = {
+    ...req.body,
+    img: imgURl?.url ? imgURl?.url : imgURl
+  }
   try {
 
     await usuarioModelo.findByIdAndUpdate(id, data, { new: true });
