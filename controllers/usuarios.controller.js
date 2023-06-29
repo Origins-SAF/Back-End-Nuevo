@@ -1,5 +1,5 @@
 import usuarioModelo from '../models/usuario.modelo.js';
-
+import cloudinary from 'cloudinary'
 
 export const getUsuarios = async (req, res) => {
 
