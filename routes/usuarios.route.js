@@ -7,9 +7,10 @@ import {
   actualizarUsuario
   } from "../controllers/usuarios.controller.js";
 
+  import { upload } from "../Libs/upload.js";
 
   router.get("/ver-usuarios", getUsuarios);
-  router.put("/actualizar-usuario/:id", actualizarUsuario);
+  router.put("/actualizar-usuario/:id", upload.single("image"), actualizarUsuario);
 
 
 export default router;
