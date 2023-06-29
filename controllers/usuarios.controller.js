@@ -17,12 +17,12 @@ export const actualizarUsuario = async (req, res) => {
   const { id } = req.params;
   //console.log(req.body)
   //console.log(req.body.nombre)
-  let imgURl;
+  let imgURl = await cloudinary.uploader.upload(req?.file?.path);
 
   if(req?.file?.path){
     imgURl = await cloudinary.uploader.upload(req?.file?.path)
   }else {
-    imgURl = ""
+    imgURl = req.body?.img
   }
     
     //console.log(imgURl)
