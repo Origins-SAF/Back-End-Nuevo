@@ -106,7 +106,7 @@ export const getProductoDistribuidoresTodos = async (req, res) => {
     //console.log(numPage)
 
   try {
-      const productos = await productoModelo.find({distribuidor: mongoose.Types.ObjectId(id)}); // consulta para todos los documentos
+      const productos = await productoModelo.find({distribuidor: mongoose.Types.ObjectId(id), listaParteDia: true}); // consulta para todos los documentos
     
       //console.log(productos)
   // Respuesta del servidor

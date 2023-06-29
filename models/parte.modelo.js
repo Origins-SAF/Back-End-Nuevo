@@ -45,6 +45,10 @@ const ParteSchema = new Schema(
         stockFinal: {
           type: Number,
           required : true
+        },
+        unidadProducto: {
+          type: String,
+          required : true
         }, 
         precioProducto: {
           type: Number,
