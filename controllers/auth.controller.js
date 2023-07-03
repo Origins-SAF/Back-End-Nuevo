@@ -1,6 +1,7 @@
 
 
 import bcryptjs from 'bcryptjs';
+import cloudinary from 'cloudinary'
 
 const ctrlAuth = {};
 
@@ -53,12 +54,28 @@ export const login = async (req, res) => {
 export const register = async (req, res) => {
   const { password, ...resto } = req.body;
 
+  let imgURl = ""
+
+  if(req?.file?.path){
+    imgURl = await cloudinary.uploader.upload(req?.file?.path)
+  }else {
+    imgURl = req.body?.image
+  }
+
   try {
-    const usuario = new usuarioModelo(resto);
+    let datos = {
+      ...resto,
+      usuario: resto.nombre +  resto.apellido.slice(0, 1),
+      ubicacion: JSON.parse(resto?.ubicacion),
+      img: imgURl?.url ? imgURl?.url : imgURl
+    }
+
+    const usuario = new usuarioModelo(datos);
 
     // Encriptar la contraseña
     const salt = bcryptjs.genSaltSync();
     usuario.password = bcryptjs.hashSync(password, salt);
+    
 
     // Guardar en BD
     const usuarioRegistrado = await usuario.save();
