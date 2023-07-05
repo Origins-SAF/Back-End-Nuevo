@@ -85,14 +85,7 @@ export const updatePrograma = async (req, res) => {
     
  const programa = await programaModelo.findByIdAndUpdate(
       id,
-      {
-        titulo: datos.titulo,
-        fecha: datos.fecha,
-        vivo: datos.vivo,
-        video: datos.video,
-        videoLink: datos.videoLink,
-        publicado: datos.publicado
-      },
+      datos,
       { new: true }
     );
 
