@@ -115,6 +115,24 @@ export const guardarAsistenciasPorPunto = async (req, res) => {
     }
 }
 
+export const actualizarPlanilla = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+
+      const data = req.body
+  /* console.log(data) */
+    await convocadoModelo.findByIdAndUpdate(id, data, { new: true });
+
+    res.json({msg:"Se Actualizo la planilla"});
+  } catch (err) {
+    console.log("Error al actualizar la planilla: ", err);
+    res.status(500).json({
+      msg: "Por favor, hable con el administrador",
+    });
+  }
+}
+
 export const archivarPlanilla = async (req, res) => {
     const { id } = req.params;
     const valor = req.body.vigente
