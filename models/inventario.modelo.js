@@ -18,31 +18,32 @@ const InventarioSchema = new Schema(
       required: true,
     },
     productos: [{
-
-      producto: {
-        type: Schema.Types.ObjectId,
-        ref: "productoModelo",
-      },
-
+      
       distribuidor: {
         type: Schema.Types.ObjectId,
         ref: "distribuidorModelo",
       },
-
-      unidad: {
-        type: String,
-        default: "UN",
-      },
-
-      cantidadProducto: {
-        type: Number,
-        default: 0,
-      },
-
-      precio: {
-        type: Number,
-        default: 0,
-      },
+      listaInv: [{
+        producto: {
+          type: Schema.Types.ObjectId,
+          ref: "productoModelo",
+        },
+        
+        unidad: {
+          type: String,
+          default: "UN",
+        },
+  
+        cantidadProducto: {
+          type: Number,
+          default: 0,
+        },
+  
+        precio: {
+          type: Number,
+          default: 0,
+        }
+      }]
     }],
     totalDeProductos: {
       type: Number
