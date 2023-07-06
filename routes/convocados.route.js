@@ -3,7 +3,7 @@ import { Router } from "express";
 const router = Router();
 import validarJWT from "../middlewares/validar-jwt.js";
 // Requerimos los controladores (funciones que contendrán la lógica del endpoint)
-import { getConvocados, postConvocados, getAsistenciasPorPunto, guardarAsistenciasPorPunto, archivarPlanilla, eliminarPlanillaLog } from "../controllers/convocados.controller.js";
+import { getConvocados, postConvocados, getAsistenciasPorPunto, guardarAsistenciasPorPunto, archivarPlanilla, eliminarPlanillaLog, actualizarPlanilla } from "../controllers/convocados.controller.js";
     
     
     router.get("/ver-convocados", getConvocados);
@@ -11,6 +11,7 @@ import { getConvocados, postConvocados, getAsistenciasPorPunto, guardarAsistenci
     router.post("/guardar-convocados", postConvocados);
     router.put("/guardar-asistencia-puntos/:id", guardarAsistenciasPorPunto);
     router.put("/archivar-planilla/:id", archivarPlanilla);
+    router.put("/actualizar-planilla/:id", actualizarPlanilla);
     router.put("/eliminar-planilla-log/:id", eliminarPlanillaLog);
   
     export default router;

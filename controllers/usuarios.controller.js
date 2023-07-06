@@ -39,7 +39,7 @@ export const actualizarUsuario = async (req, res) => {
 
     res.json({msg:"Se Actualizo el usuario"});
   } catch (err) {
-    console.log("Error al actualizar el punto: ", err);
+    console.log("Error al actualizar el usuario: ", err);
     res.status(500).json({
       msg: "Por favor, hable con el administrador",
     });
