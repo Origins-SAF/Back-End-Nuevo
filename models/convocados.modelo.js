@@ -34,7 +34,10 @@ const ConvocadosSchema = new Schema(
                         },
                         horaDeLlegada:{
                             type: String
-                        }
+                        },
+                        horaDeSalida:{
+                          type: String
+                      }
                     }
                   ]
             }
