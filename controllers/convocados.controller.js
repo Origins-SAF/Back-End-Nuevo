@@ -2,16 +2,15 @@ import convocadoModelo from '../models/convocados.modelo.js';
 import mongoose from 'mongoose';
 
 export const getConvocados = async (req, res) => {
-  const limitArc = parseInt(req.query.limitArc);
-  const skipArc = parseInt(req.query.skipArc);
+  
 
   const limitConv = parseInt(req.query.limitConv);
   const skipConv = parseInt(req.query.skipConv);
 
     try {
-        const convocados = await convocadoModelo.find({estado: true}).populate("punto", ["nombre","barrio"]) // consulta para todos los documentos
+        const convocados = await convocadoModelo.find({estado: true, vigente: true}).populate("punto", ["nombre","barrio"]) // consulta para todos los documentos
     
-        /* const totalPage = convocados.length */
+        
 
     let listaConvocados = convocados.reverse();/* .slice(skip, skip + limit) */
     //console.log(listaConvocados)
@@ -19,22 +18,19 @@ export const getConvocados = async (req, res) => {
     // "data" es la variable que está alojando el JSON
     var datos;
     var convocadosArrayList = [];
-    var archivadosArrayList = []
+   
     
     for (let i = 0; i < listaConvocados.length; i++) {
       datos = listaConvocados[i];
-    /*   
-      console.log("___________")
-      console.log(listaConvocados[i])
-      console.log("___________") */
+    
 
       var listaFecha;
       var listaC = {};
-      var listaArchivados = {}
+      
       /* console.log(datos.vigente) */
       /* console.log(datos.fecha.toLocaleDateString("es-ES")) */
       // Revisa si la ciudad que que actualmente estamos leyendo difiere con la última leída
-      if (listaFecha !== datos.fecha.toLocaleDateString("es-ES") && datos.vigente == true) {
+      if (listaFecha !== datos.fecha.toLocaleDateString("es-ES") ) {
 
         /* console.log(datos.fecha) */
         // Guarda la nueva ciudad en la variable correspondiente
@@ -52,23 +48,53 @@ export const getConvocados = async (req, res) => {
 
         convocadosArrayList.push(listaC);
         
-      } else if(listaFecha !== datos.fecha.toLocaleDateString("es-ES") && datos.vigente == false){
+      } 
+    }
 
-        listaArchivados = listaConvocados.filter((item) => item.vigente == false);
-        archivadosArrayList.push(listaArchivados);
+  
+    const pagesConv = [];
+  
+    //Convocados
+    if(limitConv != 1){
+      for (let x = 0; x < convocadosArrayList.length; x += limitConv) {
+        let pageC = x
+        pagesConv.push(pageC);
       }
     }
-    // Respuesta del servidor
-    /* console.log(convocadosArrayList.length) */
 
    
 
+    const totalPageConvocados = pagesConv
+   
+  
+    let convocadosArray = convocadosArrayList.splice(skipConv, skipConv + limitConv);
+   
+ 
+    // Respuesta del servidor
+    res.json({ totalPageConvocados, convocadosArray});
+    } catch (error) {
+        console.log("Error al traer los convocados: ", error)
+    }
+}
+
+export const getConvocadosArchivados = async (req, res) => {
+  const limitArc = parseInt(req.query.limitArc);
+  const skipArc = parseInt(req.query.skipArc);
+
+
+    try {
+        const convocados = await convocadoModelo.find({estado: true, vigente:false}).populate("punto", ["nombre","barrio"]) // consulta para todos los documentos
+    
+        /* const totalPage = convocados.length */
+
+    let listaConvocados = convocados.reverse();/* .slice(skip, skip + limit) */
+    //console.log(listaConvocados)
+
     const pagesArc = [];
-    const pagesConv = [];
 
     //Archivados
     if(limitArc != 1){
-      for (let i = 0; i < archivadosArrayList.length; i += limitArc) {
+      for (let i = 0; i < listaConvocados.length; i += limitArc) {
         let pageA = i
         pagesArc.push(pageA);
       }
@@ -76,28 +102,13 @@ export const getConvocados = async (req, res) => {
 
     /* console.log(convocadosArrayList) */
 
-    //Convocados
-    if(limitConv != 1){
-      /* console.log('limitConv ' + limitConv) */
-     /*  console.log(convocadosArrayList.length) */
-
-      for (let x = 0; x < convocadosArrayList.length; x += limitConv) {
-        let pageC = x
-        /* console.log(pageC) */
-        pagesConv.push(pageC);
-      }
-    }
-
     const totalPageArchivados = pagesArc
 
-    const totalPageConvocados = pagesConv
    /*  console.log(archivadosArrayList.length) */
-    let archivadosArray = archivadosArrayList[0].slice(skipArc, skipArc + limitArc);
-    let convocadosArray = convocadosArrayList.splice(skipConv, skipConv + limitConv);
-   
-    console.log(archivadosArray.length)
+    let archivadosArray = listaConvocados.slice(skipArc, skipArc + limitArc);
+    
     // Respuesta del servidor
-    res.json({totalPageArchivados, totalPageConvocados, convocadosArray, archivadosArray});
+    res.json({totalPageArchivados, archivadosArray});
     } catch (error) {
         console.log("Error al traer los convocados: ", error)
     }
