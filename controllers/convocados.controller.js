@@ -17,13 +17,17 @@ export const getConvocados = async (req, res) => {
     
     for (let i = 0; i < listaConvocados.length; i++) {
       datos = listaConvocados[i];
+    /*   
+      console.log("___________")
+      console.log(listaConvocados[i])
+      console.log("___________") */
 
       var listaFecha;
       var listaC = {};
       var listaArchivados = {}
       /* console.log(datos.fecha.toLocaleDateString("es-ES")) */
       // Revisa si la ciudad que que actualmente estamos leyendo difiere con la última leída
-      if (listaFecha !== datos.fecha.toLocaleDateString("es-ES")) {
+      if (listaFecha !== datos.fecha.toLocaleDateString("es-ES") && datos.vigente == true) {
         // Guarda la nueva ciudad en la variable correspondiente
         listaFecha = datos.fecha.toLocaleDateString("es-ES");
         /* console.log(listaFecha) */
@@ -32,12 +36,16 @@ export const getConvocados = async (req, res) => {
         listaC.fecha_convocados = datos.fecha;
 
         // Filtra el objeto "data" comparando la propiedad "Ciudad" de cada profesional con la ciudad actual
-        listaC.datos = listaConvocados.filter((item) => item.fecha.toLocaleDateString("es-ES") === listaFecha && item.vigente == true);
-        listaArchivados = listaConvocados.filter((item) => item.vigente == false);
+        listaC.datos = listaConvocados.filter((item) => item.fecha.toLocaleDateString("es-ES") === listaFecha && item.vigente == true  );
+       
         //onsole.log(listaC)
         // Finalmente toma el objeto ciudad con todos los profesionales que le corresponden y lo guarda en el array "ciudades"
 
         convocadosArray.push(listaC);
+        
+      } else if(listaFecha !== datos.fecha.toLocaleDateString("es-ES") && datos.vigente == false){
+
+        listaArchivados = listaConvocados.filter((item) => item.vigente == false);
         archivadosArray.push(listaArchivados);
       }
     }
@@ -83,6 +91,7 @@ export const getAsistenciasPorPunto = async (req, res) => {
       }).populate("punto", ["nombre","barrio"])
       }else if(idPunto){
         asistencias = await convocadoModelo.find({
+          estado: true,
           punto: idPunto,
           vigente: true
       }).populate("punto", ["nombre","barrio"])
