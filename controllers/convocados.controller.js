@@ -2,18 +2,24 @@ import convocadoModelo from '../models/convocados.modelo.js';
 import mongoose from 'mongoose';
 
 export const getConvocados = async (req, res) => {
+  const limitArc = parseInt(req.query.limitArc);
+  const skipArc = parseInt(req.query.skipArc);
+
+  const limitConv = parseInt(req.query.limitConv);
+  const skipConv = parseInt(req.query.skipConv);
+
     try {
         const convocados = await convocadoModelo.find({estado: true}).populate("punto", ["nombre","barrio"]) // consulta para todos los documentos
     
-        const totalPage = convocados.length
+        /* const totalPage = convocados.length */
 
     let listaConvocados = convocados.reverse();/* .slice(skip, skip + limit) */
     //console.log(listaConvocados)
 
     // "data" es la variable que está alojando el JSON
     var datos;
-    var convocadosArray = [];
-    var archivadosArray = []
+    var convocadosArrayList = [];
+    var archivadosArrayList = []
     
     for (let i = 0; i < listaConvocados.length; i++) {
       datos = listaConvocados[i];
@@ -25,9 +31,12 @@ export const getConvocados = async (req, res) => {
       var listaFecha;
       var listaC = {};
       var listaArchivados = {}
+      /* console.log(datos.vigente) */
       /* console.log(datos.fecha.toLocaleDateString("es-ES")) */
       // Revisa si la ciudad que que actualmente estamos leyendo difiere con la última leída
       if (listaFecha !== datos.fecha.toLocaleDateString("es-ES") && datos.vigente == true) {
+
+        /* console.log(datos.fecha) */
         // Guarda la nueva ciudad en la variable correspondiente
         listaFecha = datos.fecha.toLocaleDateString("es-ES");
         /* console.log(listaFecha) */
@@ -38,22 +47,56 @@ export const getConvocados = async (req, res) => {
         // Filtra el objeto "data" comparando la propiedad "Ciudad" de cada profesional con la ciudad actual
         listaC.datos = listaConvocados.filter((item) => item.fecha.toLocaleDateString("es-ES") === listaFecha && item.vigente == true  );
        
-        //onsole.log(listaC)
+        /* console.log(listaC) */
         // Finalmente toma el objeto ciudad con todos los profesionales que le corresponden y lo guarda en el array "ciudades"
 
-        convocadosArray.push(listaC);
+        convocadosArrayList.push(listaC);
         
       } else if(listaFecha !== datos.fecha.toLocaleDateString("es-ES") && datos.vigente == false){
 
         listaArchivados = listaConvocados.filter((item) => item.vigente == false);
-        archivadosArray.push(listaArchivados);
+        archivadosArrayList.push(listaArchivados);
       }
     }
     // Respuesta del servidor
-    //console.log(convocadosArray.length)
+    /* console.log(convocadosArrayList.length) */
+
+   
+
+    const pagesArc = [];
+    const pagesConv = [];
+
+    //Archivados
+    if(limitArc != 1){
+      for (let i = 0; i < archivadosArrayList.length; i += limitArc) {
+        let pageA = i
+        pagesArc.push(pageA);
+      }
+    }
+
+    /* console.log(convocadosArrayList) */
+
+    //Convocados
+    if(limitConv != 1){
+      /* console.log('limitConv ' + limitConv) */
+     /*  console.log(convocadosArrayList.length) */
+
+      for (let x = 0; x < convocadosArrayList.length; x += limitConv) {
+        let pageC = x
+        /* console.log(pageC) */
+        pagesConv.push(pageC);
+      }
+    }
+
+    const totalPageArchivados = pagesArc
+
+    const totalPageConvocados = pagesConv
+
+    const archivadosArray = archivadosArrayList.slice(skipArc, skipArc + limitArc);
+    const convocadosArray = convocadosArrayList.splice(skipConv, skipConv + limitConv);
    
     // Respuesta del servidor
-    res.json({totalPage,convocadosArray, archivadosArray});
+    res.json({totalPageArchivados, totalPageConvocados, convocadosArray, archivadosArray});
     } catch (error) {
         console.log("Error al traer los convocados: ", error)
     }
