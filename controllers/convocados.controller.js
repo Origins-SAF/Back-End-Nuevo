@@ -91,10 +91,11 @@ export const getConvocados = async (req, res) => {
     const totalPageArchivados = pagesArc
 
     const totalPageConvocados = pagesConv
-
-    const archivadosArray = archivadosArrayList.slice(skipArc, skipArc + limitArc);
-    const convocadosArray = convocadosArrayList.splice(skipConv, skipConv + limitConv);
+   /*  console.log(archivadosArrayList.length) */
+    let archivadosArray = archivadosArrayList[0].slice(skipArc, skipArc + limitArc);
+    let convocadosArray = convocadosArrayList.splice(skipConv, skipConv + limitConv);
    
+    console.log(archivadosArray.length)
     // Respuesta del servidor
     res.json({totalPageArchivados, totalPageConvocados, convocadosArray, archivadosArray});
     } catch (error) {
