@@ -8,7 +8,7 @@ export const getConvocados = async (req, res) => {
   const skipConv = parseInt(req.query.skipConv);
 
     try {
-        const convocados = await convocadoModelo.find({estado: true, vigente: true}).populate("punto", ["nombre","barrio"]) // consulta para todos los documentos
+        const convocados = await convocadoModelo.find({estado: true, vigente: true}).populate("punto", ["nombre","barrio","tipo", "departamento"]) // consulta para todos los documentos
     
         
 
@@ -83,7 +83,7 @@ export const getConvocadosArchivados = async (req, res) => {
 
 
     try {
-        const convocados = await convocadoModelo.find({estado: true, vigente:false}).populate("punto", ["nombre","barrio"]) // consulta para todos los documentos
+        const convocados = await convocadoModelo.find({estado: true, vigente:false}).populate("punto", ["nombre","barrio","tipo", "departamento"]) // consulta para todos los documentos
     
         /* const totalPage = convocados.length */
 
