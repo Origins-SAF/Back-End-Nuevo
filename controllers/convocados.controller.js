@@ -176,11 +176,11 @@ export const getConvocadosArchivadosPorMes = async (req, res) => {
     let archivadosArray = listaOrd.slice(skipArc, skipArc + limitArc)
     /* console.log(new Date(archivadosArray[1]?.fecha)) */
 
-    console.log(listaOrd.length)
-    console.log(archivadosArray.length)
+    /* console.log(listaOrd.length)
+    console.log(archivadosArray.length) */
     
     
-    res.json({totalPageArchivados, archivadosArray});
+    res.json({totalPageArchivados, archivadosArray, listaOrd});
   } catch (error) {
     console.log("Error al traer las asistencias: ", error);
   }
