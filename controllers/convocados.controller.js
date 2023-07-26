@@ -173,8 +173,11 @@ export const getConvocadosArchivadosPorMes = async (req, res) => {
    /*  console.log(archivadosArrayList.length) */
     let listaOrd = lista.slice().sort((a, b) => a.fecha - b.fecha);;
     /* console.log(archivadosArray.at(-5).fecha) */
-    let archivadosArray = listaOrd.splice(skipArc, skipArc + limitArc)
+    let archivadosArray = listaOrd.slice(skipArc, skipArc + limitArc)
     /* console.log(new Date(archivadosArray[1]?.fecha)) */
+
+    console.log(listaOrd.length)
+    console.log(archivadosArray.length)
     
     
     res.json({totalPageArchivados, archivadosArray});
