@@ -116,8 +116,8 @@ export const getConvocadosArchivados = async (req, res) => {
 
 export const getConvocadosArchivadosPorMes = async (req, res) => {
 
-  /* const limit = parseInt(req.query.limit);
-  const skip = parseInt(req.query.skip); */
+  const limitArc = parseInt(req.query.limitArc);
+  const skipArc = parseInt(req.query.skipArc);
 
   let fechaInicio; 
   let fechaFinal; 
@@ -150,9 +150,32 @@ export const getConvocadosArchivadosPorMes = async (req, res) => {
 
      
 
-    let archivadosArray = lista.reverse();
     
-    const totalPageArchivados = lista.length
+    
+    /* 
+    console.log(dataOrdenada[20])
+    console.log(lista[20]) 
+    */
+    const pagesArc = [];
+
+    //Archivados
+    if(limitArc != 1){
+      for (let i = 0; i < lista.length; i += limitArc) {
+        let pageA = i
+        pagesArc.push(pageA);
+      }
+    }
+
+    
+
+    const totalPageArchivados = pagesArc
+
+   /*  console.log(archivadosArrayList.length) */
+    let listaOrd = lista.slice().sort((a, b) => a.fecha - b.fecha);;
+    /* console.log(archivadosArray.at(-5).fecha) */
+    let archivadosArray = listaOrd.splice(skipArc, skipArc + limitArc)
+    /* console.log(new Date(archivadosArray[1]?.fecha)) */
+    
     
     res.json({totalPageArchivados, archivadosArray});
   } catch (error) {
