@@ -114,6 +114,51 @@ export const getConvocadosArchivados = async (req, res) => {
     }
 }
 
+export const getConvocadosArchivadosPorMes = async (req, res) => {
+
+  /* const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip); */
+
+  let fechaInicio; 
+  let fechaFinal; 
+
+  var año = new Date().getFullYear();
+
+  if(req.query.fechaInicio){
+    fechaInicio = new Date(req.query.fechaInicio)
+  }else{
+    fechaInicio = new Date(`${año}/01/01`)
+  }
+
+  if(req.query.fechaFinal){
+    fechaFinal = new Date(req.query.fechaFinal)
+  }else{
+    fechaFinal = new Date(`${año}/12/31`)
+  }
+
+  try {
+    const lista = await convocadoModelo
+      .find({
+        fecha: {
+          $gte: fechaInicio,
+          $lt: fechaFinal
+        },
+        estado: true, 
+        vigente:false
+      })
+      .populate("punto", ["nombre","barrio","tipo", "departamento"])
+
+     
+
+    let datosLista = lista.reverse();
+    
+
+    res.json(datosLista);
+  } catch (error) {
+    console.log("Error al traer las asistencias: ", error);
+  }
+};
+
 // Controlador que almacena una nueva lista de convocados
 export const postConvocados = async (req, res) => {
     // Desestructuramos la información recibida del cliente
