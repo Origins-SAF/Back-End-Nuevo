@@ -150,10 +150,11 @@ export const getConvocadosArchivadosPorMes = async (req, res) => {
 
      
 
-    let datosLista = lista.reverse();
+    let archivadosArray = lista.reverse();
     
-
-    res.json(datosLista);
+    const totalPageArchivados = lista.length
+    
+    res.json({totalPageArchivados, archivadosArray});
   } catch (error) {
     console.log("Error al traer las asistencias: ", error);
   }
