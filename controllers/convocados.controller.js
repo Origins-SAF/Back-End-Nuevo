@@ -214,7 +214,8 @@ export const getAsistenciasPorPunto = async (req, res) => {
     try {
       if (permiso == true){
         asistencias = await convocadoModelo.find({
-          estado: true
+          estado: true,
+          vigente: true
       }).populate("punto", ["nombre","barrio"])
       }else if(idPunto){
         asistencias = await convocadoModelo.find({
