@@ -15,6 +15,9 @@ const NoticiaSchema = new Schema(
           img:{
             type: String,
           },
+          categoria:{
+            type: String,
+          },
           publicado: {
             type: Boolean,
             default: false

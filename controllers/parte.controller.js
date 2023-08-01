@@ -7,7 +7,7 @@ export const getPartes = async (req, res) => {
       .find()
       .populate("usuario", ["nombre", "apellido", "img"]) // consulta para todos los documentos
       .populate("distribuidor.nombre", ["nombre"])
-      .populate("ubicacion", ["nombre", "barrio"])
+      .populate("ubicacion", ["nombre", "barrio", "tipo"])
       .populate("distribuidor.stock.producto", ["nombre", "img"]);
     // Respuesta del servidor
     res.json(partes);
@@ -24,7 +24,7 @@ export const getPartesPorFecha = async (req, res) => {
       .find({fecha: fechapd})
       .populate("usuario", ["nombre", "apellido", "img"]) // consulta para todos los documentos
       .populate("distribuidor.nombre", ["nombre"])
-      .populate("ubicacion", ["nombre", "barrio"])
+      .populate("ubicacion", ["nombre", "barrio", "tipo"])
       .populate("distribuidor.stock.producto", ["nombre", "img"]);
     // Respuesta del servidor
     res.json(partes);
@@ -64,7 +64,7 @@ export const getPartesPorGrupos = async (req, res) => {
       })
       .populate("usuario", ["nombre", "apellido", "img"]) // consulta para todos los documentos
       .populate("distribuidor.nombre", ["nombre"])
-      .populate('ubicacion',[ "nombre", "barrio" ])
+      .populate('ubicacion',[ "nombre", "barrio", "tipo" ])
       .populate("distribuidor.stock.producto", ["nombre", "img"])
       .populate("distribuidor.prodmasvendido", ["nombre"])
 

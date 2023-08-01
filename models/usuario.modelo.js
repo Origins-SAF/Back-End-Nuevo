@@ -35,6 +35,9 @@ const UsuarioSchema = new Schema(
       todosLosPuntos:{
         type: Boolean,
         default: false
+      },
+      consorcio: {
+        type: String
       }
     },
     img: {
