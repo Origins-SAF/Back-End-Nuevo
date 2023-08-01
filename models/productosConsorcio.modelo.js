@@ -1,6 +1,6 @@
 import { model, Schema } from 'mongoose';
 
-const ProductoSchema = new Schema(
+const ProductoConsorcioSchema = new Schema(
   {
     nombre: {
       type: String,
@@ -18,7 +18,6 @@ const ProductoSchema = new Schema(
       type: Boolean,
       default: true,
     },
-    descripcion: { type: String },
     publicado: {
       type: Boolean,
       default: false,
@@ -51,10 +50,10 @@ const ProductoSchema = new Schema(
   { timestamps: true }
 );
 
-ProductoSchema.methods.toJSON = function () {
+ProductoConsorcioSchema.methods.toJSON = function () {
   const { __v, estado, _id, ...data } = this.toObject();
   data.uid = _id;
   return data;
 };
 
-export default model("productoConsorcioModelo", ProductoSchema);
+export default model("productoConsorcioModelo", ProductoConsorcioSchema);

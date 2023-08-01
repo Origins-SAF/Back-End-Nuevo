@@ -9,7 +9,7 @@ export const getInventarios = async (req, res) => {
 
   try {
     const inventarios = await inventarioModelo.find({estado: true}).populate('usuario',["nombre","apellido","img"])
-    .populate('productos.destino',["barrio" , "nombre"]) // consulta para todos los documentos
+    .populate('destino',["barrio" , "nombre"]) // consulta para todos los documentos
   
     const totalPage = inventarios.length
     //console.log(productos)
@@ -40,7 +40,7 @@ export const getInventarioUnico = async (req, res) => {
   const { id } = req.params;
   try {
     const inventarios = await inventarioModelo.findById(id).populate('usuario',["nombre","apellido","img"])
-    .populate('productos.destino',["barrio" , "nombre"]) // consulta para todos los documentos
+    .populate('destino',["barrio" , "nombre"]) // consulta para todos los documentos
   
   // Respuesta del servidor
   res.json(inventarios);
