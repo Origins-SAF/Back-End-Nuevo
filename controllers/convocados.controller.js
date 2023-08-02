@@ -301,7 +301,7 @@ export const archivarPlanilla = async (req, res) => {
         msg: "Por favor, hable con el administrador",
       });
     }
-  };
+};
 
 export const eliminarPlanillaLog = async (req, res) => {
     const { id } = req.params;
@@ -323,4 +323,4 @@ export const eliminarPlanillaLog = async (req, res) => {
         msg: "Por favor, hable con el administrador",
       });
     }
-  };
+};

@@ -37,7 +37,10 @@ const ConvocadosSchema = new Schema(
                         },
                         horaDeSalida:{
                           type: String
-                      }
+                        },
+                        justificacionFalta:{
+                          type: String
+                        },
                     }
                   ]
             }

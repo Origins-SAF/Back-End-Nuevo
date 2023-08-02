@@ -8,7 +8,9 @@ export const getInventarios = async (req, res) => {
   const skip = parseInt(req.query.skip);
 
   try {
-    const inventarios = await inventarioModelo.find({estado: true}).populate('usuario',["nombre","apellido","img"])
+    const inventarios = await inventarioModelo.find({estado: true})
+    .populate('usuario',["nombre","apellido","img"])
+    .populate('productos.listaInv.producto',["nombre"])
     .populate('destino',["barrio" , "nombre"]) // consulta para todos los documentos
   
     const totalPage = inventarios.length
