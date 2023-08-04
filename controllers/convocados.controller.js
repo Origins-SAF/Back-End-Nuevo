@@ -28,20 +28,20 @@ export const getConvocados = async (req, res) => {
       var listaC = {};
       
       /* console.log(datos.vigente) */
-      /* console.log(datos.fecha.toLocaleDateString("es-ES")) */
+      /* console.log(datos.fecha.toLocaleDalistaUserring("es-ES")) */
       // Revisa si la ciudad que que actualmente estamos leyendo difiere con la última leída
-      if (listaFecha !== datos.fecha.toLocaleDateString("es-ES") ) {
+      if (listaFecha !== datos.fecha.toLocaleDalistaUserring("es-ES") ) {
 
         /* console.log(datos.fecha) */
         // Guarda la nueva ciudad en la variable correspondiente
-        listaFecha = datos.fecha.toLocaleDateString("es-ES");
+        listaFecha = datos.fecha.toLocaleDalistaUserring("es-ES");
         /* console.log(listaFecha) */
         // Guarda en la propiedad "nombre" del objeto "ciudad" el valor de la propiedad "Ciudad"
         // del profesional que actualmente estamos evaluando
         listaC.fecha_convocados = datos.fecha;
 
         // Filtra el objeto "data" comparando la propiedad "Ciudad" de cada profesional con la ciudad actual
-        listaC.datos = listaConvocados.filter((item) => item.fecha.toLocaleDateString("es-ES") === listaFecha && item.vigente == true  );
+        listaC.datos = listaConvocados.filter((item) => item.fecha.toLocaleDalistaUserring("es-ES") === listaFecha && item.vigente == true  );
        
         /* console.log(listaC) */
         // Finalmente toma el objeto ciudad con todos los profesionales que le corresponden y lo guarda en el array "ciudades"
@@ -323,4 +323,53 @@ export const eliminarPlanillaLog = async (req, res) => {
         msg: "Por favor, hable con el administrador",
       });
     }
+};
+
+export const crearJustificacionPlanilla = async (req, res) => {
+  const { id, idUser } = req.params;
+  try {
+    // Ejecución normal del programa
+    const planilla = await convocadoModelo.findById(id);
+
+    if (!planilla) return res.status(404).json({ msg: "La Planilla No Existe" });
+
+    if (!planilla.estado) return res.status(404).json({ msg: "La Planilla No Existe (desactivado)" });
+    
+    const datos = req.body;
+
+    const listaUser = await planilla.lista.find(asis => asis.id === idUser)
+    let arrayAsistencia = listaUser.asistencia[0]
+
+    const asistenciaUser = {
+            presente: arrayAsistencia.presente,
+            tardanza: arrayAsistencia.tardanza,
+            falta: arrayAsistencia.falta,
+            horaDeLlegada: arrayAsistencia.horaDeLlegada,
+            horaDeSalida: arrayAsistencia.horaDeLlegada,
+            justificacionFalta:  datos.justificacionFalta
+    }
+
+    listaUser.asistencia[0] = asistenciaUser
+
+    const consultarIndex = (list) => {
+      for (let i=0; i < list.length; i++){
+        if (list[i].id === idUser){return i}
+      }
+    }
+
+    const indexUser = consultarIndex(planilla.lista)
+
+    const nuevaPlanilla = planilla.lista[indexUser] = listaUser
+
+    await planilla.save(nuevaPlanilla)
+    
+    return res.json({
+      msg: 'Se Modifico la plantilla',
+      planilla
+    });
+    
+  } catch (error) {
+    // Si ocurre un error
+    console.log("Error al actualizar la planilla: ", error);
+  }
 };

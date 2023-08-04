@@ -11,7 +11,9 @@ import { getConvocados,
     archivarPlanilla, 
     eliminarPlanillaLog, 
     actualizarPlanilla,
-    getConvocadosArchivadosPorMes } from "../controllers/convocados.controller.js";
+    getConvocadosArchivadosPorMes,
+    crearJustificacionPlanilla
+} from "../controllers/convocados.controller.js";
     
     
     router.get("/ver-convocados", getConvocados);
@@ -22,6 +24,9 @@ import { getConvocados,
     router.put("/archivar-planilla/:id", archivarPlanilla);
     router.put("/actualizar-planilla/:id", actualizarPlanilla);
     router.put("/eliminar-planilla-log/:id", eliminarPlanillaLog);
+
+    router.post("/crear-justificacion/:id/:idUser", crearJustificacionPlanilla);
+
     router.get("/ver-convocados-archivados-fecha", getConvocadosArchivadosPorMes)
   
     export default router;
