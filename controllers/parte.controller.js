@@ -4,7 +4,7 @@ import parteModelo from "../models/parte.modelo.js";
 export const getPartes = async (req, res) => {
   try {
     const partes = await parteModelo
-      .find()
+      .find({estado:true})
       .populate("usuario", ["nombre", "apellido", "img"]) // consulta para todos los documentos
       .populate("distribuidor.nombre", ["nombre"])
       .populate("ubicacion", ["nombre", "barrio", "tipo"])
@@ -21,7 +21,7 @@ export const getPartesPorFecha = async (req, res) => {
   console.log(fechapd)
   try {
     const partes = await parteModelo
-      .find({fecha: fechapd})
+      .find({fecha: fechapd, estado: true})
       .populate("usuario", ["nombre", "apellido", "img"]) // consulta para todos los documentos
       .populate("distribuidor.nombre", ["nombre"])
       .populate("ubicacion", ["nombre", "barrio", "tipo"])
@@ -60,7 +60,8 @@ export const getPartesPorGrupos = async (req, res) => {
         fecha: {
           $gte: fechaInicio,
           $lt: fechaFinal
-        }
+        },
+        estado: true
       })
       .populate("usuario", ["nombre", "apellido", "img"]) // consulta para todos los documentos
       .populate("distribuidor.nombre", ["nombre"])
