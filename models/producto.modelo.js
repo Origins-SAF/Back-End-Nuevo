@@ -19,6 +19,10 @@ const ProductoSchema = new Schema(
       type: Number,
       default: 0,
     },
+    totalEdit:{
+      type: Boolean,
+      default: false,
+    },
     listaParteDia: {
       type: Boolean,
       default: true,
