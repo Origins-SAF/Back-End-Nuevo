@@ -79,14 +79,15 @@ export const getPartesPorGrupos = async (req, res) => {
 
     const nuevoArray = _.groupBy(partes, function(item) {
       /* console.log(item.fecha) */
-      let newFecha = item.fecha.toLocaleDateString("es-ES")
+      let newFecha = item.fecha.toString()
       /* console.log(newFecha) */
       return newFecha;
     });
 
     const datap = Object.keys(nuevoArray).map((date) => {
+      
       return {
-        parte_fecha: date,
+        parte_fecha: new Date(date),
         datos: nuevoArray[date]
       };
     });
