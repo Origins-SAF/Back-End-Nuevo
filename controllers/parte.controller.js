@@ -85,12 +85,27 @@ export const getPartesPorGrupos = async (req, res) => {
     });
 
     const datap = Object.keys(nuevoArray).map((date) => {
-      
+     
+
       return {
-        parte_fecha: new Date(date),
+        parte_fecha: date,
         datos: nuevoArray[date]
       };
     });
+
+
+    /* console.log(datap[0].parte_fecha)
+
+    let nuevafecha = new Date(datap[0].parte_fecha).toLocaleDateString("es-ES", {
+      weekday: "long",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    }); */
+
+    /* console.log(datap[0].parte_fecha)
+    console.log(nuevafecha)
+    console.log("===================") */
 
 /* console.log(partesDatos)  */
 let datosRev = datap.reverse();
