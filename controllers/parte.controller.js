@@ -79,7 +79,7 @@ export const getPartesPorGrupos = async (req, res) => {
 
     const nuevoArray = _.groupBy(partes, function(item) {
       /* console.log(item.fecha) */
-      let newFecha = item.fecha.toString()
+      let newFecha = item.fecha.toLocaleDateString("en-US")
       /* console.log(newFecha) */
       return newFecha;
     });
