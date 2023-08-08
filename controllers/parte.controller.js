@@ -84,7 +84,7 @@ export const getPartesPorGrupos = async (req, res) => {
       return newFecha;
     });
 
-    const partesDatos = Object.keys(nuevoArray).map((date) => {
+    const datap = Object.keys(nuevoArray).map((date) => {
       return {
         parte_fecha: date,
         datos: nuevoArray[date]
@@ -92,12 +92,12 @@ export const getPartesPorGrupos = async (req, res) => {
     });
 
 /* console.log(partesDatos)  */
-let datosRev = partesDatos.reverse();
-let datosParte = datosRev.slice(skip, skip + limit)
+let datosRev = datap.reverse();
+let partesDatos = datosRev.slice(skip, skip + limit)
   
     // Respuesta del servidor
     //console.log(partesDatos.length)
-    res.json({totalPage, datosParte});
+    res.json({totalPage, partesDatos});
   } catch (error) {
     console.log("Error al traer los partes: ", error);
   }
