@@ -1,4 +1,5 @@
 import parteModelo from "../models/parte.modelo.js";
+import _ from 'lodash'
 
 // Devuelve todos los partes activas de la colección
 export const getPartes = async (req, res) => {
@@ -71,38 +72,32 @@ export const getPartesPorGrupos = async (req, res) => {
 
       const totalPage = partes.length
 
-    let datosParte = partes.slice(skip, skip + limit).reverse();
+    
     //console.log(datosParte)
 
-    // "data" es la variable que está alojando el JSON
-    var datos;
-    var partesDatos = [];
-    
-    for (let i = 0; i < datosParte.length; i++) {
-      datos = datosParte[i];
+   /*  var nuevoArray = _.chain(partes).groupBy("cambioInicial") */
 
-      var parteAct;
-      var parte = {};
-      /* console.log(datos.fecha.toLocaleDateString("es-ES")) */
-      // Revisa si la ciudad que que actualmente estamos leyendo difiere con la última leída
-      if (parteAct !== datos.fecha.toLocaleDateString("es-ES")) {
-        // Guarda la nueva ciudad en la variable correspondiente
-        parteAct = datos.fecha.toLocaleDateString("es-ES");
-        /* console.log(parteAct) */
-        // Guarda en la propiedad "nombre" del objeto "ciudad" el valor de la propiedad "Ciudad"
-        // del profesional que actualmente estamos evaluando
-        parte.parte_fecha = datos.fecha;
+    const nuevoArray = _.groupBy(partes, function(item) {
+      /* console.log(item.fecha) */
+      let newFecha = item.fecha.toLocaleDateString("es-ES")
+      /* console.log(newFecha) */
+      return newFecha;
+    });
 
-        // Filtra el objeto "data" comparando la propiedad "Ciudad" de cada profesional con la ciudad actual
-        parte.datos = datosParte.filter((item) => item.fecha.toLocaleDateString("es-ES") === parteAct);
-        //onsole.log(parte)
-        // Finalmente toma el objeto ciudad con todos los profesionales que le corresponden y lo guarda en el array "ciudades"
-        partesDatos.push(parte);
-      }
-    }
+    const partesDatos = Object.keys(nuevoArray).map((date) => {
+      return {
+        parte_fecha: date,
+        datos: nuevoArray[date]
+      };
+    });
+
+/* console.log(partesDatos)  */
+let datosRev = partesDatos.reverse();
+let datosParte = datosRev.slice(skip, skip + limit)
+  
     // Respuesta del servidor
     //console.log(partesDatos.length)
-    res.json({totalPage,partesDatos});
+    res.json({totalPage, datosParte});
   } catch (error) {
     console.log("Error al traer los partes: ", error);
   }
