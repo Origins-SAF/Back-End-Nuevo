@@ -64,10 +64,10 @@ export const getPartesPorGrupos = async (req, res) => {
         },
         estado: true
       })
-      .populate("usuario", ["nombre", "apellido", "img", "listaInventario", "totalEdit", "listaParteDia"]) // consulta para todos los documentos
+      .populate("usuario", ["nombre", "apellido", "img"]) // consulta para todos los documentos
       .populate("distribuidor.nombre", ["nombre"])
       .populate('ubicacion',[ "nombre", "barrio", "tipo" ])
-      .populate("distribuidor.stock.producto", ["nombre", "img"])
+      .populate("distribuidor.stock.producto", ["nombre", "img", "listaInventario", "totalEdit", "listaParteDia"])
       .populate("distribuidor.prodmasvendido", ["nombre"])
 
       const totalPage = partes.length
