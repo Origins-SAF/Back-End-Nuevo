@@ -179,11 +179,9 @@ export const postParte = async (req, res) => {
 // ACTUALIZAR PARTE
 export const putParte = async (req, res = response) => {
   const { id } = req.params;
-  const { usuario, ...data } = req.body;
+  const data = req.body;
 
   try {
-    data.fecha;
-    data.distribuidor;
     //console.log(data.fecha)
     data.usuario = req.usuario._id;
     //console.log(id)
