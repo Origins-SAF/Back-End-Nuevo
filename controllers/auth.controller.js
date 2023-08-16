@@ -41,12 +41,11 @@ export const login = async (req, res) => {
     const token = await generarJWT(usuario.id);
 
     const log = {}
-    const date = new Date();
-  
-    let hora = date.getHours()
-    let minutos = date.getMinutes()
+    let date = new Date();
+    let argentinaTime = date.toLocaleString("es-AR", {timeZone: "America/Argentina/Buenos_Aires"});
+    
 
-    log.descripcion = `El usuario (${usuario.usuario}) inicio sesion a las ${hora}:${minutos}`
+    log.descripcion = `El usuario (${usuario.usuario}) inicio sesion - ${argentinaTime}`
 
     const logNuevo = new logModelo(log)
     await logNuevo.save()
