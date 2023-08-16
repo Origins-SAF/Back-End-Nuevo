@@ -2,6 +2,7 @@
 
 import bcryptjs from 'bcryptjs';
 import cloudinary from 'cloudinary'
+import logModelo from '../models/log.modelo.js';
 
 const ctrlAuth = {};
 
@@ -38,6 +39,17 @@ export const login = async (req, res) => {
 
     // Generar el JWT
     const token = await generarJWT(usuario.id);
+
+    const log = {}
+    const date = new Date();
+  
+    let hora = date.getHours()
+    let minutos = date.getMinutes()
+
+    log.descripcion = `El usuario (${usuario.usuario}) inicio sesion a las ${hora}:${minutos}`
+
+    const logNuevo = new logModelo(log)
+    await logNuevo.save()
 
     res.json({
       usuario,

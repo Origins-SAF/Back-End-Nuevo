@@ -10,7 +10,7 @@ export const getConvocados = async (req, res) => {
       .find({ estado: true, vigente: true })
       .populate("punto", ["nombre", "barrio", "tipo", "departamento"]); // consulta para todos los documentos
 
-    console.log(convocados);
+   /*  console.log(convocados); */
 
     let listaConvocados = convocados.reverse(); /* .slice(skip, skip + limit) */
     //console.log(listaConvocados)
