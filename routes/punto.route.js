@@ -9,7 +9,7 @@ import {
   eliminarPuntoLog,
   reactivarPuntoLog,
   publicacionPunto,
-
+  mostrarPuntoParteDia,
   getPuntosPublicos
 } from "../controllers/punto.controller.js";
 import validarJWT from "../middlewares/validar-jwt.js";
@@ -24,6 +24,8 @@ router.get("/ver-puntos", getPuntos);
 router.get("/ver-punto/:id",validarJWT,getPunto);
 
 router.put("/publicacion-punto/:id",publicacionPunto);
+
+router.put("/visibilidad-punto/:id",mostrarPuntoParteDia);
 
 // Crear punto - privado - cualquier persona con un token válido
 router.post("/guardar-punto",validarJWT,upload.single("image"),postNuevoPunto);
