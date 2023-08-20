@@ -38,6 +38,10 @@ const PuntoSchema = new Schema(
       type: String,
       default: "No hay Img"
     },
+    mostrarPunto: {
+      type: Boolean,
+      default: false,
+    },
     tipo:{
       type: String,
       default: "PuntoFijo"
