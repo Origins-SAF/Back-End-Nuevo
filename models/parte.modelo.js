@@ -58,6 +58,10 @@ const ParteSchema = new Schema(
           type: Number,
           required : true
         },
+        recaudacionRetirada: {
+          type: Boolean,
+          required : false
+        },
       }],
       prodmasvendido: {
         type: Schema.Types.ObjectId,
