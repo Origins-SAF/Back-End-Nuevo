@@ -68,6 +68,10 @@ const ParteSchema = new Schema(
           ref: "productoModelo",
           required : true
       },
+      recaudacionRetirada:{
+        type: Boolean,
+        default: false
+      }
     }
   ],
     recaudacionTotal: {
