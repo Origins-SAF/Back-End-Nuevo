@@ -4,7 +4,7 @@ import usuarioModelo from '../models/usuario.modelo.js'
 import cloudinary from 'cloudinary'
 
 // Devuelve todos los noticias publicas de la colección
-export const getNoticiasPublicas = async (req, res) => {
+export const getNoticiasTodas = async (req, res) => {
 
 
   
@@ -19,6 +19,45 @@ export const getNoticiasPublicas = async (req, res) => {
       console.log("Error al traer las noticias: ", error)
   }
 }
+
+export const getNoticiasPublicasGrupos = async (req, res) => {
+
+  /* const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+
+  //console.log(skip)
+  let skipEdit = 0
+
+  if(skip == 0){
+    skipEdit = 3
+  }else{
+    skipEdit = skip
+  } */
+  
+  try {
+      const noticias = await noticiaModelo.find()
+      const todasLasNoticias = noticias.reverse() // consulta para todos los documentos
+      const primerasNoticias = todasLasNoticias.slice(0, 3);
+
+      const noticiasFiltradas = todasLasNoticias.slice(3);
+
+     /*  const otrasNoticias = noticiasFiltradas */
+
+      const totalNoticias = noticias.length
+     /*  const pages = [];
+      for (let i = 0; i < noticias.length; i += limit) {
+        const page = i
+        pages.push(page);
+      } */
+  
+      /* const totalPages= pages */
+  // Respuesta del servidor
+  res.json({ totalNoticias,primerasNoticias, noticiasFiltradas});
+  } catch (error) {
+      console.log("Error al traer las noticias: ", error)
+  }
+}
+
 
 // Devuelve todos los noticias activas de la colección
 export const getNoticias = async (req, res) => {

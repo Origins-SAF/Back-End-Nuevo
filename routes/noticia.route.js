@@ -13,13 +13,15 @@ import {
    desactivarNoticia,
    publicarNoticia,
 
-   getNoticiasPublicas
+   getNoticiasTodas,
+   getNoticiasPublicasGrupos
     } from "../controllers/noticia.controller.js";
     
 
     import { upload } from "../Libs/upload.js";
     
     router.get("/ver-noticias", getNoticias);
+    router.get("/ver-noticias-publicas-grupos", getNoticiasPublicasGrupos);
     router.get("/ver-noticia-unica/:id", getNoticiarUnica);
     router.post("/guardar-noticia",upload.single("image"), postNoticia)
     router.put("/actualizar-noticia/:id",upload.single("image"), updateNoticia)
@@ -27,5 +29,5 @@ import {
     router.put("/publicar-log-noticia/:id", publicarNoticia)
     router.delete("/eliminar-noticia/:id", eliminarNoticia)
 
-    router.get("/ver-noticias-publicas", getNoticiasPublicas)
+    router.get("/ver-noticias-publicas", getNoticiasTodas)
     export default router;
