@@ -11,6 +11,9 @@ const ParteSchema = new Schema(
       type: Date,
       default: Date.now()
     },
+    nroSemana: {
+      type: String
+    },
     cambioInicial:{
       type: String,
       required : true
