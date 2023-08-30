@@ -9,11 +9,13 @@ import {
     putParte,
     getPartesPorGrupos,
     getPartesPorFecha,
-    getPartesPorMes
+    getPartesPorMes,
+    getPartesSemanales
   } from "../controllers/parte.controller.js";
 import validarJWT from "../middlewares/validar-jwt.js";
   
 router.get("/ver-parte", getPartes);
+router.get("/ver-parte-semanales", getPartesSemanales);
 router.get("/ver-parte-mes", getPartesPorMes);
 router.get("/ver-partes-dias-grupos", getPartesPorGrupos);
   router.get("/ver-partes-dias-fecha/:fechapd", getPartesPorFecha)
