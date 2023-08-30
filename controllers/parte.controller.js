@@ -250,7 +250,7 @@ export const putParte = async (req, res = response) => {
 
   try {
     //console.log(data.fecha)
-    data.usuario = req.usuario._id;
+    data.personalEditor = req.usuario._id;
     //console.log(id)
     await parteModelo.findByIdAndUpdate(id, data, { new: true });
 

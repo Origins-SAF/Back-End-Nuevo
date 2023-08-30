@@ -86,11 +86,16 @@ const ParteSchema = new Schema(
       ref: "PuntoModelo",
       required : true
     },
+    personalEditor:{
+      type: Schema.Types.ObjectId,
+      ref: "usuarioModelo",
+    },
     estado: {
       type: Boolean,
       default: true
     }
-  }
+  },
+  { timestamps: true }
 );
  
 ParteSchema.methods.toJSON = function () {
