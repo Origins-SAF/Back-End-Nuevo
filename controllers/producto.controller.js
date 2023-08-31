@@ -129,7 +129,7 @@ export const postProducto = async (req, res) => {
  if(req?.file?.path){
    imgURl = await cloudinary.uploader.upload(req?.file?.path)
  }else {
-   imgURl = ""
+   imgURl = req?.body?.linkIMG
  }
 
  try {

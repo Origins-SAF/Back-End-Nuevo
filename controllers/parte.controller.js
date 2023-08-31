@@ -26,17 +26,11 @@ export const getPartesSemanales = async (req, res) => {
       .populate("ubicacion", ["nombre", "barrio", "tipo"])
       .populate("distribuidor.stock.producto", ["nombre", "img"]);
 
-    /* let listaOrd = partes.slice().sort((a, b) => a.fecha - b.fecha); */
-    const fechaActual = new Date();
-    const dia = fechaActual.getDate();
-    /* console.log(dia) */
-    const semanaDelMes = Math.ceil(dia / 7);
-    
-    /* console.log(`Estamos en la semana ${semanaDelMes} del mes.`); */
+      
 
     // Respuesta del servidor
     res.json({
-      msg: `Estamos en la semana ${semanaDelMes} del mes.`
+      msg: `Estamos en la semana  del mes.`
     });
   } catch (error) {
     console.log("Error al traer los partes: ", error);
