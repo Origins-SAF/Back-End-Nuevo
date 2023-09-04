@@ -18,9 +18,9 @@ router.get("/ver-parte", getPartes);
 router.get("/ver-parte-semanales", getPartesSemanales);
 router.get("/ver-parte-mes", getPartesPorMes);
 router.get("/ver-partes-dias-grupos", getPartesPorGrupos);
-  router.get("/ver-partes-dias-fecha/:fechapd", getPartesPorFecha)
-  router.post("/crear-parte",validarJWT, postParte);
-  router.put("/editar-parte/:id",validarJWT, putParte);
+router.get("/ver-partes-dias-fecha/:fechapd", getPartesPorFecha)
+router.post("/crear-parte",validarJWT, postParte);
+router.put("/editar-parte/:id",validarJWT, putParte);
 
 
 export default router;

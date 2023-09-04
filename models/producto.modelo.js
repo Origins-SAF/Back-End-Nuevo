@@ -15,6 +15,9 @@ const ProductoSchema = new Schema(
       type: String,
       default: "UN",
     },
+    peso: {
+      type: Number,
+    },
     precio: {
       type: Number,
       default: 0,
