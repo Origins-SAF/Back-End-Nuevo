@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 
 export const getEntrenamiento = async (req, res) => {
     try {
-        const entr = await entrenamientoModelo.find({estado: true}) // consulta para todos los documentos
+        const entr = await entrenamientoModelo.find() // consulta para todos los documentos
     
     // Respuesta del servidor
     res.json(entr);
@@ -22,8 +22,7 @@ export const postEntrenamiento = async (req, res) => {
    const distribuidores = await distribuidorModelo.find({estado: true})
    try {
        
-   /* const entrenamiento = new entrenamientoModelo(datos);
-   await entrenamiento.save()  */
+  
    let listaProductos = []
 
    for (let i = 0; i < productos.length; i++) {
@@ -47,8 +46,8 @@ export const postEntrenamiento = async (req, res) => {
         let nombre = productos[i]?.nombre
         let peso = productos[i]?.peso
 
-        let dis = distribuidores.filter((item) => item._id == idProducto
-          );
+        let dis = await distribuidorModelo.find({_id: mongoose.Types.ObjectId(idProducto)})
+          
         let obj = {
             producto: idProducto,
             nombre: nombre,
@@ -61,51 +60,63 @@ export const postEntrenamiento = async (req, res) => {
 
   var datos;
 var convocadosArrayList = [];
-/* 
-    for (let i = 0; i < productos.length; i++) {
-      datos = productos[i];
+
+    for (let i = 0; i < listaProductosDis.length; i++) {
+      datos = listaProductosDis[i];
 
       var listaFecha;
       var listaC = {};
 
    
-      if (listaFecha !== datos.fecha.toLocaleDateString("es-ES")) {
+      if (listaFecha !== datos.distribuidor[0].nombre) {
       
-        listaFecha = datos.fecha.toLocaleDateString("es-ES");
+        listaFecha = datos.distribuidor[0].nombre;
         
-        listaC.fecha_convocados = datos.fecha;
+        listaC.nombreDistribuidor = datos.distribuidor[0].nombre;
 
         
-        listaC.datos = listaConvocados.filter(
+        listaC.datos = listaProductosDis.filter(
           (item) =>
-            item.fecha.toLocaleDateString("es-ES") === listaFecha &&
-            item.vigente == true
+            item.distribuidor[0].nombre === listaFecha
         );
 
         convocadosArrayList.push(listaC);
       }
-    } */
+    }
+
+     
+
+   let nl = 
+    {
+      lista: convocadosArrayList
+    }
    
-   res.json({listaProductosDis});
+
+   const entrenamiento = new entrenamientoModelo(nl);
+   await entrenamiento.save() 
+
+   /* console.log() */
+   
+   res.json({msg: "Se Creo La Listaaaa!!!!!!!", entrenamiento});
    } catch (error) {
        console.log("Error al crear un entrenamiento: ", error)
    }
 }
 
 export const putEntrenamiento = async (req, res) => {
-    // Desestructuramos la información recibida del cliente
-  
-   const datos = req.body;
-   
-   try {
-       
-   const entrenamiento = new entrenamientoModelo(datos);
-   await entrenamiento.save() 
-  
-  
-   
-   res.json({msg: 'El entrenamiento se guardo correctamente'});
-   } catch (error) {
-       console.log("Error al crear un entrenamiento: ", error)
-   }
-}
+  const { id } = req.params;
+
+  try {
+    const data = req.body;
+    /* console.log(data) */
+    await entrenamientoModelo.findByIdAndUpdate(id, data, { new: true });
+
+    res.json({ msg: "Se Actualizo la planilla" });
+
+  } catch (err) {
+    console.log("Error al actualizar la planilla: ", err);
+    res.status(500).json({
+      msg: "Por favor, hable con el administrador",
+    });
+  }
+};

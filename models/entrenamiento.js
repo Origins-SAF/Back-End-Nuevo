@@ -1,12 +1,38 @@
 import { Schema, model } from "mongoose";
 
 const entrenamientoSchema = new Schema({
-  producto: {
-    type: String,
-  },
-  pesoEnKilo: {
-    type: Number,
-  }
+  lista:[
+    {
+      nombreDistribuidor: {
+        type: String,
+      },
+      datos: [
+        {
+          producto: {
+            type: Schema.Types.ObjectId,
+            ref: "productoModelo",
+          },
+          nombre: {
+            type: String,
+          },
+          peso: {
+            type: String,
+          },
+          distribuidor: [
+            {
+              nombre: {
+                type: String,
+              },
+              uid: {
+                type: Schema.Types.ObjectId,
+                ref: "distribuidorModelo",
+              },
+            }
+        ],
+        }
+      ]
+    }
+  ]
 });
 
 entrenamientoSchema.methods.toJSON = function () {
