@@ -105,13 +105,15 @@ var convocadosArrayList = [];
 
 export const putEntrenamiento = async (req, res) => {
   const { id } = req.params;
+  console.log(id)
 
   try {
     const data = req.body;
-    /* console.log(data) */
-    await entrenamientoModelo.findByIdAndUpdate(id, data, { new: true });
+   /*  console.log(data) */
+    let me = await entrenamientoModelo.findByIdAndUpdate(id, data, { new: true });
+    /* console.log(me) */
 
-    res.json({ msg: "Se Actualizo la planilla" });
+    res.json({ msg: "Se Actualizo la planilla", data, me });
 
   } catch (err) {
     console.log("Error al actualizar la planilla: ", err);
