@@ -11,7 +11,7 @@ import {
 
   router.get("/ver-datos-entr", getEntrenamiento);
   router.post("/guardar-datos-entr", postEntrenamiento);
-  router.put("/actualizar-datos-entr", putEntrenamiento);
+  router.put("/actualizar-datos-entr/:id", putEntrenamiento);
 
 
 export default router;
