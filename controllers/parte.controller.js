@@ -63,7 +63,8 @@ export const getPartesSemanales = async (req, res) => {
       
       
       
-      const partesDatos = agruparPorSemana(arrayParte);
+      const nuevoGrupo = agruparPorSemana(arrayParte);
+      let partesDatos = [nuevoGrupo]
     /*   console.log(nuevoGrupo); */
       const totalPage = partes.length;
     // Respuesta del servidor
