@@ -13,6 +13,9 @@ const ParteSchema = new Schema(
     nroSemana: {
       type: String
     },
+    mesSemana: {
+      type: String
+    },
     cambioInicial:{
       type: String,
     },

@@ -26,60 +26,53 @@ export const getPartesSemanales = async (req, res) => {
       .populate("ubicacion", ["nombre", "barrio", "tipo"])
       .populate("distribuidor.stock.producto", ["nombre", "img"]);
 
-      
+      let arrayParte = []
+      for (var i = 0; i < partes.length; i++) {
+        let nombre = partes[i].ubicacion.nombre
+        let nroSemana = partes[i].nroSemana
+        let fechaSemana = partes[i].fecha.toLocaleDateString("en-US");
+        let mes = partes[i].mesSemana
+        let obj = {
+          parte: nombre,
+          semana: nroSemana,
+          fecha: fechaSemana,
+          mes: mes
+        }
 
+        arrayParte.push(obj)
+      }
+
+
+      function groupObjectsByCategory(objects) {
+        const grouped = {};
+      
+        objects.forEach(obj => {
+          const category = "Semana " + obj.semana + " de " + obj.mes;
+
+          
+         /*  console.log(grouped.hasOwnProperty(category)) */
+          if (!grouped.hasOwnProperty(category)) {
+            grouped[category] = [];
+          }
+      
+          grouped[category].push(obj);
+        });
+      
+        return grouped;
+      }
+      
+      
+      
+      const groupedObjects = groupObjectsByCategory(arrayParte);
+    /*   console.log(groupedObjects); */
+      
     // Respuesta del servidor
-    res.json({
-      msg: `Estamos en la semana  del mes.`
-    });
+    res.json(groupedObjects);
   } catch (error) {
     console.log("Error al traer los partes: ", error);
   }
 };
 
-/* export const getPartesSemanales = async (req, res) => {
-  try {
-    const partes = await parteModelo
-      .find({ estado: true })
-      .populate("usuario", ["nombre", "apellido", "img"]) // consulta para todos los documentos
-      .populate("distribuidor.nombre", ["nombre"])
-      .populate("ubicacion", ["nombre", "barrio", "tipo"])
-      .populate("distribuidor.stock.producto", ["nombre", "img"]);
-
-    let listaOrd = partes.slice().sort((a, b) => a.fecha - b.fecha);
-    let arrayFechas = [];
-    for (let i = 0; i < listaOrd.length; i++) {
-      let nw = new Date(listaOrd[i].fecha);
-      let formato = nw.toLocaleDateString("es-ES");
-      let obj = {
-        p: i,
-        fecha: nw
-      }
-      arrayFechas.push(obj);
-    }
-
-    const currentDate = new Date(arrayFechas[0].fecha);
-    console.log(arrayFechas[0].fecha);
-    function getWeekNumber(date) {
-      const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-      const daysSinceFirstDay = Math.floor(
-        (date - firstDayOfMonth) / (1000 * 60 * 60 * 24)
-      );
-      return Math.ceil((daysSinceFirstDay + 1) / 7);
-    }
-
-    const weekNumber = getWeekNumber(currentDate);
-    console.log("Semana: ", weekNumber);
-
-    // Respuesta del servidor
-    res.json({
-      arrayFechas,
-      semana: weekNumber,
-    });
-  } catch (error) {
-    console.log("Error al traer los partes: ", error);
-  }
-}; */
 
 export const getPartesPorFecha = async (req, res) => {
   const { fechapd } = req.params;
