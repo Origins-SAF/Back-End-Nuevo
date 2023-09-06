@@ -43,31 +43,31 @@ export const getPartesSemanales = async (req, res) => {
       }
 
 
-      function groupObjectsByCategory(objects) {
-        const grouped = {};
+      function agruparPorSemana(objects) {
+        const grupo = {};
       
         objects.forEach(obj => {
-          const category = "Semana " + obj.semana + " de " + obj.mes;
+          const semana = "Semana " + obj.semana + " de " + obj.mes;
 
           
-         /*  console.log(grouped.hasOwnProperty(category)) */
-          if (!grouped.hasOwnProperty(category)) {
-            grouped[category] = [];
+         /*  console.log(grupo.hasOwnProperty(semana)) */
+          if (!grupo.hasOwnProperty(semana)) {
+            grupo[semana] = [];
           }
       
-          grouped[category].push(obj);
+          grupo[semana].push(obj);
         });
       
-        return grouped;
+        return grupo;
       }
       
       
       
-      const groupedObjects = groupObjectsByCategory(arrayParte);
-    /*   console.log(groupedObjects); */
+      const nuevoGrupo = agruparPorSemana(arrayParte);
+    /*   console.log(nuevoGrupo); */
       
     // Respuesta del servidor
-    res.json(groupedObjects);
+    res.json(nuevoGrupo);
   } catch (error) {
     console.log("Error al traer los partes: ", error);
   }
