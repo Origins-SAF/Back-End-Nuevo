@@ -63,11 +63,11 @@ export const getPartesSemanales = async (req, res) => {
       
       
       
-      const nuevoGrupo = agruparPorSemana(arrayParte);
+      const partesDatos = agruparPorSemana(arrayParte);
     /*   console.log(nuevoGrupo); */
-      
+      const totalPage = partes.length;
     // Respuesta del servidor
-    res.json(nuevoGrupo);
+    res.json({ totalPage, partesDatos });
   } catch (error) {
     console.log("Error al traer los partes: ", error);
   }
