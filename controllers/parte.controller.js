@@ -26,54 +26,77 @@ export const getPartesSemanales = async (req, res) => {
       .populate("ubicacion", ["nombre", "barrio", "tipo"])
       .populate("distribuidor.stock.producto", ["nombre", "img"]);
 
-      let arrayParte = []
-      for (var i = 0; i < partes.length; i++) {
-        let nombre = partes[i].ubicacion.nombre
-        let nroSemana = partes[i].nroSemana
-        let fechaSemana = partes[i].fecha.toLocaleDateString("en-US");
-        let mes = partes[i].mesSemana
-        let obj = {
-          parte: nombre,
-          semana: nroSemana,
-          fecha: fechaSemana,
-          mes: mes
+    let arrayParte = [];
+    for (var i = 0; i < partes.length; i++) {
+      let nombre = partes[i].ubicacion.nombre;
+      let nroSemana = partes[i].nroSemana;
+      let fechaSemana = partes[i].fecha.toLocaleDateString("en-US");
+      let mes = partes[i].mesSemana;
+      let obj = {
+        parte: nombre,
+        semana: nroSemana,
+        fecha: fechaSemana,
+        mes: mes,
+      };
+
+      arrayParte.push(obj);
+    }
+
+    function agruparPorSemana(objects) {
+      const grupo = {};
+
+      objects.forEach((obj) => {
+        const semana = "Semana " + obj.semana + " de " + obj.mes;
+
+        /*  for (var i = 0; i < grupo?.length; i++) {
+            if (!grupo.hasOwnProperty(semana)) {
+                let objeto = {
+                  semana : semana
+                }
+
+                grupo.push(objeto);
+            }
+            
+          } */
+
+        /*  console.log(grupo.hasOwnProperty(semana)) */
+        if (!grupo.hasOwnProperty(semana)) {
+          grupo[semana] = [];
         }
 
-        arrayParte.push(obj)
+        grupo[semana].push(obj);
+      });
+
+      return grupo;
+    }
+
+    const datos = agruparPorSemana(arrayParte);
+    /* console.log(nuevoGrupo[0]) */
+
+    const partesDatos = [];
+
+    // Recorremos cada semana y sus elementos para crear un objeto por semana
+    for (const semana in datos) {
+      if (datos.hasOwnProperty(semana)) {
+        const semanaObjeto = {
+          semana: semana,
+          datos: datos[semana],
+        };
+        partesDatos.push(semanaObjeto);
       }
+    }
 
+    /* console.log(partesDatos); */
 
-      function agruparPorSemana(objects) {
-        const grupo = {};
-      
-        objects.forEach(obj => {
-          const semana = "Semana " + obj.semana + " de " + obj.mes;
-
-          
-         /*  console.log(grupo.hasOwnProperty(semana)) */
-          if (!grupo.hasOwnProperty(semana)) {
-            grupo[semana] = [];
-          }
-      
-          grupo[semana].push(obj);
-        });
-      
-        return grupo;
-      }
-      
-      
-      
-      const nuevoGrupo = agruparPorSemana(arrayParte);
-      let partesDatos = [nuevoGrupo]
+    /* let partesDatos = [nuevoGrupo] */
     /*   console.log(nuevoGrupo); */
-      const totalPage = partes.length;
+    const totalPage = partes.length;
     // Respuesta del servidor
     res.json({ totalPage, partesDatos });
   } catch (error) {
     console.log("Error al traer los partes: ", error);
   }
 };
-
 
 export const getPartesPorFecha = async (req, res) => {
   const { fechapd } = req.params;
