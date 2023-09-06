@@ -46,7 +46,7 @@ export const getPartesSemanales = async (req, res) => {
       const grupo = {};
 
       objects.forEach((obj) => {
-        const semana = "Semana " + obj.semana + " de " + obj.mes;
+        const semana = "Semana " + obj.nroSemana + " de " + obj.mesSemana;
 
         /*  for (var i = 0; i < grupo?.length; i++) {
             if (!grupo.hasOwnProperty(semana)) {
@@ -70,7 +70,7 @@ export const getPartesSemanales = async (req, res) => {
       return grupo;
     }
 
-    const datos = agruparPorSemana(arrayParte);
+    const datos = agruparPorSemana(partes);
     /* console.log(nuevoGrupo[0]) */
 
     const partesDatos = [];
