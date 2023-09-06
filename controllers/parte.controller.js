@@ -34,64 +34,50 @@ export const getPartesSemanales = async (req, res) => {
       let mes = partes[i].mesSemana;
       let obj = {
         parte: nombre,
-        semana: nroSemana,
+        nroSemana: nroSemana,
         fecha: fechaSemana,
-        mes: mes,
+        mesSemana: mes,
       };
 
       arrayParte.push(obj);
     }
 
-    function agruparPorSemana(objects) {
-      const grupo = {};
+    // Función para agrupar los datos por semana y fecha
+const agruparDatos = (datos) =>
+datos.reduce((agrupado, dato) => {
+  const { nroSemana, fecha, mesSemana } = dato;
+  let semana = "Semana " + nroSemana + " de " + mesSemana;
+  let fechaF = fecha.toLocaleDateString("en-US");
+  agrupado[semana] = agrupado[semana] || {};
+  agrupado[semana][fechaF] = agrupado[semana][fechaF] || [];
+  agrupado[semana][fechaF].push(dato);
+  return agrupado;
+}, {});
 
-      objects.forEach((obj) => {
-        const semana = "Semana " + obj.nroSemana + " de " + obj.mesSemana;
+// Función para convertir los datos agrupados en el formato deseado
+const convertirDatosAFormatoDeseado = (agrupado) =>
+Object.entries(agrupado).map(([semana, fechas]) => ({
+  semana,
+  datos: Object.entries(fechas).map(([fechaF, partes]) => ({
+    fechaF,
+    partes,
+  })),
+}));
 
-        /*  for (var i = 0; i < grupo?.length; i++) {
-            if (!grupo.hasOwnProperty(semana)) {
-                let objeto = {
-                  semana : semana
-                }
+// Agrupar los datos por semana y fecha
+const datosAgrupados = agruparDatos(partes);
 
-                grupo.push(objeto);
-            }
-            
-          } */
+// Convertir los datos agrupados al formato deseado
+const partesDatos = convertirDatosAFormatoDeseado(datosAgrupados);
 
-        /*  console.log(grupo.hasOwnProperty(semana)) */
-        if (!grupo.hasOwnProperty(semana)) {
-          grupo[semana] = [];
-        }
+// Ordenar la lista por semanas (opcional)
+partesDatos.sort((a, b) => a.semana.localeCompare(b.semana));
 
-        grupo[semana].push(obj);
-      });
+// Imprimir el resultado
+/* console.log(partesDatos); */
+const totalPage = partes.length;
 
-      return grupo;
-    }
 
-    const datos = agruparPorSemana(partes);
-    /* console.log(nuevoGrupo[0]) */
-
-    const partesDatos = [];
-
-    // Recorremos cada semana y sus elementos para crear un objeto por semana
-    for (const semana in datos) {
-      if (datos.hasOwnProperty(semana)) {
-        const semanaObjeto = {
-          semana: semana,
-          datos: datos[semana],
-        };
-        partesDatos.push(semanaObjeto);
-      }
-    }
-
-    /* console.log(partesDatos); */
-
-    /* let partesDatos = [nuevoGrupo] */
-    /*   console.log(nuevoGrupo); */
-    const totalPage = partes.length;
-    // Respuesta del servidor
     res.json({ totalPage, partesDatos });
   } catch (error) {
     console.log("Error al traer los partes: ", error);
