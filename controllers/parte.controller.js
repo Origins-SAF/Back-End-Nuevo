@@ -24,23 +24,9 @@ export const getPartesSemanales = async (req, res) => {
       .populate("usuario", ["nombre", "apellido", "img"]) // consulta para todos los documentos
       .populate("distribuidor.nombre", ["nombre"])
       .populate("ubicacion", ["nombre", "barrio", "tipo"])
-      .populate("distribuidor.stock.producto", ["nombre", "img"]);
-
-    let arrayParte = [];
-    for (var i = 0; i < partes.length; i++) {
-      let nombre = partes[i].ubicacion.nombre;
-      let nroSemana = partes[i].nroSemana;
-      let fechaSemana = partes[i].fecha.toLocaleDateString("en-US");
-      let mes = partes[i].mesSemana;
-      let obj = {
-        parte: nombre,
-        nroSemana: nroSemana,
-        fecha: fechaSemana,
-        mesSemana: mes,
-      };
-
-      arrayParte.push(obj);
-    }
+      .populate("distribuidor.stock.producto", ["nombre", "img"])
+      .populate('personalEditor', ["nombre", "apellido", "img"]);
+    
 
     // Función para agrupar los datos por semana y fecha
 const agruparDatos = (datos) =>
@@ -56,6 +42,7 @@ datos.reduce((agrupado, dato) => {
 
 // Función para convertir los datos agrupados en el formato deseado
 const convertirDatosAFormatoDeseado = (agrupado) =>
+  
 Object.entries(agrupado).map(([semana, fechas]) => ({
   semana,
   datos: Object.entries(fechas).map(([fechaF, partes]) => ({
@@ -71,13 +58,18 @@ const datosAgrupados = agruparDatos(partes);
 const partesDatos = convertirDatosAFormatoDeseado(datosAgrupados);
 
 // Ordenar la lista por semanas (opcional)
-partesDatos.sort((a, b) => a.semana.localeCompare(b.semana));
+/* partesDatos.sort((a, b) => a.semana.localeCompare(b.semana)); */
 
 // Imprimir el resultado
 /* console.log(partesDatos); */
 const totalPage = partes.length;
 
-
+/* let arrayParte = [];
+    for (var i = 0; i < partesDatos?.length; i++) {
+       console.log(partesDatos?.length)
+    } */
+    
+    /* Importar => partesDatos => resultado */
     res.json({ totalPage, partesDatos });
   } catch (error) {
     console.log("Error al traer los partes: ", error);
