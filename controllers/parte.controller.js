@@ -28,7 +28,14 @@ export const getPartesSemanales = async (req, res) => {
       .populate('personalEditor', ["nombre", "apellido", "img"]);
     
 
-    // Función para agrupar los datos por semana y fecha
+// Función para ordenar las fechas en formato 'MM/DD/YYYY'
+const compararFechas = (a, b) => {
+  const fechaA = new Date(a.fechaF);
+  const fechaB = new Date(b.fechaF);
+  return fechaA - fechaB;
+};
+
+// Función para agrupar los datos por semana y fecha
 const agruparDatos = (datos) =>
 datos.reduce((agrupado, dato) => {
   const { nroSemana, fecha, mesSemana } = dato;
@@ -48,7 +55,8 @@ Object.entries(agrupado).map(([semana, fechas]) => ({
   datos: Object.entries(fechas).map(([fechaF, partes]) => ({
     fechaF,
     partes,
-  })),
+  }))
+  .sort(compararFechas), // Ordenar las fechas dentro de cada semana
 }));
 
 // Agrupar los datos por semana y fecha
