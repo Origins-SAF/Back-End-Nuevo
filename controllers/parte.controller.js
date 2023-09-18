@@ -24,8 +24,9 @@ export const getPartesSemanales = async (req, res) => {
       .populate("usuario", ["nombre", "apellido", "img"]) // consulta para todos los documentos
       .populate("distribuidor.nombre", ["nombre"])
       .populate("ubicacion", ["nombre", "barrio", "tipo"])
-      .populate("distribuidor.stock.producto", ["nombre", "img"])
-      .populate('personalEditor', ["nombre", "apellido", "img"]);
+      .populate("distribuidor.stock.producto", ["nombre","img","listaInventario","totalEdit","listaParteDia"])
+      .populate('personalEditor', ["nombre", "apellido", "img"])
+      .populate("distribuidor.prodmasvendido", ["nombre"]);
     
 
 // Función para ordenar las fechas en formato 'MM/DD/YYYY'
@@ -37,27 +38,29 @@ const compararFechas = (a, b) => {
 
 // Función para agrupar los datos por semana y fecha
 const agruparDatos = (datos) =>
-datos.reduce((agrupado, dato) => {
-  const { nroSemana, fecha, mesSemana } = dato;
-  let semana = "Semana " + nroSemana + " de " + mesSemana;
-  let fechaF = fecha.toLocaleDateString("en-US");
-  agrupado[semana] = agrupado[semana] || {};
-  agrupado[semana][fechaF] = agrupado[semana][fechaF] || [];
-  agrupado[semana][fechaF].push(dato);
-  return agrupado;
-}, {});
-
+  datos.reduce((agrupado, dato) => {
+    const { nroSemana, fecha, mesSemana } = dato;
+    let semana = "Semana " + nroSemana + " de " + mesSemana;
+    let fechaF = fecha.toLocaleDateString("en-US");
+    agrupado[mesSemana] = agrupado[mesSemana] || {};
+    agrupado[mesSemana][semana] = agrupado[mesSemana][semana] || {};
+    agrupado[mesSemana][semana][fechaF] = agrupado[mesSemana][semana][fechaF] || [];
+    agrupado[mesSemana][semana][fechaF].push(dato);
+    return agrupado;
+  }, {});
 // Función para convertir los datos agrupados en el formato deseado
 const convertirDatosAFormatoDeseado = (agrupado) =>
-  
-Object.entries(agrupado).map(([semana, fechas]) => ({
-  semana,
-  datos: Object.entries(fechas).map(([fechaF, partes]) => ({
-    fechaF,
-    partes,
-  }))
-  .sort(compararFechas), // Ordenar las fechas dentro de cada semana
-}));
+  Object.entries(agrupado).map(([mes, semanas]) => ({
+    mes,
+    semanas: Object.entries(semanas).map(([semana, fechas]) => ({
+      semana,
+      datos: Object.entries(fechas).map(([fechaF, partes]) => ({
+        fechaF,
+        partes,
+      })).sort(compararFechas), // Ordenar las fechas dentro de cada semana
+    })).sort((a, b) => a.semana.localeCompare(b.semana)), // Ordenar las semanas por nombre
+  })).sort((a, b) => a.mes.localeCompare(b.mes)); // Ordenar los meses por nombre
+
 
 // Agrupar los datos por semana y fecha
 const datosAgrupados = agruparDatos(partes);
