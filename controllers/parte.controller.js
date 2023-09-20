@@ -68,19 +68,92 @@ const datosAgrupados = agruparDatos(partes);
 // Convertir los datos agrupados al formato deseado
 const partesDatos = convertirDatosAFormatoDeseado(datosAgrupados);
 
-// Ordenar la lista por semanas (opcional)
-/* partesDatos.sort((a, b) => a.semana.localeCompare(b.semana)); */
+// Función para calcular la suma total de "totalRecaudado" dentro de un mes
+const calcularSumaTotalMes = (mes) => {
+  let sumaTotalMes = 0;
 
-// Imprimir el resultado
-/* console.log(partesDatos); */
+  for (const semana of mes.semanas) {
+    for (const dato of semana.datos) {
+      for (const parte of dato.partes) {
+        for (const distribuidor of parte.distribuidor) {
+          for (const stock of distribuidor.stock) {
+            sumaTotalMes += stock.totalRecaudado;
+          }
+        }
+      }
+    }
+  }
+
+  return sumaTotalMes;
+};
+
+// Agregar "recaudacionMes" a cada mes
+for (const mes of partesDatos) {
+  mes.recaudacionMes = calcularSumaTotalMes(mes);
+}
+
+// Función para obtener la fecha más reciente dentro de un mes
+const obtenerFechaMasReciente = (mes) => {
+  let fechaMasReciente = new Date(0); // Inicializar con la fecha más antigua posible
+
+  for (const semana of mes.semanas) {
+    for (const dato of semana.datos) {
+      for (const parte of dato.partes) {
+        const fechaParte = new Date(parte.fecha);
+        if (fechaParte > fechaMasReciente) {
+          fechaMasReciente = fechaParte;
+        }
+      }
+    }
+  }
+
+  return fechaMasReciente;
+};
+
+// Agregar "ultimoRegistro" al mismo nivel que "mes"
+for (const mes of partesDatos) {
+  mes.ultimoRegistro = obtenerFechaMasReciente(mes);
+}
+
+// Función para obtener el producto más vendido dentro de un mes
+const obtenerProductoMasVendido = (mes) => {
+  const productosContador = {}; // Objeto para contar la frecuencia de cada producto
+  
+  for (const semana of mes.semanas) {
+    for (const dato of semana.datos) {
+      for (const parte of dato.partes) {
+        for (const distribuidor of parte.distribuidor) {
+          if (distribuidor.prodmasvendido) {
+            const productoId = distribuidor.prodmasvendido._id;
+            productosContador[productoId] = productosContador[productoId] || { producto: distribuidor.prodmasvendido, contador: 0 };
+            productosContador[productoId].contador++;
+          }
+        }
+      }
+    }
+  }
+
+  // Encontrar el producto con la mayor frecuencia
+  let productoMasVendido = null;
+  let frecuenciaMasAlta = 0;
+
+  for (const productoId in productosContador) {
+    if (productosContador[productoId].contador > frecuenciaMasAlta) {
+      frecuenciaMasAlta = productosContador[productoId].contador;
+      productoMasVendido = productosContador[productoId].producto;
+    }
+  }
+
+  return productoMasVendido;
+};
+
+// Agregar "prodMasVendidoMes" al mismo nivel que "mes"
+for (const mes of partesDatos) {
+  mes.prodMasVendidoMes = obtenerProductoMasVendido(mes);
+}
+
 const totalPage = partes.length;
 
-/* let arrayParte = [];
-    for (var i = 0; i < partesDatos?.length; i++) {
-       console.log(partesDatos?.length)
-    } */
-    
-    /* Importar => partesDatos => resultado */
     res.json({ totalPage, partesDatos });
   } catch (error) {
     console.log("Error al traer los partes: ", error);
@@ -231,6 +304,11 @@ export const postParte = async (req, res) => {
 
   const datos = req.body;
   datos.usuario = req.usuario._id;
+
+ /*  if(datos.mesSemana == undefined || datos.mesSemana == null){
+    datos.mesSemana = fechaDelParte.toLocaleString('default', { month: 'long' })
+  } */
+
   try {
     // Se alamacena el nuevo inventario en la base de datos
     const parte = new parteModelo(datos);
