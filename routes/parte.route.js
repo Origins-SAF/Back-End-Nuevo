@@ -10,11 +10,13 @@ import {
     getPartesPorGrupos,
     getPartesPorFecha,
     getPartesPorMes,
-    getPartesSemanales
+    getPartesSemanales,
+    CalculosGraficos
   } from "../controllers/parte.controller.js";
 import validarJWT from "../middlewares/validar-jwt.js";
   
 router.get("/ver-parte", getPartes);
+router.post("/calcular-graficos", CalculosGraficos);
 router.get("/ver-parte-semanales", getPartesSemanales);
 router.get("/ver-parte-mes", getPartesPorMes);
 router.get("/ver-partes-dias-grupos", getPartesPorGrupos);

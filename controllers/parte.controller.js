@@ -337,3 +337,117 @@ export const putParte = async (req, res = response) => {
     console.log("Error al actualizar el parte: ", error);
   }
 };
+
+
+export const CalculosGraficos = async (req, res ) => {
+
+  const parte_dia = req.body;
+  try {
+    
+  
+  let datos = parte_dia
+  let nuevoArray = []
+
+  for (var i = 0; i < datos?.length; i++) {
+    let obj = datos[i]
+    for (var x= 0; x < obj?.partes?.length; x++) {
+      let objParte = obj?.partes[x]
+      nuevoArray.push(objParte)
+   }
+ }
+
+ let cambioInicialTotal = 0
+ let distribuidoresTotal
+ let mesParte = nuevoArray[0]?.mesSemana
+ let semanaParte = nuevoArray[0]?.nroSemana
+ let alerta = false
+ let recaudacionGeneral = 0
+ let totalEnCajaGeneral = 0
+
+
+
+  for (var x= 0; x < nuevoArray?.length; x++) {
+     let fecha = fechaTexto(nuevoArray[x]?.fecha)
+      if(nuevoArray[i]?.nroSemana != semanaParte){
+        alerta = true
+          console.log("El Parte es de " + nuevoArray[i]?.mesSemana + " y de la semana " + nuevoArray[i]?.nroSemana)
+      }
+      if(nuevoArray[i]?.mesSemana != mesParte){
+        alerta = true
+        console.log("El Parte es de " + nuevoArray[i]?.mesSemana + " y de la semana " + nuevoArray[i]?.nroSemana)
+      }
+
+      recaudacionGeneral = recaudacionGeneral + nuevoArray[x]?.recaudacionTotal
+      totalEnCajaGeneral = totalEnCajaGeneral + nuevoArray[x]?.totalEnCaja
+      
+    }
+    
+  let recFinal = 0;
+    /*  console.log(datosPunto?.distribuidor) */
+    for (let a = 0; a < nuevoArray.length; a++) {
+           let listaArray = nuevoArray[a]?.distribuidor
+      for (let i = 0; i < listaArray?.length; i++) {      
+        let listaS = listaArray[i].stock;
+     /*    console.log(nuevoArray) */    
+          for (let x = 0; x < listaS.length; x++) {        
+            recFinal = recFinal + listaS[x].totalRecaudado;
+          }
+   }
+    }
+
+    // Crear un nuevo array con la sumatoria de 'recaudacionTotal' por fecha
+const nuevoArray2 = datos.map(item => {
+  const recaudacionTotalSumatoria = item.partes.reduce((acumulador, parte) => acumulador + parte.recaudacionTotal, 0);
+  return {
+    fechaF: item.fechaF,
+    partes: [
+      {
+        recaudacionTotal: recaudacionTotalSumatoria
+      }
+    ]
+  };
+});
+
+
+let labelsGrafico = []
+let dataGrafico = []
+for (var x= 0; x < nuevoArray2?.length; x++) {
+  /* console.log(nuevoArray2[x]?.partes[0]?.recaudacionTotal) */
+  let fechaText = fechaTexto(nuevoArray2[x]?.fechaF)
+  labelsGrafico.push(fechaText)
+
+  dataGrafico.push(nuevoArray2[x]?.partes[0]?.recaudacionTotal)
+ }
+/* 
+ console.log(dataGrafico) */
+    
+    const myData = [
+        { 
+          labels:labelsGrafico,
+          data: dataGrafico,
+        },
+    ];
+
+
+    let objGeneral ={
+     alertaSemana: alerta,
+     mesSemana: mesParte,
+     nroSemana: semanaParte,
+     recaudacionTotal: recaudacionGeneral,
+     totalEnCaja: totalEnCajaGeneral,
+     recaudacionFinal: recFinal,
+     dataGrafico : myData
+    }
+
+   
+
+
+    //Grafico
+
+   
+    res.json(objGeneral);
+
+  } catch (error) {
+    
+  }
+}
