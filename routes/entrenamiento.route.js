@@ -5,10 +5,12 @@ const router = Router();
 import {
   getEntrenamiento,
   postEntrenamiento,
-  putEntrenamiento
+  putEntrenamiento,
+  filtrarCantidad
   } from "../controllers/entrenamiento.js";
 
 
+  router.get("/filtro", filtrarCantidad)
   router.get("/ver-datos-entr", getEntrenamiento);
   router.post("/guardar-datos-entr", postEntrenamiento);
   router.put("/actualizar-datos-entr/:id", putEntrenamiento);

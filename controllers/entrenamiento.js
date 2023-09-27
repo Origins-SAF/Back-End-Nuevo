@@ -1,6 +1,7 @@
 import entrenamientoModelo from '../models/entrenamiento.js';
 import productoModelo from '../models/producto.modelo.js';
 import distribuidorModelo from '../models/distribuidor.modelo.js';
+import parteModelo from "../models/parte.modelo.js";
 import mongoose from 'mongoose';
 
 export const getEntrenamiento = async (req, res) => {
@@ -122,3 +123,57 @@ export const putEntrenamiento = async (req, res) => {
     });
   }
 };
+
+export const filtrarCantidad = async (req, res) => {
+  try {
+    const lista = await parteModelo.find()
+    .populate("distribuidor.nombre", ["nombre"])
+    .populate("ubicacion", ["nombre", "barrio", "tipo"])
+    .populate("distribuidor.stock.producto", ["nombre", "img"]); // consulta para todos los documentos
+
+
+
+
+// Inicializar variables para el total vendido de Arroz y Azúcar
+let totalQueso40 = 0;
+let totalAzucar = 0;
+let totalQueso150 = 0
+// Iterar a través de los datos
+lista.forEach((registro) => {
+  const distribuidores = registro.distribuidor || [];
+  distribuidores.forEach((distribuidor) => {
+    const stock = distribuidor.stock || [];
+    stock.forEach((producto) => {
+      const nombreProducto = producto.producto.nombre;
+      const stockInicial = producto.stockInicial;
+      const stockFinal = producto.stockFinal;
+
+      // Calcular la diferencia entre stockInicial y stockFinal
+      const diferencia = stockInicial - stockFinal;
+
+      // Sumar la diferencia al producto correspondiente
+      if (nombreProducto.includes("Manfrey")) {
+        totalQueso40 += diferencia;
+      } /* else if (nombreProducto.includes("Leche en Polvo")) {
+        totalAzucar += diferencia;
+      } else if (nombreProducto.includes("Queso Rallado 150g")){
+        totalQueso150 += diferencia
+      } */
+    });
+  });
+});
+
+// Imprimir los totales vendidos
+console.log("Total vendido de Queso 40g:", totalQueso40);
+console.log("Total vendido de Leche:", totalAzucar);
+console.log("Total vendido de Queso 150g: " + totalQueso150)
+
+let totalQue40 = "Total vendido de Leche Manfrey: " + totalQueso40
+let totalLec = "Total vendido de Leche: " + totalAzucar
+let totalQue150 = "Total vendido de Queso 150g: " + totalQueso150
+// Respuesta del servidor
+res.json({totalQue40});
+} catch (error) {
+    console.log("Error al traer los datos: ", error)
+}
+}
