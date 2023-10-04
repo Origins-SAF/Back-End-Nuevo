@@ -9,7 +9,7 @@ export const getPartes = async (req, res) => {
       .populate("usuario", ["nombre", "apellido", "img"]) // consulta para todos los documentos
       .populate("distribuidor.nombre", ["nombre"])
       .populate("ubicacion", ["nombre", "barrio", "tipo"])
-      .populate("distribuidor.stock.producto", ["nombre", "img"]);
+      .populate("distribuidor.stock.producto", ["nombre", "img", "peso"]);
     // Respuesta del servidor
     res.json(partes);
   } catch (error) {
@@ -153,6 +153,29 @@ for (const mes of partesDatos) {
 }
 
 const totalPage = partes.length;
+
+// Mapear los nombres de los meses a su posición en el año
+const mesesEnOrden = {
+  "enero": 1,
+  "febrero": 2,
+  "marzo": 3,
+  "abril": 4,
+  "mayo": 5,
+  "junio": 6,
+  "julio": 7,
+  "agosto": 8,
+  "septiembre": 9,
+  "octubre": 10,
+  "noviembre": 11,
+  "diciembre": 12
+};
+
+// Ordena la lista por el atributo "mes" usando el objeto de meses
+partesDatos.sort((a, b) => mesesEnOrden[a.mes.toLowerCase()] - mesesEnOrden[b.mes.toLowerCase()]);
+
+
+// Imprime la lista ordenada
+partesDatos.forEach(item => console.log(item?.mes));
 
     res.json({ totalPage, partesDatos });
   } catch (error) {
