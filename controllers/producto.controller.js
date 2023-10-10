@@ -15,10 +15,9 @@ export const getProductosPublicados = async (req, res) => {
    
       
       const productosFiltrados = productos.reverse()
-
-     
-  // Respuesta del servidor
-  res.json(productosFiltrados);
+    
+      // Respuesta del servidor
+      res.json(productosFiltrados);
   } catch (error) {
       console.log("Error al traer los productos: ", error)
   }

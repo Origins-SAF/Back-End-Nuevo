@@ -19,12 +19,12 @@ export const getPartes = async (req, res) => {
 
 export const getPartesSemanales = async (req, res) => {
   try {
-    const partes = await parteModelo
-      .find({ estado: true })
-      .populate("usuario", ["nombre", "apellido", "img"]) // consulta para todos los documentos
+    const partes = await parteModelo 
+      .find({ estado: true }) // consulta para todos los documentos
+      .populate("usuario", ["nombre", "apellido", "img"]) 
       .populate("distribuidor.nombre", ["nombre"])
       .populate("ubicacion", ["nombre", "barrio", "tipo"])
-      .populate("distribuidor.stock.producto", ["nombre","img","listaInventario","totalEdit","listaParteDia"])
+      .populate("distribuidor.stock.producto", ["nombre","img","listaInventario","totalEdit","listaParteDia", "peso"])
       .populate('personalEditor', ["nombre", "apellido", "img"])
       .populate("distribuidor.prodmasvendido", ["nombre"]);
     
@@ -48,6 +48,7 @@ const agruparDatos = (datos) =>
     agrupado[mesSemana][semana][fechaF].push(dato);
     return agrupado;
   }, {});
+
 // Función para convertir los datos agrupados en el formato deseado
 const convertirDatosAFormatoDeseado = (agrupado) =>
   Object.entries(agrupado).map(([mes, semanas]) => ({
@@ -174,8 +175,75 @@ const mesesEnOrden = {
 partesDatos.sort((a, b) => mesesEnOrden[a.mes.toLowerCase()] - mesesEnOrden[b.mes.toLowerCase()]);
 
 
-// Imprime la lista ordenada
-partesDatos.forEach(item => console.log(item?.mes));
+/* // Imprime la lista ordenada
+partesDatos.forEach(item => console.log(item?.mes)); */
+
+// Función para calcular los kilos vendidos por producto
+const calcularKilosVendidosPorProducto = (producto) => {
+  const stockInicial = producto.stockInicial || 0; // Valor por defecto si no está definido
+  const stockFinal = producto.stockFinal || 0; // Valor por defecto si no está definido
+  const peso = producto.peso || 0; // Valor por defecto si no está definido
+  const kilosVendidos = (stockInicial - stockFinal) + (peso / 1000); // Convertir gramos a kilogramos
+  return kilosVendidos;
+};
+
+// Agregar "kiloVendidoPorDistribuidor" al mismo nivel que "producto"
+for (const mes of partesDatos) {
+  for (const semana of mes.semanas) {
+    for (const dato of semana.datos) {
+      for (const parte of dato.partes) {
+        for (const distribuidor of parte.distribuidor) {
+          if (distribuidor.stock) {
+            distribuidor.kiloVendidoPorDistribuidor = distribuidor.stock.reduce((total, producto) => {
+              const kilosVendidos = calcularKilosVendidosPorProducto(producto);
+              return total + kilosVendidos;
+            }, 0);
+          } else {
+            distribuidor.kiloVendidoPorDistribuidor = 0; // Valor por defecto si no hay stock
+          }
+        }
+      }
+    }
+  }
+}
+
+// Función para calcular los kilos vendidos por semana
+const calcularKilosVendidosPorSemana = (semana) => {
+  let kilosVendidos = 0;
+  for (const dato of semana.datos) {
+    for (const parte of dato.partes) {
+      for (const distribuidor of parte.distribuidor) {
+        kilosVendidos += distribuidor.kiloVendidoPorDistribuidor || 0;
+      }
+    }
+  }
+  return kilosVendidos;
+};
+
+// Agregar "kiloVendidoPorSemana" al mismo nivel que "semana"
+for (const mes of partesDatos) {
+  for (const semana of mes.semanas) {
+    semana.kiloVendidoPorSemana = calcularKilosVendidosPorSemana(semana);
+  }
+}
+
+// Función para calcular los kilos vendidos por mes
+const calcularKilosVendidosPorMes = (mes) => {
+  let kilosVendidos = 0;
+  for (const semana of mes.semanas) {
+    kilosVendidos += semana.kiloVendidoPorSemana || 0;
+  }
+  return kilosVendidos;
+};
+
+// Agregar "kiloVendidoPorMes" al mismo nivel que "mes"
+for (const mes of partesDatos) {
+  mes.kiloVendidoPorMes = calcularKilosVendidosPorMes(mes);
+}
+
+// ... (código posterior)
+
+
 
     res.json({ totalPage, partesDatos });
   } catch (error) {
