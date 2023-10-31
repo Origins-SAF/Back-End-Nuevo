@@ -7,7 +7,21 @@ import cloudinary from 'cloudinary'
 
 
 // Devuelve todos los productos publicado de la colección
+
 export const getProductosPublicados = async (req, res) => {
+  
+
+  try {
+      const productos = await productoModelo.find({publicado: true, estado: true}).populate("distribuidor", "nombre") // consulta para todos los documentos
+
+      // Respuesta del servidor
+      res.json(productos);
+  } catch (error) {
+      console.log("Error al traer los productos: ", error)
+  }
+}
+
+export const getProductosTest = async (req, res) => {
   
 
   try {
