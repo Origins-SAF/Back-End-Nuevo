@@ -9,12 +9,14 @@ import {
     postPrograma,
     updatePrograma,
     eliminarPrograma,
+    getProgramasPublicados,
 
     desactivarPrograma,
     publicarPrograma
     } from "../controllers/programaVivo.controller.js";
     
     router.get("/ver-programas", getProgramas);
+    router.get("/ver-programas-publicados", getProgramasPublicados);
     router.get("/ver-programa-unico/:id", getProgramaUnico);
     router.post("/guardar-programa", postPrograma)
     router.put("/actualizar-programa/:id", updatePrograma)

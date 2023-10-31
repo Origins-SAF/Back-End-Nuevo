@@ -58,7 +58,6 @@ export const getNoticiasPublicasGrupos = async (req, res) => {
   }
 }
 
-
 // Devuelve todos los noticias activas de la colección
 export const getNoticias = async (req, res) => {
 

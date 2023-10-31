@@ -15,9 +15,35 @@ export const getProductosPublicados = async (req, res) => {
    
       
       const productosFiltrados = productos.reverse()
+
+      // Función para agregar ceros a la derecha de un Decimal128
+function agregarCerosADerecha(decimal, cantidadCeros) {
+  // Convierte el Decimal128 a una cadena de texto y agrega ceros
+  const valorDecimal = decimal.toString();
+  const partes = valorDecimal.split('.');
+  if (partes.length === 1) {
+    // Si no hay parte decimal, agrega la cantidad deseada de ceros
+    return valorDecimal + '.' + '0'.repeat(cantidadCeros);
+  } else {
+    // Si hay una parte decimal, agrega ceros a la parte decimal
+    return valorDecimal + '0'.repeat(cantidadCeros - partes[1].length);
+  }
+}
+
+// Itera sobre los productos y agrega ceros a los valores Decimal128
+const productosConCeros = productos.map(producto => {
+  return {
+    nombre: producto.nombre,
+    // Agrega ceros a la derecha del campo Decimal128
+    campoDecimal: agregarCerosADerecha(producto.peso, 3) // 2 es la cantidad deseada de ceros
+  };
+});
+
+// Ahora, productosConCeros contendrá los valores Decimal128 con ceros a la derecha.
+
     
       // Respuesta del servidor
-      res.json(productosFiltrados);
+      res.json(productosConCeros);
   } catch (error) {
       console.log("Error al traer los productos: ", error)
   }

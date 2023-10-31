@@ -177,74 +177,151 @@ partesDatos.sort((a, b) => mesesEnOrden[a.mes.toLowerCase()] - mesesEnOrden[b.me
 
 /* // Imprime la lista ordenada
 partesDatos.forEach(item => console.log(item?.mes)); */
+// Función para formatear el atributo "peso" con ceros a la derecha
+function formatearPesoConCeros(peso) {
+  if (typeof peso === 'number') {
+    return peso.toFixed(3); // Asegura que siempre tenga 3 decimales
+  }
+  return peso; // Si no es un número, no se modifica
+}
 
-// Función para calcular los kilos vendidos por producto
-const calcularKilosVendidosPorProducto = (producto) => {
-  const stockInicial = producto.stockInicial || 0; // Valor por defecto si no está definido
-  const stockFinal = producto.stockFinal || 0; // Valor por defecto si no está definido
-  const peso = producto.peso || 0; // Valor por defecto si no está definido
-  const kilosVendidos = (stockInicial - stockFinal) + (peso / 1000); // Convertir gramos a kilogramos
-  return kilosVendidos;
-};
+// Función para calcular el total de kilos vendidos por semana
+function calcularTotalKilosVendidosPorSemana(semana) {
+  let totalKilosVendidos = 0;
 
-// Agregar "kiloVendidoPorDistribuidor" al mismo nivel que "producto"
+  for (const dato of semana.datos) {
+    for (const parte of dato.partes) {
+      for (const distribuidor of parte.distribuidor) {
+        if (distribuidor.stock) {
+          for (const producto of distribuidor.stock) {
+            const stockInicial = producto.stockInicial || 0; // Valor por defecto si no está definido
+            const stockFinal = producto.stockFinal || 0; // Valor por defecto si no está definido
+            const peso = producto.producto.peso || 0; // Valor por defecto si no está definido
+            const nombre = producto.producto.nombre
+            /* console.log(producto) */
+            
+              console.log(semana.semana)
+              console.log("-----------")
+              console.log("Producto: ", nombre)
+              console.log("Stock Inicial: ",stockInicial)
+              console.log("Stock Final: ",stockFinal)
+              console.log("Peso: ", peso)
+           
+            
+            
+            // Convertir el peso a kilogramos
+            let totalvendido = stockInicial - stockFinal;
+            let kilosVendidos
+            // Si el peso es un número, convertirlo a kilogramos y sumarlo
+            if (typeof peso === 'number') {
+              if(peso === 0){
+                  kilosVendidos = totalvendido
+              } else{
+                  kilosVendidos = peso * totalvendido;
+              }
+            }
+
+            console.log("Kilo Vendido: ", kilosVendidos)
+              console.log("-----------")
+            /* if(semana.semana = "Semana 2 de octubre"){
+              
+            } */
+            
+            totalKilosVendidos += kilosVendidos;
+          }
+        }
+      }
+    }
+  }
+
+/*   console.log("==============")
+  console.log("Semana: ", semana.semana)
+  
+  console.log("Kilos Vendidos: ", totalKilosVendidos) */
+  return totalKilosVendidos;
+}
+
+// Recorrer los datos y formatear el peso
 for (const mes of partesDatos) {
   for (const semana of mes.semanas) {
     for (const dato of semana.datos) {
       for (const parte of dato.partes) {
         for (const distribuidor of parte.distribuidor) {
           if (distribuidor.stock) {
-            distribuidor.kiloVendidoPorDistribuidor = distribuidor.stock.reduce((total, producto) => {
-              const kilosVendidos = calcularKilosVendidosPorProducto(producto);
-              return total + kilosVendidos;
-            }, 0);
-          } else {
-            distribuidor.kiloVendidoPorDistribuidor = 0; // Valor por defecto si no hay stock
+            for (const producto of distribuidor.stock) {
+              producto.peso = formatearPesoConCeros(producto.peso);
+            }
           }
         }
       }
     }
+
+    // Calcular el total de kilos vendidos por semana y agregarlo como atributo
+    semana.totalKilosVendidosSemanas = calcularTotalKilosVendidosPorSemana(semana);
   }
 }
 
-// Función para calcular los kilos vendidos por semana
-const calcularKilosVendidosPorSemana = (semana) => {
-  let kilosVendidos = 0;
-  for (const dato of semana.datos) {
-    for (const parte of dato.partes) {
-      for (const distribuidor of parte.distribuidor) {
-        kilosVendidos += distribuidor.kiloVendidoPorDistribuidor || 0;
+// Función para calcular el total de kilos vendidos por mes
+function calcularTotalKilosVendidosPorMes(mes) {
+  let totalKilosVendidos = 0;
+
+  for (const semana of mes.semanas) {
+    totalKilosVendidos += semana.totalKilosVendidosSemanas || 0; // Asegura que se sume correctamente
+  }
+
+  return totalKilosVendidos;
+}
+
+// Recorrer los datos y calcular el total de kilos vendidos por mes
+for (const mes of partesDatos) {
+  mes.totalKilosVendidosMes = calcularTotalKilosVendidosPorMes(mes);
+}
+
+// Función para calcular el total de kilos vendidos por parte
+function calcularTotalKilosVendidosPorParte(parte) {
+  let totalKilosVendidos = 0;
+  
+  for (const distribuidor of parte.distribuidor) {
+    if (distribuidor.stock) {
+      for (const producto of distribuidor.stock) {
+        const stockInicial = producto.stockInicial || 0; // Valor por defecto si no está definido
+        const stockFinal = producto.stockFinal || 0; // Valor por defecto si no está definido
+        const peso = producto.producto.peso || 0; // Valor por defecto si no está definido
+        const nombre = producto.producto.nombre
+        /* console.log(nombre) */
+        // Convertir el peso a kilogramos
+         // Convertir el peso a kilogramos
+         let totalvendido = stockInicial - stockFinal;
+         let kilosVendidos
+         // Si el peso es un número, convertirlo a kilogramos y sumarlo
+         if (typeof peso === 'number') {
+           if(peso === 0){
+               kilosVendidos = totalvendido
+           } else{
+               kilosVendidos = peso * totalvendido;
+           }
+         }
+
+        totalKilosVendidos += kilosVendidos;
       }
     }
   }
-  return kilosVendidos;
-};
 
-// Agregar "kiloVendidoPorSemana" al mismo nivel que "semana"
+  return totalKilosVendidos;
+}
+
+// Recorrer los datos y calcular el total de kilos vendidos por parte
 for (const mes of partesDatos) {
   for (const semana of mes.semanas) {
-    semana.kiloVendidoPorSemana = calcularKilosVendidosPorSemana(semana);
+    for (const dato of semana.datos) {
+      for (const parte of dato.partes) {
+        parte.totalKilosVendidosFecha = calcularTotalKilosVendidosPorParte(parte);
+      }
+    }
   }
 }
 
-// Función para calcular los kilos vendidos por mes
-const calcularKilosVendidosPorMes = (mes) => {
-  let kilosVendidos = 0;
-  for (const semana of mes.semanas) {
-    kilosVendidos += semana.kiloVendidoPorSemana || 0;
-  }
-  return kilosVendidos;
-};
-
-// Agregar "kiloVendidoPorMes" al mismo nivel que "mes"
-for (const mes of partesDatos) {
-  mes.kiloVendidoPorMes = calcularKilosVendidosPorMes(mes);
-}
-
-// ... (código posterior)
-
-
-
+/* console.log(partesDatos[0].mes[2]) */
     res.json({ totalPage, partesDatos });
   } catch (error) {
     console.log("Error al traer los partes: ", error);

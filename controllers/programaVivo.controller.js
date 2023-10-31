@@ -2,6 +2,19 @@ import programaModelo from '../models/programaVivo.modelo.js';
 import notificacionesModelo from '../models/notificaciones.modelo.js';
 import usuarioModelo from '../models/usuario.modelo.js';
 
+
+// Devuelve todos los programas activos de la colección
+export const getProgramasPublicados = async (req, res) => {
+
+  try {
+      const programas = await programaModelo.find({publicado: true, estado: false}) // consulta para todos los documentos
+  // Respuesta del servidor
+  res.json(programas);
+  } catch (error) {
+      console.log("Error al traer los programas: ", error)
+  }
+}
+
 // Devuelve todos los programas activos de la colección
 export const getProgramas = async (req, res) => {
 
