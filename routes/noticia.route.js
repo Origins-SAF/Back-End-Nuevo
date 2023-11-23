@@ -9,7 +9,6 @@ import {
    postNoticia,
    updateNoticia,
    eliminarNoticia,
-
    desactivarNoticia,
    publicarNoticia,
 

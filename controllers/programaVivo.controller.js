@@ -15,6 +15,16 @@ export const getProgramasPublicados = async (req, res) => {
   }
 }
 
+export const getStreamingsVivo = async (req, res) => {
+  try {
+    const programasVivo = await programaModelo.find({publicado: true, estado: false, vivo: true}) // consulta para todos los documentos
+  // Respuesta del servidor
+  res.json(programasVivo);
+  } catch (error) {
+      console.log("Error al traer el streaming: ", error)
+  }
+}
+
 // Devuelve todos los programas activos de la colección
 export const getProgramas = async (req, res) => {
 

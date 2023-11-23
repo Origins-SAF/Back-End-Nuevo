@@ -5,6 +5,7 @@ const router = Router();
 // Requerimos los controladores (funciones que contendrán la lógica del endpoint)
 import {
     getProgramas,
+    getStreamingsVivo,
     getProgramaUnico,
     postPrograma,
     updatePrograma,
@@ -15,6 +16,7 @@ import {
     publicarPrograma
     } from "../controllers/programaVivo.controller.js";
     
+    router.get("/ver-programa-vivo", getStreamingsVivo);
     router.get("/ver-programas", getProgramas);
     router.get("/ver-programas-publicados", getProgramasPublicados);
     router.get("/ver-programa-unico/:id", getProgramaUnico);
