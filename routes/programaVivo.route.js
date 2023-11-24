@@ -19,7 +19,7 @@ import {
     router.get("/ver-programa-vivo", getStreamingsVivo);
     router.get("/ver-programas", getProgramas);
     router.get("/ver-programas-publicados", getProgramasPublicados);
-    router.get("/ver-programa-unico/:id", getProgramaUnico);
+    router.get("/ver-programa-unico/:titulo", getProgramaUnico);
     router.post("/guardar-programa", postPrograma)
     router.put("/actualizar-programa/:id", updatePrograma)
     router.put("/desactivar-log-programa/:id", desactivarPrograma)

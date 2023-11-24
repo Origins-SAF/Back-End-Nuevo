@@ -43,9 +43,12 @@ export const getProgramas = async (req, res) => {
 
 // Devuelve un programa de la colección
 export const getProgramaUnico = async (req, res) => {
-  const {id } = req.params;
+  const { titulo  } = req.params;
+ 
+    // Eliminar los guiones y convertir en espacios
+    const tituloPrograma = titulo?.replace(/-/g, ' ');
   try {
-      const programa = await programaModelo.findById(id) // consulta para todos los documentos
+      const programa = await programaModelo.find({titulo: tituloPrograma}) // consulta para todos los documentos
   
   // Respuesta del servidor
   res.json(programa);
