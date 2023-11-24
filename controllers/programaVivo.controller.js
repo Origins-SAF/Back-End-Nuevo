@@ -46,7 +46,7 @@ export const getProgramaUnico = async (req, res) => {
   const { titulo  } = req.params;
  
     // Eliminar los guiones y convertir en espacios
-    const tituloPrograma = titulo?.replace(/-/g, ' ');
+    const tituloPrograma = titulo?.replace(/_/g, ' ');
   try {
       const programa = await programaModelo.find({titulo: tituloPrograma}) // consulta para todos los documentos
   
