@@ -24,7 +24,9 @@ const whiteList = [
    "http://localhost:5173", 
    "http://admin.soberaniaalimentariafsa.com",
    "https://soberaniaalimentariafsa.com",
-   "www.admin.soberaniaalimentariafsa.com"
+   "www.admin.soberaniaalimentariafsa.com",
+   "http://www.admin.soberaniaalimentariafsa.com"
+
 ];
 
 const corsOptions =  {
