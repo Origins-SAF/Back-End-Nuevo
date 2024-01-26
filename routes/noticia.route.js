@@ -21,7 +21,7 @@ import {
     
     router.get("/ver-noticias", getNoticias);
     router.get("/ver-noticias-publicas-grupos", getNoticiasPublicasGrupos);
-    router.get("/ver-noticia-unica/:id", getNoticiarUnica);
+    router.get("/ver-noticia-unica/:titulo", getNoticiarUnica);
     router.post("/guardar-noticia",upload.single("image"), postNoticia)
     router.put("/actualizar-noticia/:id",upload.single("image"), updateNoticia)
     router.put("/desactivar-log-noticia/:id", desactivarNoticia)

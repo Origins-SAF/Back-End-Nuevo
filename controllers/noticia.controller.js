@@ -98,9 +98,12 @@ export const getNoticias = async (req, res) => {
 
 // Devuelve una  noticia  de la colección
 export const getNoticiarUnica = async (req, res) => {
-  const {id } = req.params;
+  const { titulo  } = req.params;
+ 
+    // Eliminar los guiones y convertir en espacios
+    const tituloNoticia = titulo?.replace(/-/g, ' ');
   try {
-      const noticia = await noticiaModelo.findById(id) // consulta para todos los documentos
+      const noticia = await noticiaModelo.find({titulo: tituloNoticia}) // consulta para todos los documentos
   
   // Respuesta del servidor
   res.json(noticia);
