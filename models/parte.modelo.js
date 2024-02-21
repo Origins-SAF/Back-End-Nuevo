@@ -57,6 +57,9 @@ const ParteSchema = new Schema(
         recaudacionRetirada: {
           type: Boolean,
         },
+        kilosVendidos: {
+          type: Number,
+        },
       }],
       prodmasvendido: {
         type: Schema.Types.ObjectId,
