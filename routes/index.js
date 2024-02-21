@@ -16,6 +16,7 @@ import inventarioProductorRutas from "./inventarioProductor.route.js"
 import productosConsorcioRutas from "./productosConsorcio.route.js";
 import entrenamientoRutas from "./entrenamiento.route.js";
 import semanaRutas from "./semana.route.js"
+import estadisticaRutas from "./estadisticas.route.js"
 
 export const rutas = () => [
     inventarioRutas,
@@ -35,5 +36,6 @@ export const rutas = () => [
     productosConsorcioRutas,
     inventarioProductorRutas,
     entrenamientoRutas,
-    semanaRutas
+    semanaRutas,
+    estadisticaRutas
 ];
