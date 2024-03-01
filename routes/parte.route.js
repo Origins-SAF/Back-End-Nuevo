@@ -11,7 +11,8 @@ import {
     getPartesPorFecha,
     getPartesPorMes,
     getPartesSemanales,
-    CalculosGraficos
+    CalculosGraficos,
+    guardarKilosVendidosParte
   } from "../controllers/parte.controller.js";
 import validarJWT from "../middlewares/validar-jwt.js";
   
@@ -23,6 +24,6 @@ router.get("/ver-partes-dias-grupos", getPartesPorGrupos);
 router.get("/ver-partes-dias-fecha/:fechapd", getPartesPorFecha)
 router.post("/crear-parte",validarJWT, postParte);
 router.put("/editar-parte/:id",validarJWT, putParte);
-
+router.put("/editar-parte-kilos/:idParte", guardarKilosVendidosParte);
 
 export default router;

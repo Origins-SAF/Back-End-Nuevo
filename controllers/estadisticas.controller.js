@@ -11,8 +11,6 @@ export const getKilosVendidosDia = async (req, res) => {
   const mes = fechaRecibida.getMonth() + 1; // Los meses en JavaScript van de 0 a 11, por lo que sumamos 1
   const año = fechaRecibida.getFullYear();
 
-  
-
   const fechaRecibidaFormateada = `${año}-${mes < 10 ? "0" : ""}${mes}-${
     dia < 10 ? "0" : ""
   }${dia}`;
@@ -45,63 +43,79 @@ export const getKilosVendidosDia = async (req, res) => {
       ])
       .populate("distribuidor.prodmasvendido", ["nombre"]);
 
-// Función para obtener un identificador único de producto
-function obtenerIdProducto(producto) {
-  return producto._id || producto.nombre;
-}
+    // Función para obtener un identificador único de producto
+    function obtenerIdProducto(producto) {
+      return producto._id || producto.nombre;
+    }
 
-// Objeto para almacenar los datos acumulados
-const resultado = [];
+    // Objeto para almacenar los datos acumulados
+    const resultado = [];
 
-// Función para convertir el valor de kilos vendidos a número
-function convertirKilosVendidos(valor) {
-    // Si el valor es null o undefined, retornamos 0
-    if (valor == null || isNaN(parseFloat(valor))) return 0;
-    // Si el valor es un número, lo retornamos tal cual
-    if (typeof valor === 'number') return valor;
-    // Si el valor es una cadena, intentamos convertirlo a número
-    if (typeof valor === 'string') {
+    // Función para convertir el valor de kilos vendidos a número
+    function convertirKilosVendidos(valor) {
+      // Si el valor es null o undefined, retornamos 0
+      if (valor == null || isNaN(parseFloat(valor))) return 0;
+      // Si el valor es un número, lo retornamos tal cual
+      if (typeof valor === "number") return valor;
+      // Si el valor es una cadena, intentamos convertirlo a número
+      if (typeof valor === "string") {
         // Si el valor es una representación válida de número, lo convertimos
         const numero = parseFloat(valor);
         if (!isNaN(numero)) return numero;
+      }
+      // En cualquier otro caso, retornamos 0
+      return 0;
     }
-    // En cualquier otro caso, retornamos 0
-    return 0;
-}
 
+    const opciones = {
+      weekday: "long",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    };
+    let fechaFormateadaAR = fecha.toLocaleDateString("es-AR", opciones);
 
-const opciones = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
-let fechaFormateadaAR = fecha.toLocaleDateString('es-AR', opciones)
-
-// Agregar el campo "titulo" al objeto principal
-resultado.push({ titulo:`Estadisticas del: ${fechaFormateadaAR}, semana ${semanaPartes}` , estadisticas: [] });
-
-// Recorrer los datos
-partes.forEach(registro => {
-    registro.distribuidor.forEach(distribuidor => {
-        const nombreDistribuidor = distribuidor.nombre.nombre;
-        let distribuidorActual = resultado[0].estadisticas.find(item => item.distribuidor === nombreDistribuidor);
-        if (!distribuidorActual) {
-            distribuidorActual = { distribuidor: nombreDistribuidor, productos: {} };
-            resultado[0].estadisticas.push(distribuidorActual);
-        }
-        distribuidor.stock.forEach(producto => {
-            const idProducto = obtenerIdProducto(producto.producto);
-            if (!distribuidorActual.productos[idProducto]) {
-                distribuidorActual.productos[idProducto] = { Nombre: producto.producto.nombre, "Kilos Vendidos": convertirKilosVendidos(producto.kilosVendidos) };
-            } else {
-                distribuidorActual.productos[idProducto]["Kilos Vendidos"] += convertirKilosVendidos(producto.kilosVendidos);
-            }
-        });
+    // Agregar el campo "titulo" al objeto principal
+    resultado.push({
+      titulo: `Estadisticas del: ${fechaFormateadaAR}, semana ${semanaPartes}`,
+      estadisticas: [],
     });
-});
 
-// Convertir el objeto de productos de cada distribuidor en un array
-resultado[0].estadisticas.forEach(item => {
-    item.productos = Object.values(item.productos);
-});
+    // Recorrer los datos
+    partes.forEach((registro) => {
+      registro.distribuidor.forEach((distribuidor) => {
+        const nombreDistribuidor = distribuidor.nombre.nombre;
+        let distribuidorActual = resultado[0].estadisticas.find(
+          (item) => item.distribuidor === nombreDistribuidor
+        );
+        if (!distribuidorActual) {
+          distribuidorActual = {
+            distribuidor: nombreDistribuidor,
+            productos: {},
+          };
+          resultado[0].estadisticas.push(distribuidorActual);
+        }
+        distribuidor.stock.forEach((producto) => {
+          const idProducto = obtenerIdProducto(producto.producto);
+          if (!distribuidorActual.productos[idProducto]) {
+            distribuidorActual.productos[idProducto] = {
+              Nombre: producto.producto.nombre,
+              "Kilos Vendidos": convertirKilosVendidos(producto.kilosVendidos),
+            };
+          } else {
+            distribuidorActual.productos[idProducto]["Kilos Vendidos"] +=
+              convertirKilosVendidos(producto.kilosVendidos);
+          }
+        });
+      });
+    });
 
-/* console.log(resultado); */
+    // Convertir el objeto de productos de cada distribuidor en un array
+    resultado[0].estadisticas.forEach((item) => {
+      item.productos = Object.values(item.productos);
+    });
+
+    /* console.log(resultado); */
 
     // Respuesta del servidor
     res.json(resultado);
@@ -141,60 +155,71 @@ export const getKilosVendidosSemana = async (req, res) => {
       .populate("distribuidor.prodmasvendido", ["nombre"]);
 
     // Función para obtener un identificador único de producto
-function obtenerIdProducto(producto) {
-  return producto._id || producto.nombre;
-}
+    function obtenerIdProducto(producto) {
+      return producto._id || producto.nombre;
+    }
 
-// Objeto para almacenar los datos acumulados
-const resultado = [];
+    // Objeto para almacenar los datos acumulados
+    const resultado = [];
 
-// Función para convertir el valor de kilos vendidos a número
-function convertirKilosVendidos(valor) {
-    // Si el valor es null o undefined, retornamos 0
-    if (valor == null || isNaN(parseFloat(valor))) return 0;
-    // Si el valor es un número, lo retornamos tal cual
-    if (typeof valor === 'number') return valor;
-    // Si el valor es una cadena, intentamos convertirlo a número
-    if (typeof valor === 'string') {
+    // Función para convertir el valor de kilos vendidos a número
+    function convertirKilosVendidos(valor) {
+      // Si el valor es null o undefined, retornamos 0
+      if (valor == null || isNaN(parseFloat(valor))) return 0;
+      // Si el valor es un número, lo retornamos tal cual
+      if (typeof valor === "number") return valor;
+      // Si el valor es una cadena, intentamos convertirlo a número
+      if (typeof valor === "string") {
         // Si el valor es una representación válida de número, lo convertimos
         const numero = parseFloat(valor);
         if (!isNaN(numero)) return numero;
+      }
+      // En cualquier otro caso, retornamos 0
+      return 0;
     }
-    // En cualquier otro caso, retornamos 0
-    return 0;
-}
 
-
-/* const opciones = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+    /* const opciones = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
 let fechaFormateadaAR = fecha.toLocaleDateString('es-AR', opciones) */
 
-// Agregar el campo "titulo" al objeto principal
-resultado.push({ titulo:`Estadisticas de la semana ${semanaPartes} del mes ${mesPartes}` , estadisticas: [] });
-
-// Recorrer los datos
-partes.forEach(registro => {
-    registro.distribuidor.forEach(distribuidor => {
-        const nombreDistribuidor = distribuidor.nombre.nombre;
-        let distribuidorActual = resultado[0].estadisticas.find(item => item.distribuidor === nombreDistribuidor);
-        if (!distribuidorActual) {
-            distribuidorActual = { distribuidor: nombreDistribuidor, productos: {} };
-            resultado[0].estadisticas.push(distribuidorActual);
-        }
-        distribuidor.stock.forEach(producto => {
-            const idProducto = obtenerIdProducto(producto.producto);
-            if (!distribuidorActual.productos[idProducto]) {
-                distribuidorActual.productos[idProducto] = { Nombre: producto.producto.nombre, "Kilos Vendidos": convertirKilosVendidos(producto.kilosVendidos) };
-            } else {
-                distribuidorActual.productos[idProducto]["Kilos Vendidos"] += convertirKilosVendidos(producto.kilosVendidos);
-            }
-        });
+    // Agregar el campo "titulo" al objeto principal
+    resultado.push({
+      titulo: `Estadisticas de la semana ${semanaPartes} del mes ${mesPartes} del ${añoPartes}`,
+      estadisticas: [],
     });
-});
 
-// Convertir el objeto de productos de cada distribuidor en un array
-resultado[0].estadisticas.forEach(item => {
-    item.productos = Object.values(item.productos);
-});
+    // Recorrer los datos
+    partes.forEach((registro) => {
+      registro.distribuidor.forEach((distribuidor) => {
+        const nombreDistribuidor = distribuidor.nombre.nombre;
+        let distribuidorActual = resultado[0].estadisticas.find(
+          (item) => item.distribuidor === nombreDistribuidor
+        );
+        if (!distribuidorActual) {
+          distribuidorActual = {
+            distribuidor: nombreDistribuidor,
+            productos: {},
+          };
+          resultado[0].estadisticas.push(distribuidorActual);
+        }
+        distribuidor.stock.forEach((producto) => {
+          const idProducto = obtenerIdProducto(producto.producto);
+          if (!distribuidorActual.productos[idProducto]) {
+            distribuidorActual.productos[idProducto] = {
+              Nombre: producto.producto.nombre,
+              "Kilos Vendidos": convertirKilosVendidos(producto.kilosVendidos),
+            };
+          } else {
+            distribuidorActual.productos[idProducto]["Kilos Vendidos"] +=
+              convertirKilosVendidos(producto.kilosVendidos);
+          }
+        });
+      });
+    });
+
+    // Convertir el objeto de productos de cada distribuidor en un array
+    resultado[0].estadisticas.forEach((item) => {
+      item.productos = Object.values(item.productos);
+    });
 
     // Respuesta del servidor
     res.json(resultado);
@@ -231,36 +256,75 @@ export const getKilosVendidosMes = async (req, res) => {
       ])
       .populate("distribuidor.prodmasvendido", ["nombre"]);
 
-    const productosVendidos = {};
+    // Función para obtener un identificador único de producto
+    function obtenerIdProducto(producto) {
+      return producto._id || producto.nombre;
+    }
 
-    partes.forEach((venta) => {
-      venta.distribuidor.forEach((distribuidor) => {
+    // Objeto para almacenar los datos acumulados
+    const resultado = [];
+
+    // Función para convertir el valor de kilos vendidos a número
+    function convertirKilosVendidos(valor) {
+      // Si el valor es null o undefined, retornamos 0
+      if (valor == null || isNaN(parseFloat(valor))) return 0;
+      // Si el valor es un número, lo retornamos tal cual
+      if (typeof valor === "number") return valor;
+      // Si el valor es una cadena, intentamos convertirlo a número
+      if (typeof valor === "string") {
+        // Si el valor es una representación válida de número, lo convertimos
+        const numero = parseFloat(valor);
+        if (!isNaN(numero)) return numero;
+      }
+      // En cualquier otro caso, retornamos 0
+      return 0;
+    }
+
+    /* const opciones = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+let fechaFormateadaAR = fecha.toLocaleDateString('es-AR', opciones) */
+
+    // Agregar el campo "titulo" al objeto principal
+    resultado.push({
+      titulo: `Estadisticas del mes ${mesPartes} de ${añoPartes}`,
+      estadisticas: [],
+    });
+
+    // Recorrer los datos
+    partes.forEach((registro) => {
+      registro.distribuidor.forEach((distribuidor) => {
+        const nombreDistribuidor = distribuidor.nombre.nombre;
+        let distribuidorActual = resultado[0].estadisticas.find(
+          (item) => item.distribuidor === nombreDistribuidor
+        );
+        if (!distribuidorActual) {
+          distribuidorActual = {
+            distribuidor: nombreDistribuidor,
+            productos: {},
+          };
+          resultado[0].estadisticas.push(distribuidorActual);
+        }
         distribuidor.stock.forEach((producto) => {
-          const nombreProducto = producto.producto.nombre;
-          const kilosVendidos = producto.kilosVendidos;
-
-          if (productosVendidos[nombreProducto]) {
-            productosVendidos[nombreProducto] += kilosVendidos;
+          const idProducto = obtenerIdProducto(producto.producto);
+          if (!distribuidorActual.productos[idProducto]) {
+            distribuidorActual.productos[idProducto] = {
+              Nombre: producto.producto.nombre,
+              "Kilos Vendidos": convertirKilosVendidos(producto.kilosVendidos),
+            };
           } else {
-            productosVendidos[nombreProducto] = kilosVendidos;
+            distribuidorActual.productos[idProducto]["Kilos Vendidos"] +=
+              convertirKilosVendidos(producto.kilosVendidos);
           }
         });
       });
     });
 
-    const arrayProductosVendidos = Object.keys(productosVendidos).map(
-      (nombreProducto) => {
-        return {
-          nombreProducto,
-          kilosVendidos: productosVendidos[nombreProducto],
-        };
-      }
-    );
-
-    /* console.log(arrayProductosVendidos); */
+    // Convertir el objeto de productos de cada distribuidor en un array
+    resultado[0].estadisticas.forEach((item) => {
+      item.productos = Object.values(item.productos);
+    });
 
     // Respuesta del servidor
-    res.json(arrayProductosVendidos);
+    res.json(resultado);
   } catch (error) {
     console.log("Error al traer los partes: ", error);
   }
@@ -292,36 +356,75 @@ export const getKilosVendidosAno = async (req, res) => {
       ])
       .populate("distribuidor.prodmasvendido", ["nombre"]);
 
-    const productosVendidos = {};
+    // Función para obtener un identificador único de producto
+    function obtenerIdProducto(producto) {
+      return producto._id || producto.nombre;
+    }
 
-    partes.forEach((venta) => {
-      venta.distribuidor.forEach((distribuidor) => {
+    // Objeto para almacenar los datos acumulados
+    const resultado = [];
+
+    // Función para convertir el valor de kilos vendidos a número
+    function convertirKilosVendidos(valor) {
+      // Si el valor es null o undefined, retornamos 0
+      if (valor == null || isNaN(parseFloat(valor))) return 0;
+      // Si el valor es un número, lo retornamos tal cual
+      if (typeof valor === "number") return valor;
+      // Si el valor es una cadena, intentamos convertirlo a número
+      if (typeof valor === "string") {
+        // Si el valor es una representación válida de número, lo convertimos
+        const numero = parseFloat(valor);
+        if (!isNaN(numero)) return numero;
+      }
+      // En cualquier otro caso, retornamos 0
+      return 0;
+    }
+
+    /* const opciones = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+let fechaFormateadaAR = fecha.toLocaleDateString('es-AR', opciones) */
+
+    // Agregar el campo "titulo" al objeto principal
+    resultado.push({
+      titulo: `Estadisticas generales del año ${añoPartes}`,
+      estadisticas: [],
+    });
+
+    // Recorrer los datos
+    partes.forEach((registro) => {
+      registro.distribuidor.forEach((distribuidor) => {
+        const nombreDistribuidor = distribuidor.nombre.nombre;
+        let distribuidorActual = resultado[0].estadisticas.find(
+          (item) => item.distribuidor === nombreDistribuidor
+        );
+        if (!distribuidorActual) {
+          distribuidorActual = {
+            distribuidor: nombreDistribuidor,
+            productos: {},
+          };
+          resultado[0].estadisticas.push(distribuidorActual);
+        }
         distribuidor.stock.forEach((producto) => {
-          const nombreProducto = producto.producto.nombre;
-          const kilosVendidos = producto.kilosVendidos;
-
-          if (productosVendidos[nombreProducto]) {
-            productosVendidos[nombreProducto] += kilosVendidos;
+          const idProducto = obtenerIdProducto(producto.producto);
+          if (!distribuidorActual.productos[idProducto]) {
+            distribuidorActual.productos[idProducto] = {
+              Nombre: producto.producto.nombre,
+              "Kilos Vendidos": convertirKilosVendidos(producto.kilosVendidos),
+            };
           } else {
-            productosVendidos[nombreProducto] = kilosVendidos;
+            distribuidorActual.productos[idProducto]["Kilos Vendidos"] +=
+              convertirKilosVendidos(producto.kilosVendidos);
           }
         });
       });
     });
 
-    const arrayProductosVendidos = Object.keys(productosVendidos).map(
-      (nombreProducto) => {
-        return {
-          nombreProducto,
-          kilosVendidos: productosVendidos[nombreProducto],
-        };
-      }
-    );
-
-    /* console.log(arrayProductosVendidos); */
+    // Convertir el objeto de productos de cada distribuidor en un array
+    resultado[0].estadisticas.forEach((item) => {
+      item.productos = Object.values(item.productos);
+    });
 
     // Respuesta del servidor
-    res.json(arrayProductosVendidos);
+    res.json(resultado);
   } catch (error) {
     console.log("Error al traer los partes: ", error);
   }

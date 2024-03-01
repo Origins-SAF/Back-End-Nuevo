@@ -1,5 +1,6 @@
 import parteModelo from "../models/parte.modelo.js";
 import _ from "lodash";
+import mongoose from 'mongoose';
 
 // Devuelve todos los partes activas de la colección
 export const getPartes = async (req, res) => {
@@ -200,12 +201,12 @@ function calcularTotalKilosVendidosPorSemana(semana) {
             const nombre = producto.producto.nombre
             /* console.log(producto) */
             
-              console.log(semana.semana)
+              /* console.log(semana.semana)
               console.log("-----------")
               console.log("Producto: ", nombre)
               console.log("Stock Inicial: ",stockInicial)
               console.log("Stock Final: ",stockFinal)
-              console.log("Peso: ", peso)
+              console.log("Peso: ", peso) */
            
             
             
@@ -221,8 +222,8 @@ function calcularTotalKilosVendidosPorSemana(semana) {
               }
             }
 
-            console.log("Kilo Vendido: ", kilosVendidos)
-              console.log("-----------")
+            /* console.log("Kilo Vendido: ", kilosVendidos)
+              console.log("-----------") */
             /* if(semana.semana = "Semana 2 de octubre"){
               
             } */
@@ -619,3 +620,30 @@ for (var x= 0; x < nuevoArray2?.length; x++) {
     
   }
 }
+
+export const guardarKilosVendidosParte = async (req, res) => {
+
+  let idProducto = req.body.producto;
+  let idDistribuidor = req.body.distribuidor;
+  let kilosVendidos = req.body.kilos;
+  const {idParte} = req.params;
+/* 
+  console.log(idProducto, kilosVendidos, idParte) */
+
+  try {
+    const parte = await parteModelo.findById(idParte).populate("distribuidor.stock.producto", ["nombre","peso"]);
+    
+    const distribuidores = parte?.distribuidor
+
+    // Filtrar el array de objetos por ID
+    console.log(mongoose.Types.ObjectId(idDistribuidor))
+    console.log(distribuidores[0].nombre)
+
+
+    let productos = distribuidores.filter(obj => obj.nombre ==  mongoose.Types.ObjectId(idDistribuidor));
+    // Respuesta del servidor
+    res.json(productos);
+  } catch (error) {
+    console.log("Error al traer los partes: ", error);
+  }
+};
