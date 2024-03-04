@@ -636,13 +636,15 @@ export const guardarKilosVendidosParte = async (req, res) => {
     const distribuidores = parte?.distribuidor
 
     // Filtrar el array de objetos por ID
-    console.log(mongoose.Types.ObjectId(idDistribuidor))
-    console.log(distribuidores[0].nombre)
-
-
-    let productos = distribuidores.filter(obj => obj.nombre ==  mongoose.Types.ObjectId(idDistribuidor));
+    let productos = distribuidores.filter(obj => obj?.nombre ==  idDistribuidor);
+    
+   
+    let stock = productos[0]?.stock
+    let producto = stock.filter(obj => obj?.producto?._id ==  idProducto);
+    
+    let data = producto[0]
     // Respuesta del servidor
-    res.json(productos);
+    res.json(producto);
   } catch (error) {
     console.log("Error al traer los partes: ", error);
   }
