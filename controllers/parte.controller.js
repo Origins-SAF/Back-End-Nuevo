@@ -635,16 +635,32 @@ export const guardarKilosVendidosParte = async (req, res) => {
     
     const distribuidores = parte?.distribuidor
 
+   
+    // Iterar sobre los distribuidores en la variable 'parte'
+    parte.distribuidor.forEach(distribuidor => {
+      /* console.log(distribuidor) */
+      // Verificar si este es el distribuidor que queremos modificar
+      if (distribuidor.nombre == idDistribuidor) {
+        
+          // Iterar sobre los productos del distribuidor
+          distribuidor.stock.forEach(producto => {
+              // Verificar si este es el producto que queremos modificar
+              if (producto.producto._id == idProducto) {
+                
+                  // Agregar el campo kilosVendidos al producto
+                  producto.kilosVendidos = kilosVendidos;
+                  
+              }
+          });
+      }
+    });
+
+
     // Filtrar el array de objetos por ID
     let productos = distribuidores.filter(obj => obj?.nombre ==  idDistribuidor);
     
-   
-    let stock = productos[0]?.stock
-    let producto = stock.filter(obj => obj?.producto?._id ==  idProducto);
-    
-    let data = producto[0]
     // Respuesta del servidor
-    res.json(producto);
+    res.json(productos);
   } catch (error) {
     console.log("Error al traer los partes: ", error);
   }
