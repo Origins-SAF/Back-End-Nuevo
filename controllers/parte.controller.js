@@ -658,9 +658,14 @@ export const guardarKilosVendidosParte = async (req, res) => {
 
     // Filtrar el array de objetos por ID
     let productos = distribuidores.filter(obj => obj?.nombre ==  idDistribuidor);
+
+    // Guardar los cambios en la base de datos
+    await parte.save();
+
+
     
     // Respuesta del servidor
-    res.json(productos);
+    res.json(parte);
   } catch (error) {
     console.log("Error al traer los partes: ", error);
   }
