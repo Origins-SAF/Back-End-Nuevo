@@ -100,10 +100,10 @@ export const getKilosVendidosDia = async (req, res) => {
           if (!distribuidorActual.productos[idProducto]) {
             distribuidorActual.productos[idProducto] = {
               Nombre: producto.producto.nombre,
-              "Kilos Vendidos": convertirKilosVendidos(producto.kilosVendidos),
+              "KilosVendidos": convertirKilosVendidos(producto.kilosVendidos),
             };
           } else {
-            distribuidorActual.productos[idProducto]["Kilos Vendidos"] +=
+            distribuidorActual.productos[idProducto]["KilosVendidos"] +=
               convertirKilosVendidos(producto.kilosVendidos);
           }
         });
