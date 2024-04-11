@@ -82,38 +82,41 @@ export const getKilosVendidosDia = async (req, res) => {
     });
 
     // Recorrer los datos
-    partes.forEach((registro) => {
-      registro.distribuidor.forEach((distribuidor) => {
-        const nombreDistribuidor = distribuidor.nombre.nombre;
-        let distribuidorActual = resultado[0].estadisticas.find(
-          (item) => item.distribuidor === nombreDistribuidor
-        );
-        if (!distribuidorActual) {
-          distribuidorActual = {
-            distribuidor: nombreDistribuidor,
-            productos: {},
-          };
-          resultado[0].estadisticas.push(distribuidorActual);
-        }
-        distribuidor.stock.forEach((producto) => {
-          const idProducto = obtenerIdProducto(producto.producto);
-          if (!distribuidorActual.productos[idProducto]) {
-            distribuidorActual.productos[idProducto] = {
-              Nombre: producto.producto.nombre,
-              "KilosVendidos": convertirKilosVendidos(producto.kilosVendidos),
-            };
-          } else {
-            distribuidorActual.productos[idProducto]["KilosVendidos"] +=
-              convertirKilosVendidos(producto.kilosVendidos);
-          }
-        });
-      });
+partes.forEach((registro) => {
+  registro.distribuidor.forEach((distribuidor) => {
+    const nombreDistribuidor = distribuidor.nombre.nombre;
+    let distribuidorActual = resultado[0].estadisticas.find(
+      (item) => item.distribuidor === nombreDistribuidor
+    );
+    if (!distribuidorActual) {
+      distribuidorActual = {
+        distribuidor: nombreDistribuidor,
+        productos: {},
+      };
+      resultado[0].estadisticas.push(distribuidorActual);
+    }
+    distribuidor.stock.forEach((producto) => {
+      const idProducto = obtenerIdProducto(producto.producto);
+      if (!distribuidorActual.productos[idProducto]) {
+        distribuidorActual.productos[idProducto] = {
+          Nombre: producto.producto.nombre,
+          "KilosVendidos": convertirKilosVendidos(producto.kilosVendidos),
+          "Recaudado": producto.totalRecaudado,
+        };
+      } else {
+        distribuidorActual.productos[idProducto]["KilosVendidos"] +=
+          convertirKilosVendidos(producto.kilosVendidos);
+        distribuidorActual.productos[idProducto]["Recaudado"] +=
+          producto.totalRecaudado;
+      }
     });
+  });
+});
 
-    // Convertir el objeto de productos de cada distribuidor en un array
-    resultado[0].estadisticas.forEach((item) => {
-      item.productos = Object.values(item.productos);
-    });
+// Convertir el objeto de productos de cada distribuidor en un array
+resultado[0].estadisticas.forEach((item) => {
+  item.productos = Object.values(item.productos);
+});
 
     /* console.log(resultado); */
 
