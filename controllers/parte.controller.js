@@ -195,10 +195,10 @@ function calcularTotalKilosVendidosPorSemana(semana) {
       for (const distribuidor of parte.distribuidor) {
         if (distribuidor.stock) {
           for (const producto of distribuidor.stock) {
-            const stockInicial = producto.stockInicial || 0; // Valor por defecto si no está definido
-            const stockFinal = producto.stockFinal || 0; // Valor por defecto si no está definido
-            const peso = producto.producto.peso || 0; // Valor por defecto si no está definido
-            const nombre = producto.producto.nombre
+            const stockInicial = producto?.stockInicial || 0; // Valor por defecto si no está definido
+            const stockFinal = producto?.stockFinal || 0; // Valor por defecto si no está definido
+            const peso = producto?.producto?.peso || 0; // Valor por defecto si no está definido
+            const nombre = producto?.producto?.nombre
             /* console.log(producto) */
             
               /* console.log(semana.semana)
@@ -250,7 +250,7 @@ for (const mes of partesDatos) {
         for (const distribuidor of parte.distribuidor) {
           if (distribuidor.stock) {
             for (const producto of distribuidor.stock) {
-              producto.peso = formatearPesoConCeros(producto.peso);
+              producto.peso = formatearPesoConCeros(producto?.peso );
             }
           }
         }
@@ -285,12 +285,12 @@ function calcularTotalKilosVendidosPorParte(parte) {
   for (const distribuidor of parte.distribuidor) {
     if (distribuidor.stock) {
       for (const producto of distribuidor.stock) {
-        const stockInicial = producto.stockInicial || 0; // Valor por defecto si no está definido
-        const stockFinal = producto.stockFinal || 0; // Valor por defecto si no está definido
-        const peso = producto.producto.peso || 0; // Valor por defecto si no está definido
-        const nombre = producto.producto.nombre
+        const stockInicial = producto?.stockInicial || 0; // Valor por defecto si no está definido
+        const stockFinal = producto?.stockFinal || 0; // Valor por defecto si no está definido
+        const peso = producto?.producto?.peso || 0; // Valor por defecto si no está definido
+        const nombre = producto?.producto?.nombre
         /* console.log(nombre) */
-        // Convertir el peso a kilogramos
+
          // Convertir el peso a kilogramos
          let totalvendido = stockInicial - stockFinal;
          let kilosVendidos
