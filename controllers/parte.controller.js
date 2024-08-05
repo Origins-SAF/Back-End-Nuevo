@@ -19,9 +19,18 @@ export const getPartes = async (req, res) => {
 };
 
 export const getPartesSemanales = async (req, res) => {
+
+  const añoPartes = 2024; // Establecer el año 2024
+
   try {
     const partes = await parteModelo 
-      .find({ estado: true }) // consulta para todos los documentos
+      .find({
+        fecha: {
+          $gte: new Date(añoPartes, 0, 1), // Primer día del año 2024
+          $lt: new Date(añoPartes + 1, 0, 1), // Primer día del año 2025
+        },
+        estado: true,
+      }) // consulta para todos los documentos del año 2024
       .populate("usuario", ["nombre", "apellido", "img"]) 
       .populate("distribuidor.nombre", ["nombre"])
       .populate("ubicacion", ["nombre", "barrio", "tipo"])
