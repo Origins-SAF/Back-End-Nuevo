@@ -20,7 +20,7 @@ export const getPartes = async (req, res) => {
 
 export const getPartesSemanales = async (req, res) => {
 
-  const añoPartes = 2024; // Establecer el año 2024
+  const añoPartes = 2025; // Establecer el año 2024
 
   try {
     const partes = await parteModelo 
